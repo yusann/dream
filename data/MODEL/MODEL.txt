@@ -1,0 +1,15 @@
+	data/MODEL/Player_body.x
+	data/MODEL/Player_head.x
+	data/MODEL/Player_head_M.x
+	data/MODEL/Player_armR.x
+	data/MODEL/Player_handR.x
+	data/MODEL/Player_armL.x
+	data/MODEL/Player_handL.x
+	data/MODEL/Player_legR.x
+	data/MODEL/Player_footR.x
+	data/MODEL/Player_legL.x
+	data/MODEL/Player_footL.x
+	data/MODEL/Enemy00_body.x
+	data/MODEL/Enemy00_footR.x
+	data/MODEL/Enemy00_footL.x
+END_LOAD
