@@ -34,7 +34,7 @@ CInputXbox::~CInputXbox()
 //=============================================================================
 // XBOXコントローラーの初期化処理
 //=============================================================================
-HRESULT CInputXbox::Init(HINSTANCE hInst, HWND hWnd)
+HRESULT CInputXbox::Init()
 {
 	HRESULT hr = S_OK;
 

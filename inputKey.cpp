@@ -32,7 +32,7 @@ void CInputKey::Init(HINSTANCE hInstance, HWND hWnd)
 
 	// Xboxコントローラーの生成
 	m_pInputXbox = new CInputXbox;
-	m_pInputXbox->Init(hInstance, hWnd);
+	m_pInputXbox->Init();
 
 	// サウンドの生成
 	m_pSound = new CSound;

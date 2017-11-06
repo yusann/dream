@@ -33,7 +33,7 @@ public:
 	}VALUE_TYPE;
 	CInputXbox();																//	コンストラクタ
 	~CInputXbox();																//	デストラクタ
-	HRESULT Init(HINSTANCE hInstance, HWND hWnd);								//	初期化
+	HRESULT Init(void);								//	初期化
 	void Update(void);															//	更新
 	void Uninit(void);															//	終了
 	bool GetXboxPress(CONTROLLER_NUM Idx, WORD nKey);							// XBOXコントローラーの入力

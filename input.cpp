@@ -35,7 +35,7 @@ CInput::~CInput()
 //=============================================================================
 // 入力処理の初期化処理
 //=============================================================================
-HRESULT CInput::Init(HINSTANCE hInst, HWND hWnd)
+HRESULT CInput::Init(HINSTANCE hInst)
 {
 	HRESULT hr = S_FALSE;
 
@@ -107,7 +107,7 @@ HRESULT CInputKeyboard::Init(HINSTANCE hInst, HWND hWnd)
 	HRESULT hr;
 
 	// 入力処理の初期化
-	CInput::Init(hInst, hWnd);
+	CInput::Init(hInst);
 
 	// デバイスオブジェクトを作成
 	hr = m_pDInput->CreateDevice(GUID_SysKeyboard, &m_pDIDevice, NULL);
@@ -261,7 +261,7 @@ HRESULT CInputMouse::Init(HINSTANCE hInst, HWND hWnd)
 	HRESULT hr;
 
 	// 入力処理の初期化
-	CInput::Init(hInst, hWnd);
+	CInput::Init(hInst);
 
 	// デバイスオブジェクトを作成
 	hr = m_pDInput->CreateDevice(GUID_SysMouse, &m_pDIDevice, NULL);

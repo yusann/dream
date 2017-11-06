@@ -7,6 +7,9 @@
 #ifndef _INPUT_H_
 #define _INPUT_H_
 
+#include <dinput.h>
+#include <XInput.h>
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -21,7 +24,7 @@ public:
 	CInput();
 	virtual ~CInput();
 
-	virtual HRESULT Init(HINSTANCE hInst, HWND hWnd);
+	virtual HRESULT Init(HINSTANCE hInst);
 	virtual void Uninit(void);
 	virtual void Update(void) = 0;		// ---> 純粋仮想関数化
 

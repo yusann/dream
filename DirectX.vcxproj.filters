@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="リソース ファイル">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -40,38 +36,8 @@
     <Filter Include="ソース ファイル\resource">
       <UniqueIdentifier>{d869360f-b004-45a5-a32c-b70cd7ac86bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\manager">
-      <UniqueIdentifier>{0271dff7-2cb3-4a16-9760-d1a748770ac9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\resource">
-      <UniqueIdentifier>{8e93d0cb-472f-402c-ad23-e927cf4b5bd3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\renderer">
-      <UniqueIdentifier>{8a082331-b96e-4051-8226-9b92b51e8135}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\object">
-      <UniqueIdentifier>{e3ab174c-d983-4f85-9c18-abb0949cf355}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\object\2D">
-      <UniqueIdentifier>{cb0f0714-9ea7-4b8f-b092-0c993c7820e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\object\3D">
-      <UniqueIdentifier>{269291a6-c88a-4585-b72c-d1fed6c694a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\object\modelX">
-      <UniqueIdentifier>{8285d532-21a3-4004-ad26-c71e8b7c605c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\object\billboard">
-      <UniqueIdentifier>{7726b1fc-f52b-45c8-8ea4-9721f8cb0832}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\object\mash">
-      <UniqueIdentifier>{ab4d2973-731f-4fb0-ae6e-a8dc0afa21c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\motionX">
       <UniqueIdentifier>{ba9fd39b-75f3-4df7-af78-c216cf7a5253}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\object\motionX">
-      <UniqueIdentifier>{c8181e60-6799-42f0-9755-f2599d94f2f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\imGui">
       <UniqueIdentifier>{b06d866c-02bc-4f2b-8b1f-915933076a26}</UniqueIdentifier>
@@ -215,107 +181,107 @@
     <ClInclude Include="imGui\stb_truetype.h">
       <Filter>ソース ファイル\imGui</Filter>
     </ClInclude>
-    <ClInclude Include="fade.h">
-      <Filter>ヘッダー ファイル\object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="shadow.h">
-      <Filter>ヘッダー ファイル\object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="object2D.h">
-      <Filter>ヘッダー ファイル\object\2D</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="collision.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="input.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="inputKey.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="light.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="manager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="mode.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="xbox360.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ソース ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>ソース ファイル\object\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="object2D.h">
+      <Filter>ソース ファイル\object\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="shadow.h">
+      <Filter>ソース ファイル\object\2D</Filter>
     </ClInclude>
     <ClInclude Include="bullet.h">
-      <Filter>ヘッダー ファイル\object\billboard</Filter>
+      <Filter>ソース ファイル\object\billboard</Filter>
     </ClInclude>
     <ClInclude Include="particle.h">
-      <Filter>ヘッダー ファイル\object\billboard</Filter>
+      <Filter>ソース ファイル\object\billboard</Filter>
     </ClInclude>
     <ClInclude Include="meshCube.h">
-      <Filter>ヘッダー ファイル\object\mash</Filter>
+      <Filter>ソース ファイル\object\mash</Filter>
     </ClInclude>
     <ClInclude Include="meshField.h">
-      <Filter>ヘッダー ファイル\object\mash</Filter>
+      <Filter>ソース ファイル\object\mash</Filter>
     </ClInclude>
     <ClInclude Include="meshSphere.h">
-      <Filter>ヘッダー ファイル\object\mash</Filter>
+      <Filter>ソース ファイル\object\mash</Filter>
     </ClInclude>
     <ClInclude Include="skyDome.h">
-      <Filter>ヘッダー ファイル\object\mash</Filter>
+      <Filter>ソース ファイル\object\mash</Filter>
     </ClInclude>
     <ClInclude Include="block.h">
-      <Filter>ヘッダー ファイル\object\modelX</Filter>
+      <Filter>ソース ファイル\object\modelX</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>ヘッダー ファイル\object\motionX</Filter>
+      <Filter>ソース ファイル\object\motionX</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
-      <Filter>ヘッダー ファイル\object\motionX</Filter>
+      <Filter>ソース ファイル\object\motionX</Filter>
     </ClInclude>
     <ClInclude Include="renderer.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="scene2D.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="scene3D.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="sceneBillboard.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="sceneMesh.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="sceneModelX.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="sceneMotionPartsX.h">
-      <Filter>ヘッダー ファイル\renderer</Filter>
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="equation.h">
-      <Filter>ヘッダー ファイル\resource</Filter>
+      <Filter>ソース ファイル\resource</Filter>
     </ClInclude>
     <ClInclude Include="modelX.h">
-      <Filter>ヘッダー ファイル\resource</Filter>
+      <Filter>ソース ファイル\resource</Filter>
     </ClInclude>
     <ClInclude Include="motionPartsX.h">
-      <Filter>ヘッダー ファイル\resource</Filter>
+      <Filter>ソース ファイル\resource</Filter>
     </ClInclude>
     <ClInclude Include="sound.h">
-      <Filter>ヘッダー ファイル\resource</Filter>
+      <Filter>ソース ファイル\resource</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
-      <Filter>ヘッダー ファイル\resource</Filter>
+      <Filter>ソース ファイル\resource</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -145,7 +145,6 @@ void CPlayer::Update()
 
 	// 地面判定
 	float PosY;
-	CCamera *pCamera = CManager::GetCamera();
 	// ブロックの上にいる時
 	if (m_FloorPosY > 0.0f)
 	{
