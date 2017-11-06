@@ -185,8 +185,10 @@
     <ClCompile Include="meshCube.cpp" />
     <ClCompile Include="meshField.cpp" />
     <ClCompile Include="meshSphere.cpp" />
-    <ClCompile Include="mode.cpp" />
+    <ClCompile Include="modeGame.cpp" />
     <ClCompile Include="modelX.cpp" />
+    <ClCompile Include="modeResult.cpp" />
+    <ClCompile Include="modeTitle.cpp" />
     <ClCompile Include="motionPartsX.cpp" />
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="particle.cpp" />
@@ -229,7 +231,10 @@
     <ClInclude Include="meshField.h" />
     <ClInclude Include="meshSphere.h" />
     <ClInclude Include="mode.h" />
+    <ClInclude Include="modeGame.h" />
     <ClInclude Include="modelX.h" />
+    <ClInclude Include="modeResult.h" />
+    <ClInclude Include="modeTitle.h" />
     <ClInclude Include="motionPartsX.h" />
     <ClInclude Include="object2D.h" />
     <ClInclude Include="particle.h" />

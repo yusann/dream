@@ -5,6 +5,7 @@
 #include "main.h"
 #include "manager.h"
 #include "mode.h"
+#include "modeGame.h"
 #include "scene.h"
 #include "scene2D.h"
 #include "sceneModelX.h"

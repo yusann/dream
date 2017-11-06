@@ -9,6 +9,7 @@
 #include "sound.h"
 
 #include "mode.h"
+#include "modeTitle.h"
 #include "camera.h"
 #include "light.h"
 #include "texture.h"
@@ -157,7 +158,6 @@ void CManager::Draw(void)
 	{
 		// •`‰æˆ—
 		CScene::DrawAll();             // ƒV[ƒ“
-		m_pMode->Draw();
 
 #ifdef _DEBUG
 		ImGui::Render();
