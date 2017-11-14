@@ -2,7 +2,6 @@
 #define _PLAYER_H_
 
 // ‘O•ûéŒ¾
-class CShadow;
 #ifdef _DEBUG
 class CMeshSphere;
 #endif
@@ -73,7 +72,6 @@ private:
 	int m_Life;
 	int m_Magic;
 	float m_FloorPosY;
-	CShadow* m_Shadow;
 	COLLISION_SPHERE m_Collision;
 };
 

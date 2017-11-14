@@ -18,7 +18,6 @@
 #include "particle.h"
 #include "sceneMesh.h"
 #include "meshField.h"
-#include "shadow.h"
 #include "collision.h"
 #include "equation.h"
 #include "sound.h"
@@ -62,7 +61,6 @@ void CEnemy::Init(D3DXVECTOR3 pos)
 	m_CntFrameNormal = 0;
 	m_CntFrameMove = 0;
 	m_CntFrameAttack = 0;
-	m_Shadow = CShadow::Create(m_Pos, D3DXVECTOR3(6.0f, 6.0f, 1.0f));
 
 	m_pMotionPartsX = CMotionPartsX::GetMotionPartsX(CMotionPartsX::TYPE_ENEMY);
 #ifdef _DEBUG
@@ -86,7 +84,6 @@ void CEnemy::Uninit()
 	m_CollisionDebug->Uninit();
 	m_DetectionDebug->Uninit();
 #endif
-	m_Shadow->Uninit();
 	CSceneMotionPartsX::Uninit();
 }
 
@@ -119,7 +116,6 @@ void CEnemy::Update()
 	m_Pos += m_Move;
 	m_Move.x = 0.0f;
 	m_Move.z = 0.0f;
-	m_Shadow->SetPos(D3DXVECTOR3(m_Pos.x, 0.0f, m_Pos.z));
 	CMeshField *pMeshField = CModeGame::GetMeshField();
 	if (pMeshField == NULL) { return; }
 	float PosY = pMeshField->GetHeight(m_Pos);
@@ -127,7 +123,6 @@ void CEnemy::Update()
 	{
 		m_Move.y = 0.0f;
 		m_Pos.y = PosY;
-		m_Shadow->SetPos(m_Pos);
 	}
 
 	// ˆÚ“®‚Å‚«‚é”ÍˆÍ

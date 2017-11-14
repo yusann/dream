@@ -12,7 +12,6 @@
 #include "sceneMotionPartsX.h"
 #include "sceneBillboard.h"
 #include "sceneMesh.h"
-#include "shadow.h"
 
 #include "player.h"
 #include "enemy.h"
@@ -76,7 +75,6 @@ void CPlayer::Init(D3DXVECTOR3 pos)
 	m_Collision.Pos = m_Pos;
 	m_Collision.Scl = 2.0f;
 
-	m_Shadow = CShadow::Create(m_Pos, D3DXVECTOR3(4.0f, 4.0f, 1.0f));
 	m_pMotionPartsX = CMotionPartsX::GetMotionPartsX(CMotionPartsX::TYPE_PLAYER);
 
 #ifdef _DEBUG
@@ -134,7 +132,6 @@ void CPlayer::Update()
 	m_Pos += m_Move;
 	m_Move.x = 0.0f;
 	m_Move.z = 0.0f;
-	m_Shadow->SetPos(D3DXVECTOR3(m_Pos.x, 0.0f, m_Pos.z));
 	m_Collision.Pos = D3DXVECTOR3(m_Pos.x, m_Pos.y + 2.0f, m_Pos.z);
 #ifdef _DEBUG
 	m_Collision.Sphere->Update(m_Collision.Pos, m_Collision.Scl);
@@ -161,7 +158,6 @@ void CPlayer::Update()
 			CMeshField *pMeshField = CModeGame::GetMeshField();
 			if (pMeshField == NULL) { return; }
 			PosY = pMeshField->GetHeight(m_Pos);
-			m_Shadow->SetPos(D3DXVECTOR3(m_Pos.x, PosY+1.0f, m_Pos.z));
 		}
 	}
 
@@ -170,7 +166,6 @@ void CPlayer::Update()
 	{
 		m_Move.y = 0.0f;
 		m_Pos.y = PosY;
-		m_Shadow->SetPos(m_Pos);
 		if (m_Mode != MODE_ATTACK && m_Mode != MODE_MOVE&& m_Mode != MODE_JUMPATTACK)
 		{
 			m_Mode = MODE_NORMAL;
@@ -180,8 +175,6 @@ void CPlayer::Update()
 			m_FloorPosY = 0.0f;
 		}
 	}
-	float ShadowScl = m_Pos.y - m_Shadow->GetPos().y;
-	m_Shadow->SetScl(ShadowScl*0.05f+1.0f);
 
 	// 移動できる範囲
 	if (m_Pos.x > 550.0f) m_Pos.x = 550.0f;
@@ -411,7 +404,7 @@ void CPlayer::ModeJumpAttack()
 	HitEnemy();
 
 	// 地面判定
-	float PosY;
+	float PosY = 0.0f;
 	// ブロックの上にいる時
 	if (m_FloorPosY > 0.0f)
 	{
@@ -513,7 +506,6 @@ void CPlayer::CollisionBlock(void)
 		if (fWorkBlockHeight < fBlockHeight && m_Collision.Pos.y > fBlockHeight)
 		{
 			fWorkBlockHeight = fBlockHeight;
-			m_Shadow->SetPos(D3DXVECTOR3(m_Pos.x, fWorkBlockHeight, m_Pos.z));
 			m_isBlock = true;
 		}
 
@@ -639,5 +631,8 @@ void CPlayer::ImGui()
 	ImGui::InputInt("Life", &m_Life);
 	ImGui::InputFloat("MoveSpeed", &m_Speed, 0.01f);
 	ImGui::InputFloat("Jump", &m_Jump, 0.01f);
+	ImGui::InputFloat("", &m_Jump, 0.01f);
+	ImGui::Text("m_FloorPosY %.2f", m_FloorPosY);
+	
 }
 #endif

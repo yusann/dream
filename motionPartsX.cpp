@@ -55,6 +55,10 @@ void CMotionPartsX::Uninit()
 
 		// パーツ破棄
 		(*CntPartsX).second.Part.clear();
+
+		// 影破棄
+		delete (*CntPartsX).second.pShadow;
+		(*CntPartsX).second.pShadow = NULL;
 	}
 	m_MotionPartsX.clear();
 }
@@ -73,6 +77,7 @@ CMotionPartsX::MOTIONPARTSX CMotionPartsX::LoadFile(char *FileName)
 	int CntCollision = -1;
 	int CntSound = -1;
 	FILE* pFile = NULL;
+	MotionParts.pShadow = new SHADOW;
 
 	//  ファイルの読み込み
 	pFile = fopen(FileName, "r+");
@@ -92,6 +97,34 @@ CMotionPartsX::MOTIONPARTSX CMotionPartsX::LoadFile(char *FileName)
 			//  ロード開始
 			if (strcmp(aWork, "LOAD_START") == 0) {
 				continue;
+			}
+
+			// 影情報
+			else if (strcmp(aWork, "SET_SHADOW") == 0) {
+				while (1)
+				{
+					fscanf(pFile, "%s", &aWork);
+					// オフセット終了
+					if (strcmp(aWork, "END_SHADOW") == 0) {
+						break;
+					}
+					else if (strcmp(aWork, "NUM_X") == 0) {
+						fscanf(pFile, "%d", &MotionParts.pShadow->NumX);
+					}
+					else if (strcmp(aWork, "NUM_Y") == 0) {
+						fscanf(pFile, "%d", &MotionParts.pShadow->NumY);
+					}
+					else if (strcmp(aWork, "RADIUS") == 0) {
+						fscanf(pFile, "%f", &MotionParts.pShadow->Radius);
+					}
+					// スケール
+					else if (strcmp(aWork, "SCL") == 0) {
+						fscanf(pFile, "%f %f %f",
+							&MotionParts.pShadow->Scl.x,
+							&MotionParts.pShadow->Scl.y,
+							&MotionParts.pShadow->Scl.z);
+					}
+				}
 			}
 
 			// オフセット情報

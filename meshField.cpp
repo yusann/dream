@@ -351,7 +351,7 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 			}
 		}
 	}
-	return pos.y;
+	return 0.0f;
 }
 
 void CMeshField::LoadFile(void)

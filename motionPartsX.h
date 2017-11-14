@@ -46,6 +46,15 @@ public:
 		int					EndFrame;
 	};
 
+	// ‰e
+	struct SHADOW
+	{
+		int					NumX;
+		int					NumY;
+		float				Radius;
+		D3DXVECTOR3			Scl;
+	};
+
 	// ƒL[î•ñ
 	struct KEY
 	{
@@ -73,6 +82,7 @@ public:
 	{
 		std::vector<PART*>		Part;
 		std::vector<MOTION*>	Motion;
+		SHADOW*					pShadow;
 	};
 
 	static void Init(void);                              // ‰Šú‰»ˆ—

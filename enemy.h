@@ -2,7 +2,6 @@
 #define _ENEMY_H_
 
 // ‘O•ûéŒ¾
-class CShadow;
 #ifdef _DEBUG
 class CMeshSphere;
 #endif
@@ -53,8 +52,6 @@ private:
 	int m_CntFrameNormal;
 	int m_CntFrameMove;
 	int m_CntFrameAttack;
-
-	CShadow* m_Shadow;
 
 	D3DXVECTOR3 m_CollisionPos;
 	float m_CollisionScl;

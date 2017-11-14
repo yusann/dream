@@ -4,6 +4,7 @@
 #include "motionPartsX.h"
 
 // ‘O•ûéŒ¾
+class CShadow;
 #ifdef _DEBUG
 class CMeshSphere;
 #endif
@@ -72,6 +73,7 @@ private:
 	std::vector<MODEL*>				m_Model;
 	D3DXMATRIX						m_Matrix;
 	std::vector<COLLISION_SPHERE*>	m_CollisionSphere;
+	CShadow*						m_pShadow;
 	int m_MotionID;
 	int m_Key;
 	int m_Frame;

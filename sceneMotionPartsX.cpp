@@ -9,6 +9,7 @@
 #include "scene.h"
 #include "sceneMotionPartsX.h"
 #include "sceneMesh.h"
+#include "shadow.h"
 #include "meshSphere.h"
 #include "sound.h"
 #include "equation.h"
@@ -25,6 +26,7 @@ CSceneMotionPartsX::CSceneMotionPartsX(int Priority) :CScene(Priority)
 	m_MotionID = 0;
 	m_Frame = 0;
 	m_Key = 0;
+	m_pShadow = NULL;
 }
 
 CSceneMotionPartsX::~CSceneMotionPartsX()
@@ -61,6 +63,7 @@ void CSceneMotionPartsX::Init()
 		m_BlendData[i]->Scl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	}
 
+	// 当たり判定セット
 	for (int i = 0; i < (signed)m_pMotionPartsX->Motion.size(); i++)
 	{
 		for (int j = 0; j < (signed)m_pMotionPartsX->Motion[i]->Collision.size(); j++)
@@ -73,6 +76,12 @@ void CSceneMotionPartsX::Init()
 #endif
 		}
 	}
+
+	// 影セット
+	m_pShadow = CShadow::Create(m_pMotionPartsX->pShadow->NumX,
+								m_pMotionPartsX->pShadow->NumY,
+								m_pMotionPartsX->pShadow->Radius,
+								m_pMotionPartsX->pShadow->Scl);
 
 	m_LastKye = false;
 	m_MotionID = 0;
@@ -87,6 +96,9 @@ void CSceneMotionPartsX::Init()
 //=======================================================================================
 void CSceneMotionPartsX::Uninit()
 {
+	// 影破棄
+	SAFE_UNINIT(m_pShadow);
+
 	// モデル破棄
 	m_Model.clear();
 	m_BlendData.clear();
@@ -99,6 +111,9 @@ void CSceneMotionPartsX::Uninit()
 void CSceneMotionPartsX::Update()
 {
 	CEquation::SetMatrix(&m_Matrix, m_Pos, m_Rot, m_Scl);
+
+	// 影更新
+	m_pShadow->Update(m_Pos);
 
 	// ループしないモーション処理
 	if (m_pMotionPartsX->Motion[m_MotionID]->KeyFrame[m_Key]->Frame <= 0)
@@ -330,6 +345,9 @@ void CSceneMotionPartsX::Draw()
 		MessageBox(NULL, "InitのpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
 		return;
 	}
+	// 影描画
+	m_pShadow->Draw();
+
 	// 全パーツ分ループ
 	for (int i = 0; i < (signed)m_pMotionPartsX->Part.size(); i++) {
 
