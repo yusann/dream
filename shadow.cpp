@@ -7,21 +7,22 @@
 #include "renderer.h"
 #include "shadow.h"
 
-CShadow::CShadow()
-{
-}
+//*************
+// メイン処理
+//*************
+CShadow::CShadow(){}
+CShadow::~CShadow() {}
 
-CShadow::CShadow(int numBlockX,
-				int numBlockY,
-				float radius,
-				D3DXVECTOR3 scl,
-				D3DXVECTOR3 pos)
+// 変数初期化
+CShadow::CShadow(int numBlockX, int numBlockY, float radius, D3DXVECTOR3 scl, D3DXCOLOR color, D3DXVECTOR3 pos)
+	: m_SpherePos(pos),
+	m_SphereScl(scl),
+	m_SphereRadius(radius),
+	m_Color(color),
+	m_SphereNumX(numBlockX),
+	m_SphereNumY(numBlockY)
 {
-	m_SpherePos = pos;
-	m_SphereScl = scl;
-	m_SphereRadius = radius;
-	m_SphereNumX = numBlockX;
-	m_SphereNumY = numBlockY;
+	m_VtxBuff = NULL;
 	m_SphereIdxBuff = NULL;
 	m_SphereVtxBuff = NULL;
 	m_IndexNum = numBlockY * numBlockX * 2 + ((numBlockY - 1) * 4) + 2;
@@ -29,23 +30,29 @@ CShadow::CShadow(int numBlockX,
 	m_VexNum = m_SphereNumX * (m_SphereNumY - 1) + 2;
 }
 
-CShadow::~CShadow()
-{
-}
-
 //==============================================================================
 //  生成処理
 //==============================================================================
-CShadow *CShadow::Create(int numBlockX,
-						int numBlockY,
-						float radius,
-						D3DXVECTOR3 scl,
-						D3DXVECTOR3 pos)
-{
-	CShadow *pSceneMD;                            // 変数宣言
-	pSceneMD = new CShadow(numBlockX, numBlockY, radius, scl, pos);
-	pSceneMD->Init();                            // 初期化
-	return pSceneMD;                             // 値を返す
+CShadow *CShadow::Create(int numBlockX, int numBlockY, float radius, D3DXVECTOR3 scl)
+{	// デフォルト
+	CShadow *pSceneMD;
+	pSceneMD = new CShadow(numBlockX, numBlockY, radius, scl, D3DXCOLOR(0.1f, 0.1f, 0.1f, 0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	pSceneMD->Init();
+	return pSceneMD;
+}
+CShadow *CShadow::Create(int numBlockX, int numBlockY, float radius, D3DXVECTOR3 scl, D3DXVECTOR3 pos)
+{	// 座標指定
+	CShadow *pSceneMD;
+	pSceneMD = new CShadow(numBlockX, numBlockY, radius, scl, D3DXCOLOR(0.1f, 0.1f, 0.1f, 0.3f),pos);
+	pSceneMD->Init();
+	return pSceneMD;
+}
+CShadow *CShadow::Create(int numBlockX, int numBlockY, float radius, D3DXVECTOR3 scl, D3DXCOLOR color)
+{	// 色指定
+	CShadow *pSceneMD;
+	pSceneMD = new CShadow(numBlockX, numBlockY, radius, scl, color, D3DXVECTOR3(0.0f,0.0f,0.0f));
+	pSceneMD->Init();
+	return pSceneMD;
 }
 
 //==============================================================================
@@ -53,11 +60,9 @@ CShadow *CShadow::Create(int numBlockX,
 //==============================================================================
 void CShadow::Init( void )
 {
-	m_Color = D3DXCOLOR(0.1f, 0.1f, 0.1f, 0.3f);
-
-	MakeVex();
-	MakeSphereVex();
-	MakeSphereBuff();
+	MakeVex();				// 影頂点
+	MakeSphereVex();		// スフィア頂点
+	MakeSphereBuff();		// スフィアインデクス
 }
 
 //==============================================================================
@@ -65,21 +70,21 @@ void CShadow::Init( void )
 //==============================================================================
 void CShadow::Uninit( void )
 {
-	SAFE_RELEASE( m_VtxBuff);     // インデックスバッファ
-	SAFE_RELEASE( m_SphereIdxBuff);     // インデックスバッファ
-	SAFE_RELEASE( m_SphereVtxBuff);  // 頂点バッファへのポインタ
+	SAFE_RELEASE( m_VtxBuff);
+	SAFE_RELEASE( m_SphereIdxBuff);
+	SAFE_RELEASE( m_SphereVtxBuff);
 }
 
 //==============================================================================
 //  更新処理
 //==============================================================================
 void CShadow::Update(const D3DXVECTOR3 pos, const D3DXVECTOR3 scl)
-{
+{	// スケール更新
 	m_SpherePos = pos;
 	m_SphereScl = scl;
 }
 void CShadow::Update(const D3DXVECTOR3 pos)
-{
+{	// 座標更新
 	m_SpherePos = pos;
 }
 
@@ -92,50 +97,43 @@ void CShadow::Draw( void )
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	pDevice = CManager::GetRenderer()->GetDevice();
 	if (pDevice == NULL) {
-		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		MessageBox(NULL, "shadow.cpp => Draw => pDeviceがNULL！！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
 		return;
 	}
 
+	// ステンシルの設定
 	pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_COLORWRITEENABLE, 0);
 	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);
 	pDevice->SetRenderState(D3DRS_STENCILREF, 1);
+	// 表描画
 	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_INCR);
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	DrawSphere();
-
+	// 裏描画
 	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_DECR);
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
 	DrawSphere();
 
+	// 影の切り取り設定
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	pDevice->SetRenderState(D3DRS_COLORWRITEENABLE, 0xf);
 	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);
 
-	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0,
-		m_VtxBuff,              // ストリームのもとになる頂点のバッファの始点
-		0,                       // オフセット（バイト）
-		sizeof(VERTEX_2D));      // 一つの頂点データのサイズ（ストライド量）
-
-								 // 頂点フォーマットの設定
+	// 影の描画
+	pDevice->SetStreamSource(0, m_VtxBuff, 0, sizeof(VERTEX_2D));
 	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	// 描画直前にテクスチャをセット（テクスチャの設定）
 	pDevice->SetTexture(0, NULL);
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, NUM_POLYGON);
 
-	// ポリゴンの描画
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,        // プリミティブの種類
-							0,                          // オフセット（頂点数）
-							NUM_POLYGON);              // プリミティブの数（ポリゴンの数）
-
+	// ステンシル設定のクリア
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
 }
 
 //=======================================================================================
-// ポリゴンの頂点設定
+// 影頂点設定
 //=======================================================================================
 void CShadow::MakeVex(void)
 {
@@ -191,7 +189,7 @@ void CShadow::MakeVex(void)
 }
 
 //=======================================================================================
-// ポリゴンの頂点設定
+// スフィア頂点設定
 //=======================================================================================
 void CShadow::MakeSphereVex(void)
 {
@@ -199,7 +197,7 @@ void CShadow::MakeSphereVex(void)
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	pDevice = CManager::GetRenderer()->GetDevice();
 	if (pDevice == NULL) {
-		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		MessageBox(NULL, "shadow.cpp => MakeSphereVex => pDeviceがNULL！！", "エラー", MB_OK | MB_ICONASTERISK);
 		return;
 	}
 
@@ -252,7 +250,7 @@ void CShadow::MakeSphereVex(void)
 }
 
 //=======================================================================================
-// ポリゴンのバッファ設定
+// スフィアインデクスバッファ設定
 //=======================================================================================
 void CShadow::MakeSphereBuff(void)
 {
@@ -260,7 +258,7 @@ void CShadow::MakeSphereBuff(void)
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	pDevice = CManager::GetRenderer()->GetDevice();
 	if (pDevice == NULL) {
-		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		MessageBox(NULL, "shadow.cpp => MakeSphereBuff => pDeviceがNULL！！", "エラー", MB_OK | MB_ICONASTERISK);
 		return;
 	}
 
@@ -352,7 +350,7 @@ void CShadow::DrawSphere()
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	pDevice = CManager::GetRenderer()->GetDevice();
 	if (pDevice == NULL) {
-		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		MessageBox(NULL, "shadow.cpp => DrawSphere => pDeviceがNULL！！", "エラー", MB_OK | MB_ICONASTERISK);
 		return;
 	}
 
@@ -385,7 +383,7 @@ void CShadow::DrawSphere()
 		0,                       // オフセット（バイト）
 		sizeof(VERTEX_3D));      // 一つの頂点データのサイズ（ストライド量）
 
-								 // デバイスにインデックスバッファの設定
+	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_SphereIdxBuff); 
 
 	// 頂点フォーマットの設定
