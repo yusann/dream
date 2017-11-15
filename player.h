@@ -65,7 +65,7 @@ private:
 	MODE m_Mode;
 	D3DXVECTOR3 m_Move;
 	D3DXVECTOR3 m_PosOld;
-	bool m_isBlock;
+	bool m_onBlock;
 	int m_Level;
 	int m_LifeMax;
 	int m_MagicMax;

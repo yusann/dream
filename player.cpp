@@ -104,18 +104,19 @@ void CPlayer::Uninit()
 //=======================================================================================
 void CPlayer::Update()
 {
+	// 座標記憶
 	m_PosOld = m_Pos;
-	// モードの切り替え
-	if (m_Mode == MODE_MOVE)
-	{
-		m_Mode = MODE_NORMAL;
-	}
+
+	// モードクリア
+	if (m_Mode == MODE_MOVE) { m_Mode = MODE_NORMAL; }
 
 	// キー判定
 	InputKey();
 
+	// 重力
 	m_Move.y -= PLAYER_GRAVITY;
 
+	// モード判定
 	switch (m_Mode)
 	{
 	case MODE_NORMAL:     ModeNormal();     break;
@@ -138,41 +139,26 @@ void CPlayer::Update()
 #endif
 
 	// ブロックの当たり判定
-	m_isBlock = false;
+	m_onBlock = false;
 	CollisionBlock();
 
 	// 地面判定
-	float PosY;
-	// ブロックの上にいる時
-	if (m_FloorPosY > 0.0f)
+	if (!m_onBlock)
 	{
-		PosY = m_FloorPosY;
+		CMeshField *pMeshField = CModeGame::GetMeshField();
+		if (pMeshField == NULL) { return; }
+		m_FloorPosY = pMeshField->GetHeight(m_Pos);
 	}
-	else{
-		if (m_isBlock)
-		{
-			PosY = 0.0f;
-		}
-		else
-		{
-			CMeshField *pMeshField = CModeGame::GetMeshField();
-			if (pMeshField == NULL) { return; }
-			PosY = pMeshField->GetHeight(m_Pos);
-		}
-	}
+	ImGui::Text("m_FloorPosY %.2f", m_FloorPosY);
 
 	// 着地時処理
-	if (m_Pos.y < PosY)
+	if (m_Pos.y < m_FloorPosY && m_Move.y < 0.0f)
 	{
 		m_Move.y = 0.0f;
-		m_Pos.y = PosY;
+		m_Pos.y = m_FloorPosY;
 		if (m_Mode != MODE_ATTACK && m_Mode != MODE_MOVE&& m_Mode != MODE_JUMPATTACK)
 		{
 			m_Mode = MODE_NORMAL;
-		}
-		if (m_Mode != MODE_JUMPATTACK)
-		{
-			m_FloorPosY = 0.0f;
 		}
 	}
 
@@ -403,21 +389,8 @@ void CPlayer::ModeJumpAttack()
 	}
 	HitEnemy();
 
-	// 地面判定
-	float PosY = 0.0f;
-	// ブロックの上にいる時
-	if (m_FloorPosY > 0.0f)
-	{
-		PosY = m_FloorPosY;
-	}
-	// 地面にいる時
-	else {
-		CMeshField *pMeshField = CModeGame::GetMeshField();
-		if (pMeshField == NULL) { return; }
-		PosY = pMeshField->GetHeight(m_Pos);
-	}
 	// 着地時処理
-	if (m_Pos.y <= PosY)
+	if (m_Pos.y <= m_FloorPosY)
 	{
 		m_Move.y = 1.0f;
 		m_Mode = MODE_NORMAL;
@@ -460,8 +433,8 @@ void CPlayer::CollisionBlock(void)
 	CScene *pScene;
 	pScene = CScene::GetScene(CScene::OBJTYPE_BLOCK);
 
-	// ブロックの高さ変数
-	float fWorkBlockHeight = 0.0f;
+	// ブロック高さ選別用
+	float blockPosY = 0.0f;
 
 	// NULLチェック
 	while (pScene != NULL)
@@ -483,9 +456,9 @@ void CPlayer::CollisionBlock(void)
 		bCollision = CCollision::AABB(m_Collision.Pos.x,
 			BlockPos.x - (BlockScl.x * 0.5f) - m_Collision.Scl,
 			BlockPos.x + (BlockScl.x * 0.5f) + m_Collision.Scl);
-		// 当たってない場合抜く
+		// 当たってない場合
 		if (!bCollision)
-		{
+		{	// 次へ
 			pScene = pScene->SetNextScene(); 
 			continue;
 		};
@@ -494,36 +467,35 @@ void CPlayer::CollisionBlock(void)
 		bCollision = CCollision::AABB(m_Collision.Pos.z,
 			BlockPos.z - (BlockScl.z * 0.5f) - m_Collision.Scl,
 			BlockPos.z + (BlockScl.z * 0.5f) + m_Collision.Scl);
-		// 当たってない場合抜く
+		// 当たってない場合
 		if (!bCollision)
-		{
+		{	// 次へ
 			pScene = pScene->SetNextScene();
 			continue;
 		};
 
 		// ブロックの高さ計算
 		float fBlockHeight = BlockPos.y + BlockScl.y;
-		if (fWorkBlockHeight < fBlockHeight && m_Collision.Pos.y > fBlockHeight)
-		{
-			fWorkBlockHeight = fBlockHeight;
-			m_isBlock = true;
-		}
 
 		float Check = (m_Pos.y - fBlockHeight)*(m_PosOld.y - fBlockHeight);
+		
+		// ブロックの上にいるよ
+		if (m_Collision.Pos.y > fBlockHeight) { 
+			m_onBlock = true;
+
+			if (blockPosY < fBlockHeight)
+			{	// 一番高いブロック選別
+				blockPosY = fBlockHeight;
+			}
+		}
 
 		// Y辺
 		bCollision = CCollision::AABB(m_Collision.Pos.y,
 			BlockPos.y - m_Collision.Scl,
 			BlockPos.y + BlockScl.y + m_Collision.Scl);
-		// 当たってない場合抜く
+		// 当たってない場合
 		if (!bCollision)
-		{
-			if (Check < 0.0f)
-			{
-				m_FloorPosY = fBlockHeight;
-				// 当たったフラグを返す
-				break;
-			}
+		{	// 次へ
 			pScene = pScene->SetNextScene();
 			continue;
 		};
@@ -531,12 +503,14 @@ void CPlayer::CollisionBlock(void)
 		// 落下の時
 		if (m_Move.y < 0.0f && (m_Collision.Pos.y > fBlockHeight || Check <0.0f))
 		{
-			m_FloorPosY = fBlockHeight;
+			// ブロック高さの代入
+			m_onBlock = true;
+			blockPosY = fBlockHeight;
 
-			// 当たったフラグを返す
-			break;
+			// 次へ
+			pScene = pScene->SetNextScene();
+			continue;
 		}
-
 
 		// 各辺との差分計算
 		// X辺
@@ -552,21 +526,20 @@ void CPlayer::CollisionBlock(void)
 			fLenZ);
 
 		// Z辺はX辺よりめり込んだ場合
-		if (fabs(fLenZ) > fabs(fLenX)) {
-
-			// X軸を補正する
+		if (fabs(fLenZ) > fabs(fLenX))
+		{	// X軸を補正する
 			m_Pos.x += fLenX;
 		}
-
-		// X辺はZ辺よりめり込んだ場合
-		if (fabs(fLenX) > fabs(fLenZ)) {
-
-			// Z軸を補正する
+		else
+		{	// Z軸を補正する
 			m_Pos.z += fLenZ;
 		}
 
+		// 次へ
 		pScene = pScene->SetNextScene();
 	}
+	// ブロック高さの代入
+	m_FloorPosY = blockPosY;
 }
 
 //=======================================================================================
@@ -632,7 +605,6 @@ void CPlayer::ImGui()
 	ImGui::InputFloat("MoveSpeed", &m_Speed, 0.01f);
 	ImGui::InputFloat("Jump", &m_Jump, 0.01f);
 	ImGui::InputFloat("", &m_Jump, 0.01f);
-	ImGui::Text("m_FloorPosY %.2f", m_FloorPosY);
 	
 }
 #endif
