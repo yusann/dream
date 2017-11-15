@@ -255,7 +255,6 @@ void CMeshField::MakeBuff(void)
 
 float CMeshField::GetHeight(D3DXVECTOR3 pos)
 {
-	// 頂点情報を設定
 	// 頂点情報格納用疑似バッファの宣言
 	VERTEX_3D* pVtx;
 
@@ -273,6 +272,112 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 	{
 		return pos.y;
 	}
+	
+	float posY = SearchPolygon(indexX, indexZ, pos);
+	if (posY >= 0.0f)
+	{
+		return posY;
+	}
+
+	// 再検索
+	if (posY < 0.0f && indexX-1 >= 0)
+	{
+		posY = SearchPolygon(indexX-1, indexZ, pos);
+	}
+	if (posY < 0.0f && indexX - 1 >= 0 && indexZ -1 >= 0)
+	{
+		posY = SearchPolygon(indexX - 1, indexZ - 1, pos);
+	}
+	if (posY < 0.0f && indexZ - 1 >= 0)
+	{
+		posY = SearchPolygon(indexX, indexZ-1, pos);
+	}
+	return posY;
+}
+
+void CMeshField::LoadFile(void)
+{
+	char aWork[64];
+	// 書き出し処理
+	FILE *pFile;
+	fopen_s(&pFile, "data/SAVE.txt", "r+");
+
+	if (pFile == NULL)
+	{
+		assert(!("ロードするファイル（LOAD_NAME）がありません！"));
+	}
+	else
+	{
+		while (1)
+		{
+			// 文字読み込み
+			fscanf(pFile, "%s", &aWork);
+
+			// 文字チェック
+			//  ロード開始
+			if (strcmp(aWork, "LOAD_START") == 0) {
+				continue;
+			}
+			else if (strcmp(aWork, "LOAD_SIZE") == 0) {
+
+				//  
+				fscanf(pFile, "%d", &m_MaxX);
+				fscanf(pFile, "%d", &m_MaxY);
+				m_PosY = new float[(m_MaxY + 1)*(m_MaxX + 1)];
+
+				// 終了
+				while (1) {
+					// 文字読み込み
+					fscanf(pFile, "%s", &aWork);
+					if (strcmp(aWork, "END_SIZE") == 0) {
+						break;
+					}
+				}
+				continue;
+			}
+			else if (strcmp(aWork, "LOAD_FIELD") == 0) {
+
+				for (int i = 0; i < m_MaxY + 1; i++)
+				{
+					for (int j = 0; j < m_MaxX + 1; j++)
+					{
+						// 座標
+						fscanf(pFile, "%f ", &m_PosY[i*(m_MaxX + 1) + j]);
+					}
+				}
+
+				// 終了
+				while (1) {
+					// 文字読み込み
+					fscanf(pFile, "%s", &aWork);
+					if (strcmp(aWork, "END_FIELD") == 0) {
+						break;
+					}
+				}
+				continue;
+			}
+
+			//  ロード終了
+			else if (strcmp(aWork, "END_LOAD") == 0) {
+				break;
+			}
+
+			// エラー
+			assert(!("セーブ内容が間違っている！！"));
+		}
+		//  ファイルを閉じる
+		fclose(pFile);
+	}
+
+}
+
+float CMeshField::SearchPolygon(int indexX, int indexZ, D3DXVECTOR3 pos)
+{
+	// 頂点情報格納用疑似バッファの宣言
+	VERTEX_3D* pVtx;
+
+	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 計算用変数
 	D3DXVECTOR3 normal, work;
@@ -351,81 +456,5 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 			}
 		}
 	}
-	return 0.0f;
-}
-
-void CMeshField::LoadFile(void)
-{
-	char aWork[64];
-	// 書き出し処理
-	FILE *pFile;
-	fopen_s(&pFile, "data/SAVE.txt", "r+");
-
-	if (pFile == NULL)
-	{
-		assert(!("ロードするファイル（LOAD_NAME）がありません！"));
-	}
-	else
-	{
-		while (1)
-		{
-			// 文字読み込み
-			fscanf(pFile, "%s", &aWork);
-
-			// 文字チェック
-			//  ロード開始
-			if (strcmp(aWork, "LOAD_START") == 0) {
-				continue;
-			}
-			else if (strcmp(aWork, "LOAD_SIZE") == 0) {
-
-				//  
-				fscanf(pFile, "%d", &m_MaxX);
-				fscanf(pFile, "%d", &m_MaxY);
-				m_PosY = new float[(m_MaxY + 1)*(m_MaxX + 1)];
-
-				// 終了
-				while (1) {
-					// 文字読み込み
-					fscanf(pFile, "%s", &aWork);
-					if (strcmp(aWork, "END_SIZE") == 0) {
-						break;
-					}
-				}
-				continue;
-			}
-			else if (strcmp(aWork, "LOAD_FIELD") == 0) {
-
-				for (int i = 0; i < m_MaxY + 1; i++)
-				{
-					for (int j = 0; j < m_MaxX + 1; j++)
-					{
-						// 座標
-						fscanf(pFile, "%f ", &m_PosY[i*(m_MaxX + 1) + j]);
-					}
-				}
-
-				// 終了
-				while (1) {
-					// 文字読み込み
-					fscanf(pFile, "%s", &aWork);
-					if (strcmp(aWork, "END_FIELD") == 0) {
-						break;
-					}
-				}
-				continue;
-			}
-
-			//  ロード終了
-			else if (strcmp(aWork, "END_LOAD") == 0) {
-				break;
-			}
-
-			// エラー
-			assert(!("セーブ内容が間違っている！！"));
-		}
-		//  ファイルを閉じる
-		fclose(pFile);
-	}
-
+	return -1.0f;
 }

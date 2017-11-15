@@ -21,7 +21,8 @@ public:
 private:
 	void MakeVex(void);     // 頂点の設定
 	void MakeBuff(void);    // バッファの設定
-	void LoadFile(void);
+	float SearchPolygon(int indexX, int indexZ, D3DXVECTOR3 pos);
+	void LoadFile(void);	// ファイル読込
 
 	D3DXVECTOR2 m_size;
 	D3DXVECTOR2 m_divide;
