@@ -13,6 +13,9 @@
 #include "meshSphere.h"
 #include "sound.h"
 #include "equation.h"
+#include "shaderManager.h"
+#include "shaderBase.h"
+#include "shaderModel.h"
 
 //*************
 // メイン処理
@@ -363,18 +366,27 @@ void CSceneMotionPartsX::Draw()
 
 		pMat = (D3DXMATERIAL*)m_pMotionPartsX->Part[i]->pBuffMat->GetBufferPointer();
 
+		// シェーダのセット
+		CShaderModel *pShaderModel = CShaderManager::GetModel();
+		pShaderModel->Set();
+		pShaderModel->SetPixelInfo(m_Pos);
+
 		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
 		{
 			// マテリアルの設定
-			pDevice->SetMaterial(&pMat[j].MatD3D);
+			pShaderModel->SetVertexInfo(m_Model[i]->Matrix, pMat[j].MatD3D.Diffuse);
+
+			// テクスチャID取得
+			UINT samplerID = pShaderModel->GetSamplerIndex();
 
 			// テクスチャの描画
-			pDevice->SetTexture(0, m_pMotionPartsX->Part[i]->pTexture[j]);
+			pDevice->SetTexture(samplerID, m_pMotionPartsX->Part[i]->pTexture[j]);
 
 			// メッシュの描画
 			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
-			pDevice->SetMaterial(&matDef);
 		}
+		// シェーダクリア
+		pShaderModel->Clear();
 	}
 }
 

@@ -111,9 +111,10 @@ void CShaderModel::SetVertexInfo(const D3DXMATRIX mtxW,			// ワールド座標
 //=======================================================================================
 //   ピクセルシェーダの情報を代入
 //=======================================================================================
-void CShaderModel::SetPixelInfo(const float specularPower,		// スペキュラーパワー
-								const float specular,			// スペキュラーカラー
-								const D3DXVECTOR3 modelPos)		// ターゲット座標
+void CShaderModel::SetPixelInfo(const D3DXVECTOR3 modelPos,		// ターゲット座標
+								const float specularPower,		// スペキュラーパワー
+								const float specular			// スペキュラーカラー
+)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
@@ -167,7 +168,7 @@ void CShaderModel::CreateVertex(void)
 
 	// ピクセルシェーダーの読み込み
 	HRESULT hr = D3DXCompileShaderFromFile(
-		"modelPS.hlsl",		// ファイル名
+		"shader/modelPS.hlsl",		// ファイル名
 		NULL,
 		NULL,
 		"main",				// エントリ関数
@@ -210,7 +211,7 @@ void CShaderModel::CreatePixel(void)
 
 	// 頂点シェーダーの読み込み
 	HRESULT hr = D3DXCompileShaderFromFile(
-		"modelVS.hlsl",		// ファイル名
+		"shader/modelVS.hlsl",		// ファイル名
 		NULL,
 		NULL,
 		"main",				// エントリ関数

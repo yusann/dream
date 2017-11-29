@@ -32,6 +32,8 @@
 #include "player.h"
 #include "enemy.h"
 
+#include "shaderManager.h"
+
 //*****************************************************************************
 //   静的メンバー変数宣言
 //*****************************************************************************
@@ -79,7 +81,11 @@ HRESULT CManager::Init( HINSTANCE hInstance, HWND hWnd, BOOL bWindow )
 	// モデルを読み込み
 	CModelX::Init();
 
+	// パーツモデルを読込
 	CMotionPartsX::Init();
+
+	// シェーダの読み込み
+	CShaderManager::Init();
 
 	// オブジェクトの生成
 	SetMode(new CModeTitle);
@@ -102,6 +108,10 @@ void CManager::Uninit(void)
 	// オブジェクトの破棄
 	CScene::ReleaseAll();
 
+	// シェーダの破棄
+	CShaderManager::Uninit();
+
+	// パーツモデル破棄
 	CMotionPartsX::Uninit();
 
 	// モデルを破棄

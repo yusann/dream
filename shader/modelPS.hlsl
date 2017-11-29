@@ -24,7 +24,8 @@ float4 main(float4 in_color   : COLOR0,
 
 	// ディフューズ
 	//float diff = max(dot(in_normalW, -lightDirW), 0.2f);
-	float diff = dot(in_normalW, -lightDirW)*0.5f+0.5f;
+	float diff = max(dot(in_normalW, -lightDirW)*0.5f+0.5f,0.2f);
+	diff = min(diff, 1.0f);
 
 	float rim = abs(dot(toEyeW, in_normalW))*1.8f;
 	
