@@ -7,6 +7,9 @@
 #include "texture.h"
 #include "scene.h"
 #include "sceneModelX.h"
+#include "shaderManager.h"
+#include "shaderBase.h"
+#include "shaderModel.h"
 
 //=======================================================================================
 //   コンストラクタ
@@ -102,15 +105,24 @@ void CSceneModelX::Draw()
 	D3DXMATERIAL* pMat;
 	pMat = (D3DXMATERIAL*)m_Model.pBuffMat->GetBufferPointer();
 
+	// シェーダのセット
+	CShaderModel *pShaderModel = CShaderManager::GetModel();
+	pShaderModel->Set();
+	pShaderModel->SetPixelInfo(m_Pos);
+
 	for( int i = 0; i < (int)m_Model.NumMat; i++ )
 	{
 		// マテリアルの設定
-		pDevice->SetMaterial( &pMat[i].MatD3D );
+		pShaderModel->SetVertexInfo(mtxWorld, pMat[i].MatD3D.Diffuse);
 
 		// テクスチャの描画
 		if( pMat[i].pTextureFilename != NULL )
 		{
-			pDevice->SetTexture( 0, m_Model.pTexture[i] );      // テクスチャマッピング
+			// テクスチャID取得
+			UINT samplerID = pShaderModel->GetSamplerIndex();
+
+			// テクスチャの描画
+			pDevice->SetTexture(samplerID, m_Model.pTexture[i]);
 		}
 		else
 		{
@@ -118,6 +130,7 @@ void CSceneModelX::Draw()
 		}
 		// メッシュの描画
 		m_Model.pMesh->DrawSubset(i);
-		pDevice->SetMaterial( &matDef );
 	}
+	// シェーダクリア
+	pShaderModel->Clear();
 }

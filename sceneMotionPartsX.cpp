@@ -366,7 +366,7 @@ void CSceneMotionPartsX::Draw()
 
 		pMat = (D3DXMATERIAL*)m_pMotionPartsX->Part[i]->pBuffMat->GetBufferPointer();
 
-		// シェーダのセット
+		// シェーダの取得
 		CShaderModel *pShaderModel = CShaderManager::GetModel();
 		pShaderModel->Set();
 		pShaderModel->SetPixelInfo(m_Pos);
