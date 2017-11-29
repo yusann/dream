@@ -14,7 +14,9 @@ class CMode;
 class CCamera;
 class CLight;
 
+#ifdef _DEBUG
 extern LRESULT ImGui_ImplDX9_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif
 
 //*****************************************************************************
 //   マネージャークラス定義
@@ -32,10 +34,12 @@ public:
 	void Update(void);                             // 更新処理
 	void Draw(void);                               // 描画処理
 
+#ifdef _DEBUG
 	static void WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		if (ImGui_ImplDX9_WndProcHandler(hWnd, uMsg, wParam, lParam))
 			return;
 	}
+#endif
 	static void SetMode(CMode *pMode);
 
 	// 取得処理

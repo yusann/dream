@@ -79,14 +79,14 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 	pDevice->SetTexture(0, m_pTexture);
 
 	// カメラの取得
-	CCamera::CAMERA camera;
-	camera = CCamera::GetCamera();
+	CCamera* pCamera;
+	pCamera = CManager::GetCamera();
 
 	// 変換行列の宣言
 	D3DXMATRIX mtxPos;             // ローカル座標
 	D3DXMATRIX mtxWorld;           // ワールド情報
 	D3DXMATRIX mtxViewInverse;     // 転置行列
-	D3DXMATRIX mtxViewCamera = camera.mtxView;      // カメラ行列の取得
+	D3DXMATRIX mtxViewCamera = pCamera->GetMtxView();      // カメラ行列の取得
 	
 	// ローカル座標の代入
 	D3DXMatrixTranslation(&mtxPos,

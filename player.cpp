@@ -149,7 +149,9 @@ void CPlayer::Update()
 		if (pMeshField == NULL) { return; }
 		m_FloorPosY = pMeshField->GetHeight(m_Pos);
 	}
+#ifdef _DEBUG
 	ImGui::Text("m_FloorPosY %.2f", m_FloorPosY);
+#endif // _DEBUG
 
 	// 着地時処理
 	if (m_Pos.y < m_FloorPosY && m_Move.y < 0.0f)
@@ -202,12 +204,12 @@ void CPlayer::InputKey(void)
 	// カメラ情報取得
 	CCamera* pCamera = CManager::GetCamera();
 	if (pCamera == NULL) { return; }
-	CCamera::CAMERA Camera = pCamera->GetCamera();
+	D3DXVECTOR3 CameraPos = pCamera->GetPosEye();
 
 	// カメラとのベクトル
 	D3DXVECTOR3 Vector;
-	Vector.x = Camera.posEye.x - m_Pos.x;
-	Vector.z = Camera.posEye.z - m_Pos.z;
+	Vector.x = CameraPos.x - m_Pos.x;
+	Vector.z = CameraPos.z - m_Pos.z;
 	Vector.y = 0.0f;
 
 	// カメラとの角度

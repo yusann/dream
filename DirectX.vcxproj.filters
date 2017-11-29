@@ -33,9 +33,6 @@
     <Filter Include="ソース ファイル\object\mash">
       <UniqueIdentifier>{78398d2f-32a7-4509-8fab-8ab763f1f0e8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\resource">
-      <UniqueIdentifier>{d869360f-b004-45a5-a32c-b70cd7ac86bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\motionX">
       <UniqueIdentifier>{ba9fd39b-75f3-4df7-af78-c216cf7a5253}</UniqueIdentifier>
     </Filter>
@@ -44,6 +41,15 @@
     </Filter>
     <Filter Include="ソース ファイル\mode">
       <UniqueIdentifier>{9d46698b-d331-40d4-bcce-023242c706d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シェーダ">
+      <UniqueIdentifier>{80a46b2f-07f9-472b-9181-89388a3e61b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\input">
+      <UniqueIdentifier>{dc9de104-01f2-4a83-936e-3008091dd42e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\shader">
+      <UniqueIdentifier>{8dac1d43-5bbf-4b81-b949-ab88fdb0f93c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,9 +60,6 @@
       <Filter>ソース ファイル\object\billboard</Filter>
     </ClCompile>
     <ClCompile Include="camera.cpp">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="input.cpp">
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
     <ClCompile Include="light.cpp">
@@ -95,29 +98,14 @@
     <ClCompile Include="sceneMesh.cpp">
       <Filter>ソース ファイル\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="modelX.cpp">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClCompile>
     <ClCompile Include="skyDome.cpp">
       <Filter>ソース ファイル\object\mash</Filter>
-    </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClCompile>
-    <ClCompile Include="motionPartsX.cpp">
-      <Filter>ソース ファイル\resource</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>ソース ファイル\object\motionX</Filter>
     </ClCompile>
     <ClCompile Include="object2D.cpp">
       <Filter>ソース ファイル\object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="sound.cpp">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClCompile>
-    <ClCompile Include="inputKey.cpp">
-      <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
     <ClCompile Include="collision.cpp">
       <Filter>ソース ファイル\manager</Filter>
@@ -127,9 +115,6 @@
     </ClCompile>
     <ClCompile Include="shadow.cpp">
       <Filter>ソース ファイル\object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="equation.cpp">
-      <Filter>ソース ファイル\resource</Filter>
     </ClCompile>
     <ClCompile Include="particle.cpp">
       <Filter>ソース ファイル\object\billboard</Filter>
@@ -152,9 +137,6 @@
     <ClCompile Include="enemy.cpp">
       <Filter>ソース ファイル\object\motionX</Filter>
     </ClCompile>
-    <ClCompile Include="xbox360.cpp">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClCompile>
     <ClCompile Include="modeTitle.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
@@ -166,6 +148,39 @@
     </ClCompile>
     <ClCompile Include="modeResult.cpp">
       <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="equation.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="modelX.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="motionPartsX.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+    <ClCompile Include="inputKey.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+    <ClCompile Include="xbox360.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderBase.cpp">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderModel.cpp">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderManager.cpp">
+      <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,19 +211,10 @@
     <ClInclude Include="collision.h">
       <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="inputKey.h">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClInclude>
     <ClInclude Include="light.h">
       <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="manager.h">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="xbox360.h">
       <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="fade.h">
@@ -268,21 +274,6 @@
     <ClInclude Include="sceneMotionPartsX.h">
       <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="equation.h">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClInclude>
-    <ClInclude Include="modelX.h">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClInclude>
-    <ClInclude Include="motionPartsX.h">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClInclude>
-    <ClInclude Include="sound.h">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>ソース ファイル\resource</Filter>
-    </ClInclude>
     <ClInclude Include="main.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
@@ -301,5 +292,46 @@
     <ClInclude Include="modeResult.h">
       <Filter>ソース ファイル\mode</Filter>
     </ClInclude>
+    <ClInclude Include="equation.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="modelX.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="motionPartsX.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>ソース ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="inputKey.h">
+      <Filter>ソース ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="xbox360.h">
+      <Filter>ソース ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderBase.h">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderModel.h">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderManager.h">
+      <Filter>ソース ファイル\manager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\modelPS.hlsl">
+      <Filter>シェーダ</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\modelVS.hlsl">
+      <Filter>シェーダ</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

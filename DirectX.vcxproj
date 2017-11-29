@@ -201,6 +201,9 @@
     <ClCompile Include="sceneMesh.cpp" />
     <ClCompile Include="sceneModelX.cpp" />
     <ClCompile Include="sceneMotionPartsX.cpp" />
+    <ClCompile Include="shaderBase.cpp" />
+    <ClCompile Include="shaderManager.cpp" />
+    <ClCompile Include="shaderModel.cpp" />
     <ClCompile Include="shadow.cpp" />
     <ClCompile Include="skyDome.cpp" />
     <ClCompile Include="sound.cpp" />
@@ -247,11 +250,24 @@
     <ClInclude Include="sceneMesh.h" />
     <ClInclude Include="sceneModelX.h" />
     <ClInclude Include="sceneMotionPartsX.h" />
+    <ClInclude Include="shaderBase.h" />
+    <ClInclude Include="shaderManager.h" />
+    <ClInclude Include="shaderModel.h" />
     <ClInclude Include="shadow.h" />
     <ClInclude Include="skyDome.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="xbox360.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\modelPS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\modelVS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

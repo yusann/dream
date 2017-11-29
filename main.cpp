@@ -147,7 +147,10 @@ int APIENTRY WinMain( HINSTANCE hInstance , HINSTANCE hPrevInstance , LPSTR lpCm
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
+
+#ifdef _DEBUG
 	CManager::WndProc(hWnd, uMsg, wParam, lParam);
+#endif
 	switch( uMsg )
 	{
 	case WM_DESTROY:                   // ウィンドウ破壊
