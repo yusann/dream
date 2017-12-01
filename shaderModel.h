@@ -25,7 +25,7 @@ public:
 	// 頂点シェーダの情報を代入
 	void SetVertexInfo(const D3DXMATRIX mtxW, const D3DCOLORVALUE diffColor);
 	// ピクセルシェーダーの情報を代入
-	void SetPixelInfo(const D3DXVECTOR3 modelPos, const float specularPower = 1.0f, const float specular = 0.02f);
+	void SetPixelInfo(const D3DXVECTOR3 modelPos, const float specularPower = 60.0f);
 	// テクスチャIDの取得
 	UINT GetSamplerIndex(void);
 

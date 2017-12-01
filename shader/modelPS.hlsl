@@ -3,7 +3,6 @@ float3 posEyeW;
 float3 toEyeW;
 float3 lightDirW;
 float  specularPower;
-float  specularColor;
 
 float4 main(float4 in_color   : COLOR0,
 			float2 in_uv      : TEXCOORD0,
@@ -23,24 +22,20 @@ float4 main(float4 in_color   : COLOR0,
 	float spec = pow(max(dot(r, toEyeW), 0.0f), specularPower);
 
 	// ディフューズ
-	//float diff = max(dot(in_normalW, -lightDirW), 0.2f);
-	float diff = max(dot(in_normalW, -lightDirW)*0.5f+0.5f,0.2f);
-	diff = min(diff, 1.0f);
+	float diff = min(dot(in_normalW, -lightDirW)*0.5f + 0.5f, 1.0f);
 
-	float rim = abs(dot(toEyeW, in_normalW))*1.8f;
+	float rim = 1.0f - abs(dot(toEyeW, in_normalW))*1.2f;
 	
-
-	// スペキュラーセット（反射光＝ボーリングの光とか）
-	float3 specular = (specularColor, specularColor, specularColor) * spec;
-
-	// ディフューズセット（平行光源）
-	float3 diffuse  = (diff, diff, diff);
-
-	// アンビエント（発光）
-	float3 ambient = (0.2f, 0.2f, 0.2f);
-
 	// リムライト（縁）
-	float4 rimlight = (rim, rim, rim,1.0f);
+	float3 lightColor = float3(0.2f, 0.2f, 0.2f);
+	float4 rimlight = float4(lightColor * rim, 0.0f);
 
-	return float4(specular + diffuse + ambient, 1.0f) * tex2D(tex, in_uv) * in_color;
+	//// スペキュラーセット（反射光＝ボーリングの光とか）
+	float3 specColor = float3(1.0f, 1.0f, 1.0f);
+	float4 specular = float4(specColor* spec, 1.0f);
+
+	//// ディフューズセット（平行光源）
+	float4 diffuse = tex2D(tex, in_uv) * in_color * diff;
+
+	return specular + diffuse + rimlight;
 }

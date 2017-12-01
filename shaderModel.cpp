@@ -112,8 +112,7 @@ void CShaderModel::SetVertexInfo(const D3DXMATRIX mtxW,			// ワールド座標
 //   ピクセルシェーダの情報を代入
 //=======================================================================================
 void CShaderModel::SetPixelInfo(const D3DXVECTOR3 modelPos,		// ターゲット座標
-								const float specularPower,		// スペキュラーパワー
-								const float specular			// スペキュラーカラー
+								const float specularPower		// スペキュラーパワー
 )
 {
 	// デバイス取得
@@ -127,6 +126,7 @@ void CShaderModel::SetPixelInfo(const D3DXVECTOR3 modelPos,		// ターゲット座標
 	CLight *pLight = CManager::GetLight();
 	// ライトベクトル（ワールド）
 	D3DXVECTOR3 lightDirW = pLight->GetLight().vecDir;
+	D3DXVec3Normalize(&lightDirW, &lightDirW);
 
 	// カメラ情報取得
 	CCamera *pCamera = CManager::GetCamera();
@@ -139,7 +139,6 @@ void CShaderModel::SetPixelInfo(const D3DXVECTOR3 modelPos,		// ターゲット座標
 	m_PixelTable->SetValue(pDevice, "lightDirW", &lightDirW, sizeof(lightDirW));
 	m_PixelTable->SetValue(pDevice, "posEyeW", &posEyeW, sizeof(posEyeW));
 	m_PixelTable->SetFloat(pDevice, "specularPower", specularPower);
-	m_PixelTable->SetFloat(pDevice, "specularColor", specular);
 }
 
 //=======================================================================================
