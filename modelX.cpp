@@ -75,7 +75,14 @@ void CModelX::Init()
 				if (FAILED(D3DXCreateTextureFromFile(pDevice, pMat[i].pTextureFilename, &m_modelX[j].pTexture[i])))
 				{
 					MessageBox(NULL, "画像がありません！", "エラー", MB_OK | MB_ICONASTERISK);         // 終了するメッセージ
+					// ない時に白いテクスチャを代入
+					m_modelX[j].pTexture[i] = CTexture::GetTexture((int)CTexture::TEXTYPE_WHITE);
 				}
+			}
+			else
+			{
+				// ない時に白いテクスチャを代入
+				m_modelX[j].pTexture[i] = CTexture::GetTexture((int)CTexture::TEXTYPE_WHITE);
 			}
 		}
 	}

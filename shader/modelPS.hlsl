@@ -1,11 +1,10 @@
 sampler tex;
 float3 posEyeW;
-float3 toEyeW;
 float3 lightDirW;
 float  specularPower;
+float4 diffColor;
 
-float4 main(float4 in_color   : COLOR0,
-			float2 in_uv      : TEXCOORD0,
+float4 main(float2 in_uv      : TEXCOORD0,
 			float3 in_normalW : TEXCOORD1,
 			float3 in_posW    : TEXCOORD2) : COLOR0
 {
@@ -35,7 +34,7 @@ float4 main(float4 in_color   : COLOR0,
 	float4 specular = float4(specColor* spec, 1.0f);
 
 	//// ディフューズセット（平行光源）
-	float4 diffuse = tex2D(tex, in_uv) * in_color * diff;
+	float4 diffuse = tex2D(tex, in_uv) * diffColor * diff;
 
 	return specular + diffuse + rimlight;
 }

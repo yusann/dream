@@ -369,12 +369,12 @@ void CSceneMotionPartsX::Draw()
 		// シェーダの取得
 		CShaderModel *pShaderModel = CShaderManager::GetModel();
 		pShaderModel->Set();
-		pShaderModel->SetPixelInfo(m_Pos);
+		pShaderModel->SetVertexInfo(m_Model[i]->Matrix);
 
 		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
 		{
 			// マテリアルの設定
-			pShaderModel->SetVertexInfo(m_Model[i]->Matrix, pMat[j].MatD3D.Diffuse);
+			pShaderModel->SetPixelInfo(m_Pos, pMat[j].MatD3D.Diffuse);
 
 			// テクスチャID取得
 			UINT samplerID = pShaderModel->GetSamplerIndex();

@@ -1,6 +1,5 @@
 float4x4 mtxWVP;
 float4x4 mtxW;
-float4 diffColor;
 
 // 入力
 struct IN_VERTEX
@@ -14,7 +13,6 @@ struct IN_VERTEX
 struct OUT_VERTEX
 {
 	float4 posH:POSITION0;
-	float4 color:COLOR0;
 	float2 uv:TEXCOORD0;
 	float3 normal:TEXCOORD1;
 	float3 posW:TEXCOORD2;
@@ -38,7 +36,5 @@ OUT_VERTEX main(IN_VERTEX inv)
 	// UV
 	ov.uv = inv.uv;
 
-	// ディフューズカラー
-	ov.color = diffColor;
 	return ov;
 }

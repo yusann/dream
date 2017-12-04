@@ -23,15 +23,11 @@ public:
 	void Clear(void) override;
 
 	// 頂点シェーダの情報を代入
-	void SetVertexInfo(const D3DXMATRIX mtxW, const D3DCOLORVALUE diffColor);
+	void SetVertexInfo(const D3DXMATRIX mtxW);
 	// ピクセルシェーダーの情報を代入
-	void SetPixelInfo(const D3DXVECTOR3 modelPos, const float specularPower = 60.0f);
+	void SetPixelInfo(const D3DXVECTOR3 modelPos, const D3DCOLORVALUE diffColor, const float specularPower = 60.0f);
 	// テクスチャIDの取得
 	UINT GetSamplerIndex(void);
-
-private:
-	void CreateVertex(void);
-	void CreatePixel(void);
 };
 
 #endif

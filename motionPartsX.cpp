@@ -339,7 +339,8 @@ void CMotionPartsX::LoadModel(PART *pPart)
 			{
 				//  エラーだった場合
 				MessageBox(NULL, "テクスチャインタフェースのポインタがありません。", "エラーメッセージ", MB_OK | MB_ICONWARNING);
-				return;
+				// ない時に白いテクスチャを代入
+				pPart->pTexture[j] = CTexture::GetTexture((int)CTexture::TEXTYPE_WHITE);
 			}
 		}
 		else

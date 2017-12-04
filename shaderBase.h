@@ -18,12 +18,13 @@ public:
 	virtual void Clear(void) = 0;
 
 protected:
-	LPDIRECT3DPIXELSHADER9	m_Pixel;		// ピクセルシェーダー
-	LPD3DXCONSTANTTABLE		m_PixelTable;	// ピクセルシェーダーのテーブル
-	LPDIRECT3DVERTEXSHADER9	m_Vertex;		// 頂点シェーダー
-	LPD3DXCONSTANTTABLE		m_VertexTable;	// 頂点シェーダーのテーブル
+	void CreateVertex(const char* hlslFile);
+	void CreatePixel(const char* hlslFile);
 
-private:
+	LPDIRECT3DVERTEXSHADER9	m_pVertex;		// 頂点シェーダー
+	LPD3DXCONSTANTTABLE		m_pVertexTable;	// 頂点シェーダーのテーブル
+	LPDIRECT3DPIXELSHADER9	m_pPixel;		// ピクセルシェーダー
+	LPD3DXCONSTANTTABLE		m_pPixelTable;	// ピクセルシェーダーのテーブル
 
 };
 

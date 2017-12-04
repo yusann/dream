@@ -108,26 +108,24 @@ void CSceneModelX::Draw()
 	// シェーダのセット
 	CShaderModel *pShaderModel = CShaderManager::GetModel();
 	pShaderModel->Set();
-	pShaderModel->SetPixelInfo(m_Pos);
+	pShaderModel->SetVertexInfo(mtxWorld);
 
 	for( int i = 0; i < (int)m_Model.NumMat; i++ )
 	{
 		// マテリアルの設定
-		pShaderModel->SetVertexInfo(mtxWorld, pMat[i].MatD3D.Diffuse);
+		pShaderModel->SetPixelInfo(m_Pos, pMat[i].MatD3D.Diffuse);
+
+		if (pMat[i].pTextureFilename == NULL)
+		{
+			MessageBox(NULL, "テクスチャ取得失敗", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		}
+		// テクスチャID取得
+		UINT samplerID = pShaderModel->GetSamplerIndex();
 
 		// テクスチャの描画
-		if( pMat[i].pTextureFilename != NULL )
-		{
-			// テクスチャID取得
-			UINT samplerID = pShaderModel->GetSamplerIndex();
-
-			// テクスチャの描画
-			pDevice->SetTexture(samplerID, m_Model.pTexture[i]);
-		}
-		else
-		{
-			pDevice->SetTexture( 0, m_pTexture );         // テクスチャマッピング(白)
-		}
+		pDevice->SetTexture(samplerID, m_Model.pTexture[i]);
+			//pDevice->SetTexture( 0, m_pTexture );         // テクスチャマッピング(白)
+		
 		// メッシュの描画
 		m_Model.pMesh->DrawSubset(i);
 	}

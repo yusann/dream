@@ -34,6 +34,14 @@ typedef struct
 	D3DXVECTOR2 tex;        // 頂点データ構造体にもUV追加（必ず最後に追加）2はXY, 3はXYZ
 }VERTEX_3D;
 
+// 頂点データ構造体
+struct VERTEX2D_POS {
+	D3DXVECTOR3	p;		// 位置
+};
+struct VERTEX2D_TEX {
+	D3DXVECTOR2 tex;	// テクスチャ座標
+};
+
 //*****************************************************************************
 //   レンダラクラスの定義
 //*****************************************************************************
@@ -49,11 +57,17 @@ public:
 	void DrawEnd(void);
 
 	LPDIRECT3DDEVICE9 GetDevice(void);             // デバイスの取得処理
+	// 2D用デクラレーションの取得
+	LPDIRECT3DVERTEXDECLARATION9 Get2DDeclaration(void) { return m_Vertex2DDeclaration; }
+	// 3D用デクラレーションの取得
+	LPDIRECT3DVERTEXDECLARATION9 Get3DDeclaration(void) { return m_Vertex3DDeclaration; }
 
 private:
 	LPDIRECT3D9				m_pD3D;                // Direct3Dオブジェクト
 	LPDIRECT3DDEVICE9		m_pD3DDevice;          // Deviceオブジェクト(描画に必要)
 	bool					m_bDraw;
+	LPDIRECT3DVERTEXDECLARATION9 m_Vertex2DDeclaration;
+	LPDIRECT3DVERTEXDECLARATION9 m_Vertex3DDeclaration;
 };
 
 #endif
