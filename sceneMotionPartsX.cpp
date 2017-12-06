@@ -9,7 +9,7 @@
 #include "scene.h"
 #include "sceneMotionPartsX.h"
 #include "sceneMesh.h"
-#include "shadow.h"
+#include "shadowSphere.h"
 #include "meshSphere.h"
 #include "sound.h"
 #include "equation.h"
@@ -81,7 +81,7 @@ void CSceneMotionPartsX::Init()
 	}
 
 	// ‰eƒZƒbƒg
-	m_pShadow = CShadow::Create(m_pMotionPartsX->pShadow->NumX,
+	m_pShadow = CShadowSphere::Create(m_pMotionPartsX->pShadow->NumX,
 								m_pMotionPartsX->pShadow->NumY,
 								m_pMotionPartsX->pShadow->Radius,
 								m_pMotionPartsX->pShadow->Scl);

@@ -51,6 +51,9 @@
     <Filter Include="ソース ファイル\shader">
       <UniqueIdentifier>{8dac1d43-5bbf-4b81-b949-ab88fdb0f93c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\2D\shadow">
+      <UniqueIdentifier>{9485a73f-8b2b-4ba8-826a-94db3b144b21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,9 +63,6 @@
       <Filter>ソース ファイル\object\billboard</Filter>
     </ClCompile>
     <ClCompile Include="camera.cpp">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="light.cpp">
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
     <ClCompile Include="manager.cpp">
@@ -112,9 +112,6 @@
     </ClCompile>
     <ClCompile Include="block.cpp">
       <Filter>ソース ファイル\object\modelX</Filter>
-    </ClCompile>
-    <ClCompile Include="shadow.cpp">
-      <Filter>ソース ファイル\object\2D</Filter>
     </ClCompile>
     <ClCompile Include="particle.cpp">
       <Filter>ソース ファイル\object\billboard</Filter>
@@ -182,6 +179,18 @@
     <ClCompile Include="shaderManager.cpp">
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
+    <ClCompile Include="shadowModel.cpp">
+      <Filter>ソース ファイル\object\2D\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowSphere.cpp">
+      <Filter>ソース ファイル\object\2D\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>ソース ファイル\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="shadow.cpp">
+      <Filter>ソース ファイル\object\2D\shadow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -211,9 +220,6 @@
     <ClInclude Include="collision.h">
       <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
-    <ClInclude Include="light.h">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClInclude>
     <ClInclude Include="manager.h">
       <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
@@ -221,9 +227,6 @@
       <Filter>ソース ファイル\object\2D</Filter>
     </ClInclude>
     <ClInclude Include="object2D.h">
-      <Filter>ソース ファイル\object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="shadow.h">
       <Filter>ソース ファイル\object\2D</Filter>
     </ClInclude>
     <ClInclude Include="bullet.h">
@@ -324,6 +327,18 @@
     </ClInclude>
     <ClInclude Include="shaderManager.h">
       <Filter>ソース ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowModel.h">
+      <Filter>ソース ファイル\object\2D\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowSphere.h">
+      <Filter>ソース ファイル\object\2D\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>ソース ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="shadow.h">
+      <Filter>ソース ファイル\object\2D\shadow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

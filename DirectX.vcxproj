@@ -205,6 +205,8 @@
     <ClCompile Include="shaderManager.cpp" />
     <ClCompile Include="shaderModel.cpp" />
     <ClCompile Include="shadow.cpp" />
+    <ClCompile Include="shadowModel.cpp" />
+    <ClCompile Include="shadowSphere.cpp" />
     <ClCompile Include="skyDome.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -254,6 +256,8 @@
     <ClInclude Include="shaderManager.h" />
     <ClInclude Include="shaderModel.h" />
     <ClInclude Include="shadow.h" />
+    <ClInclude Include="shadowModel.h" />
+    <ClInclude Include="shadowSphere.h" />
     <ClInclude Include="skyDome.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="texture.h" />
