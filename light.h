@@ -1,18 +1,16 @@
+//*****************************************************************************
+//   二重定義防止
+//*****************************************************************************
 #ifndef _LIGHT_H_
 #define _LIGHT_H_
 
 //*****************************************************************************
-//   ライトクラス定義
+//   クラスの定義
 //*****************************************************************************
+// シーンクラス
 class CLight
 {
 public:
-	typedef struct
-	{
-		D3DLIGHT9 light;              // ライト
-		D3DXVECTOR3 vecDir;           // 方向
-	}LIGHT;
-
 	CLight();                                   // デフォルトコンストラクタ
 	~CLight();                                  // デストラクタ
 	
@@ -21,13 +19,15 @@ public:
 	void Update(void);
 	void Set(void);
 
-	// カメラの取得
-	static LIGHT GetLight() {
-		return m_light;
+	D3DXVECTOR3 GetPos() {
+		return m_Light.Position;
+	}
+	D3DXVECTOR3 GetDir() {
+		return m_Light.Direction;
 	}
 
 private:
-	static LIGHT m_light;
+	D3DLIGHT9 m_Light;              // ライト
 };
 
 #endif

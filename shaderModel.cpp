@@ -124,7 +124,7 @@ void CShaderModel::SetPixelInfo(const D3DXVECTOR3 modelPos,		// ターゲット座標
 	// ライト情報取得
 	CLight *pLight = CManager::GetLight();
 	// ライトベクトル（ワールド）
-	D3DXVECTOR3 lightDirW = pLight->GetLight().vecDir;
+	D3DXVECTOR3 lightDirW = pLight->GetDir();
 	D3DXVec3Normalize(&lightDirW, &lightDirW);
 
 	// カメラ情報取得

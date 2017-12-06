@@ -1,22 +1,23 @@
-//=============================================================================
-// ライト
-// Author : YUUSAN KA
-//=============================================================================
+//*****************************************************************************
+//   インクルードファイル
+//*****************************************************************************
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
+
 #include "light.h"
 #include "camera.h"
 
-//*****************************************************************************
-//   静的メンバ変数
-//*****************************************************************************
-CLight::LIGHT CLight::m_light;
-
+//=======================================================================================
+//   コンストラクタ
+//=======================================================================================
 CLight::CLight()
 {
 }
 
+//=======================================================================================
+//   デストラクタ
+//=======================================================================================
 CLight::~CLight()
 {
 }
@@ -28,11 +29,12 @@ void CLight::Init()
 {
 	int nCntLight;
 	for (nCntLight = 0; nCntLight < 1; nCntLight++) {
-		ZeroMemory(&m_light.light, sizeof(D3DLIGHT9));              // 初期化  ={0}も可
-		m_light.light.Type = D3DLIGHT_DIRECTIONAL;             // タイプ
-		m_light.light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);       // 平行光源（ライトの色）
-		m_light.light.Ambient = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);       // 環境光
-		m_light.vecDir = D3DXVECTOR3(10.0f, -10.0f, 1.0f);               // 向き
+		ZeroMemory(&m_Light, sizeof(D3DLIGHT9));              // 初期化  ={0}も可
+		m_Light.Type = D3DLIGHT_DIRECTIONAL;             // タイプ
+		m_Light.Position = D3DXVECTOR3(10000.0f, 10000.0f, 10000.0f);
+		m_Light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);       // 平行光源（ライトの色）
+		m_Light.Ambient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.0f);       // 環境光
+		m_Light.Direction = D3DXVECTOR3(1.0f, -1.0f, 1.0f);               // 向き
 	}
 
 }
@@ -68,10 +70,11 @@ void CLight::Set()
 	for (nCntLight = 0; nCntLight < 1; nCntLight++) {
 
 		// 単位ベクトルの算出
-		D3DXVec3Normalize((D3DXVECTOR3*)&m_light.light.Direction, &m_light.vecDir);
+		D3DXVECTOR3	vecDir = -1.0f * m_Light.Position;
+		D3DXVec3Normalize((D3DXVECTOR3*)&m_Light.Direction, &vecDir);
 
 		// デバイスにライトを設定
-		pDevice->SetLight(nCntLight, &m_light.light);                   // nCntLight番目のライトの設定
+		pDevice->SetLight(nCntLight, &m_Light);                   // nCntLight番目のライトの設定
 		pDevice->LightEnable(nCntLight, TRUE);                  // nCntLight番目のライトをONにする
 		pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	}
