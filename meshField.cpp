@@ -112,13 +112,13 @@ void CMeshField::MakeVex(void)
 	const float g_fieldPosX = m_MaxX*FIELD_WIDTH*-0.5f;                            // X座標
 	const float g_fieldPosZ = m_MaxY*FIELD_DEPTH*0.5f;                                 // Z座標
 
-	// 座標代入
+																					   // 座標代入
 	for (nCntHeight = 0; nCntHeight < (int)m_divide.y + 1; nCntHeight++)
 	{
 		for (nCntWidth = 0; nCntWidth < (int)m_divide.x; nCntWidth++)
 		{
 			m_vtxPos[nCntHeight][nCntWidth].x = g_fieldPosX + (nCntWidth * m_size.x);
-			m_vtxPos[nCntHeight][nCntWidth].y = m_PosY[nCntHeight*(int)m_divide.x+nCntWidth];
+			m_vtxPos[nCntHeight][nCntWidth].y = m_PosY[nCntHeight*(int)m_divide.x + nCntWidth];
 			m_vtxPos[nCntHeight][nCntWidth].z = g_fieldPosZ - (nCntHeight * m_size.y);
 		}
 	}
@@ -132,30 +132,47 @@ void CMeshField::MakeVex(void)
 	}
 
 	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * m_VexNum,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
-		D3DUSAGE_WRITEONLY,                                      // 書き込むしかしない（チェックしない）
-		FVF_VERTEX_3D,                                           // どんな頂点で書くの（0にしてもOK）
-		D3DPOOL_MANAGED,                                         // メモリ管理をお任せにする
-		&m_pVtxBuff,
+	pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_POS) * m_VexNum,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
+		D3DUSAGE_WRITEONLY,                         // 書き込むしかしない（チェックしない）
+		0,                              // どんな頂点で書くの（0にしてもOK）
+		D3DPOOL_MANAGED,                            // メモリ管理をお任せにする
+		&m_pVB_POS,
 		NULL);
 
-	// 頂点情報を設定
-	// 頂点情報格納用疑似バッファの宣言
-	VERTEX_3D* pVtx;
-
-	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_POS* v0;
+	m_pVB_POS->Lock(0, 0, (void**)&v0, 0);
+	// 各頂点の位置
 	for (nCntHeight = 0; nCntHeight < m_divide.y + 1; nCntHeight++)
 	{
-		for (nCntWidth = 0; nCntWidth < m_divide.x; nCntWidth++, pVtx++)
+		for (nCntWidth = 0; nCntWidth < m_divide.x; nCntWidth++, v0++)
 		{
 			// 頂点情報の設定
-			pVtx[0].pos = D3DXVECTOR3(g_fieldPosX + (nCntWidth * m_size.x),      // X座標の設定（ 3D座標・右回り ）
+			v0[0].pos = D3DXVECTOR3(g_fieldPosX + (nCntWidth * m_size.x),      // X座標の設定（ 3D座標・右回り ）
 				m_PosY[nCntHeight*(int)m_divide.x + nCntWidth],                                           // Y座標の設定
 				g_fieldPosZ - (nCntHeight * m_size.y));    // Z座標の設定
+		}
+	}
+	m_pVB_POS->Unlock();
 
-														   // 外側の頂点実行しない
+	// オブジェクトの頂点バッファ(ノーマル座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_NORMAL) * m_VexNum,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_NORMAL, NULL))) {
+		MessageBox(NULL, "ノーマル座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_NORMAL* v1;
+	m_pVB_NORMAL->Lock(0, 0, (void**)&v1, 0);
+	// 各頂点のノーマル座標
+	for (nCntHeight = 0; nCntHeight < m_divide.y + 1; nCntHeight++)
+	{
+		for (nCntWidth = 0; nCntWidth < m_divide.x; nCntWidth++, v1++)
+		{
+			// 外側の頂点実行しない
 			if (nCntHeight != 0 && nCntHeight != m_divide.y &&
 				nCntWidth != 0 && nCntWidth != m_divide.x - 1)
 			{
@@ -183,15 +200,54 @@ void CMeshField::MakeVex(void)
 				normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 			}
 
-			pVtx[0].normal = D3DXVECTOR3(normal.x, normal.y, normal.z);					// 法線の設定
-			pVtx[0].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);						// カラーの設定（0~255の整数値）
-			pVtx[0].tex = D3DXVECTOR2(0.0f + (nCntWidth * m_texUV.x),					// テクスチャU座標の設定
+			v1[0].normal = D3DXVECTOR3(normal.x, normal.y, normal.z);					// 法線の設定
+		}
+	}
+	m_pVB_NORMAL->Unlock();
+
+	// オブジェクトの頂点バッファ(色)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_COLOR) * m_VexNum,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_COLOR, NULL))) {
+		MessageBox(NULL, "頂点色生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_COLOR* v2;
+	m_pVB_COLOR->Lock(0, 0, (void**)&v2, 0);
+	for (nCntHeight = 0; nCntHeight < m_divide.y + 1; nCntHeight++)
+	{
+		for (nCntWidth = 0; nCntWidth < m_divide.x; nCntWidth++, v2++)
+		{
+			v2[0].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);						// カラーの設定（0~255の整数値）
+		}
+	}
+	m_pVB_COLOR->Unlock();
+
+	// オブジェクトの頂点バッファ(テクスチャ座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_TEX) * m_VexNum,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_TEX, NULL))) {
+		MessageBox(NULL, "テクスチャ座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_TEX* v3;
+	m_pVB_TEX->Lock(0, 0, (void**)&v3, 0);
+
+	for (nCntHeight = 0; nCntHeight < m_divide.y + 1; nCntHeight++)
+	{
+		for (nCntWidth = 0; nCntWidth < m_divide.x; nCntWidth++, v3++)
+		{
+			v3[0].tex = D3DXVECTOR2(0.0f + (nCntWidth * m_texUV.x),					// テクスチャU座標の設定
 				0.0f + (nCntHeight * m_texUV.y));									// テクスチャV座標の設定
 		}
 	}
-
-	// 鍵を開ける
-	m_pVtxBuff->Unlock();
+	m_pVB_TEX->Unlock();
 }
 
 
@@ -255,11 +311,6 @@ void CMeshField::MakeBuff(void)
 
 float CMeshField::GetHeight(D3DXVECTOR3 pos)
 {
-	// 頂点情報格納用疑似バッファの宣言
-	VERTEX_3D* pVtx;
-
-	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 	// 座標変換
 	float posZ = -pos.z + (FIELD_DEPTH*m_MaxY*0.5f);
 	float posX = pos.x + (FIELD_WIDTH*m_MaxX*0.5f);
@@ -374,10 +425,8 @@ void CMeshField::LoadFile(void)
 float CMeshField::SearchPolygon(int indexX, int indexZ, D3DXVECTOR3 pos)
 {
 	// 頂点情報格納用疑似バッファの宣言
-	VERTEX_3D* pVtx;
-
-	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	CVertexDecl::VERTEX3D_POS* pVtx;
+	m_pVB_POS->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 計算用変数
 	D3DXVECTOR3 normal, work;
@@ -419,7 +468,7 @@ float CMeshField::SearchPolygon(int indexX, int indexZ, D3DXVECTOR3 pos)
 				D3DXVec3Normalize(&normal, &normal);
 
 				// 鍵を開ける
-				m_pVtxBuff->Unlock();
+				m_pVB_POS->Unlock();
 
 				// 高さを返す
 				return pos0.y - ((pos.x - pos0.x) * normal.x + (pos.z - pos0.z) * normal.z) / normal.y;
@@ -431,7 +480,7 @@ float CMeshField::SearchPolygon(int indexX, int indexZ, D3DXVECTOR3 pos)
 	pos2 = pVtx[(indexZ + 1)*(m_MaxX + 1) + indexX + 1].pos;
 
 	// 鍵を開ける
-	m_pVtxBuff->Unlock();
+	m_pVB_POS->Unlock();
 
 	vecF = pos1 - pos0;
 	vecT = posT - pos0;

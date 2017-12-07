@@ -105,40 +105,100 @@ void CSkyDome::MakeVex(void)
 		return;
 	}
 
-	// 頂点バッファを作る
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * ((m_NumBlockX + 1) * (m_NumBlockY + 1)),           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
-		D3DUSAGE_WRITEONLY,                                      // 書き込むしかしない（チェックしない）
-		FVF_VERTEX_3D,                                           // どんな頂点で書くの（0にしてもOK）
-		D3DPOOL_MANAGED,                                         // メモリ管理をお任せにする
-		&m_pVtxBuff,
+	// 頂点バッファの生成
+	pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_POS) * ((m_NumBlockX + 1) * (m_NumBlockY + 1)),           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
+		D3DUSAGE_WRITEONLY,                         // 書き込むしかしない（チェックしない）
+		0,                              // どんな頂点で書くの（0にしてもOK）
+		D3DPOOL_MANAGED,                            // メモリ管理をお任せにする
+		&m_pVB_POS,
 		NULL);
 
-	// 頂点情報格納用疑似バッファの宣言
-	VERTEX_3D* pVtx;
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_POS* v0;
+	m_pVB_POS->Lock(0, 0, (void**)&v0, 0);
 
-	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 	// 半径を記憶
 	float Radius = m_Radius;
-
 	for (int nCntHeight = 0; nCntHeight < m_NumBlockY + 1; nCntHeight++)
 	{
 		m_Radius = cos(D3DXToRadian((90 / m_NumBlockY) * nCntHeight)) * Radius;
-		for (int nCntWidth = 0; nCntWidth < m_NumBlockX + 1; nCntWidth++, pVtx++)
+		for (int nCntWidth = 0; nCntWidth < m_NumBlockX + 1; nCntWidth++, v0++)
 		{
 			// 頂点情報の設定
-			pVtx[0].pos = D3DXVECTOR3(cos(D3DXToRadian((360 / m_NumBlockX) * nCntWidth)) * m_Radius,      // X座標の設定（ 3D座標・右回り ）
+			v0[0].pos = D3DXVECTOR3(cos(D3DXToRadian((360 / m_NumBlockX) * nCntWidth)) * m_Radius,      // X座標の設定（ 3D座標・右回り ）
 				sin(D3DXToRadian(((90 / m_NumBlockY) * nCntHeight))) * Radius,                                                                            // Y座標の設定
 				sin(D3DXToRadian((360 / m_NumBlockX) * nCntWidth)) * m_Radius);    // Z座標の設定
-			pVtx[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);                          // 法線の設定
-			pVtx[0].color = m_Color;                       // カラーの設定
-			pVtx[0].tex = D3DXVECTOR2(nCntWidth * (1.0f / m_NumBlockX),              // テクスチャU座標の設定
+		}
+	}
+	m_pVB_POS->Unlock();
+
+	// オブジェクトの頂点バッファ(ノーマル座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_NORMAL) * ((m_NumBlockX + 1) * (m_NumBlockY + 1)),
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_NORMAL, NULL))) {
+		MessageBox(NULL, "ノーマル座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_NORMAL* v1;
+	m_pVB_NORMAL->Lock(0, 0, (void**)&v1, 0);
+
+	for (int nCntHeight = 0; nCntHeight < m_NumBlockY + 1; nCntHeight++)
+	{
+		for (int nCntWidth = 0; nCntWidth < m_NumBlockX + 1; nCntWidth++, v1++)
+		{
+			v1[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);                          // 法線の設定
+		}
+	}
+	m_pVB_NORMAL->Unlock();
+
+	// オブジェクトの頂点バッファ(色)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_COLOR) * ((m_NumBlockX + 1) * (m_NumBlockY + 1)),
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_COLOR, NULL))) {
+		MessageBox(NULL, "頂点色生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_COLOR* v2;
+	m_pVB_COLOR->Lock(0, 0, (void**)&v2, 0);
+
+	for (int nCntHeight = 0; nCntHeight < m_NumBlockY + 1; nCntHeight++)
+	{
+		for (int nCntWidth = 0; nCntWidth < m_NumBlockX + 1; nCntWidth++, v2++)
+		{
+			v2[0].color = m_Color;                       // カラーの設定
+		}
+	}
+	m_pVB_COLOR->Unlock();
+
+	// オブジェクトの頂点バッファ(テクスチャ座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_TEX) * ((m_NumBlockX + 1) * (m_NumBlockY + 1)),
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_TEX, NULL))) {
+		MessageBox(NULL, "テクスチャ座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_TEX* v3;
+	m_pVB_TEX->Lock(0, 0, (void**)&v3, 0);
+
+	for (int nCntHeight = 0; nCntHeight < m_NumBlockY + 1; nCntHeight++)
+	{
+		for (int nCntWidth = 0; nCntWidth < m_NumBlockX + 1; nCntWidth++, v3++)
+		{
+			v3[0].tex = D3DXVECTOR2(nCntWidth * (1.0f / m_NumBlockX),              // テクスチャU座標の設定
 				(m_NumBlockY - nCntHeight) * (1.0f / m_NumBlockY));            // テクスチャV座標の設定
 
 		}
 	}
-	// 鍵を開ける
-	m_pVtxBuff->Unlock();
+	m_pVB_TEX->Unlock();
 }
 
 

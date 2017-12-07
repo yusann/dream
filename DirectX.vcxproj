@@ -210,6 +210,7 @@
     <ClCompile Include="skyDome.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="vertexDecl.cpp" />
     <ClCompile Include="xbox360.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +262,7 @@
     <ClInclude Include="skyDome.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="vertexDecl.h" />
     <ClInclude Include="xbox360.h" />
   </ItemGroup>
   <ItemGroup>

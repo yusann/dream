@@ -21,6 +21,11 @@ protected:
 	int m_TexWidth;
 	int m_TexHeight;
 
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_POS;
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_NORMAL;
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_COLOR;
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_TEX;
+
 private:
 	void MakeVex(void);     // í∏ì_ÇÃê›íË
 	D3DXVECTOR2 m_TexPos;

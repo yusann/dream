@@ -11,9 +11,7 @@
 CRenderer::CRenderer() :
 	m_pD3D(NULL),
 	m_pD3DDevice(NULL),
-	m_bDraw(false),
-	m_Vertex2DDeclaration(NULL),
-	m_Vertex3DDeclaration(NULL)
+	m_bDraw(false)
 {
 }
 
@@ -114,14 +112,7 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
 	// 頂点宣言（デクラレーション）
-	// 頂点宣言の初期化
-	D3DVERTEXELEMENT9 vertexElements[] = {
-		{ 0,  0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 },
-		{ 0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
-		D3DDECL_END()
-	};
-
-	m_pD3DDevice->CreateVertexDeclaration(vertexElements, &m_Vertex2DDeclaration);
+	CVertexDecl::Init(m_pD3DDevice);
 
 
 	return S_OK;
@@ -132,6 +123,7 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 //==================================================================================================================================================
 void CRenderer::Uninit(void)
 {
+	CVertexDecl::Uninit();
 	// デバイスの破棄
 	SAFE_RELEASE(m_pD3DDevice);
 

@@ -13,7 +13,11 @@
 //*************
 // メイン処理
 //*************
-CSceneBillboard::CSceneBillboard(int Priority) :CScene(Priority)
+CSceneBillboard::CSceneBillboard(int Priority) :CScene(Priority),
+m_pVB_POS(NULL),
+m_pVB_NORMAL(NULL),
+m_pVB_COLOR(NULL),
+m_pVB_TEX(NULL)
 {
 	m_TexWidth = 1;
 	m_TexHeight = 1;
@@ -42,6 +46,10 @@ void CSceneBillboard::Init()
 //=======================================================================================
 void CSceneBillboard::Uninit()
 {
+	SAFE_RELEASE(m_pVB_POS);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_NORMAL);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_COLOR);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_TEX);      // 頂点バッファの破棄
 	SAFE_RELEASE( m_pVtxBuff );      // 頂点バッファの破棄
 	CScene::Release();
 }
@@ -66,14 +74,15 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 		return;
 	}
 
-	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0,
-		m_pVtxBuff,              // ストリームのもとになる頂点のバッファの始点
-		0,                       // オフセット（バイト）
-		sizeof(VERTEX_3D));      // 一つの頂点データのサイズ（ストライド量）
+	// 頂点のデクラレーションの設定
+	LPDIRECT3DVERTEXDECLARATION9 pDecl = *CVertexDecl::Get(CVertexDecl::TYPE_3D);
+	pDevice->SetVertexDeclaration(pDecl);
 
-								 // 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
+	// ストリームとして頂点バッファを設定
+	pDevice->SetStreamSource(0, m_pVB_POS, 0, sizeof(CVertexDecl::VERTEX3D_POS));
+	pDevice->SetStreamSource(1, m_pVB_NORMAL, 0, sizeof(CVertexDecl::VERTEX3D_NORMAL));
+	pDevice->SetStreamSource(2, m_pVB_COLOR, 0, sizeof(CVertexDecl::VERTEX3D_COLOR));
+	pDevice->SetStreamSource(3, m_pVB_TEX, 0, sizeof(CVertexDecl::VERTEX3D_TEX));
 
 	// 描画直前にテクスチャをセット（テクスチャの設定）
 	pDevice->SetTexture(0, m_pTexture);
@@ -163,55 +172,86 @@ void CSceneBillboard::MakeVex(void)
 	}
 
 	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
+	pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_POS) * NUM_VERTEX,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
 		D3DUSAGE_WRITEONLY,                         // 書き込むしかしない（チェックしない）
-		FVF_VERTEX_3D,                              // どんな頂点で書くの（0にしてもOK）
+		0,                              // どんな頂点で書くの（0にしてもOK）
 		D3DPOOL_MANAGED,                            // メモリ管理をお任せにする
-		&m_pVtxBuff,
+		&m_pVB_POS,
 		NULL);
 
-	// 頂点情報を設定
-	// 頂点情報格納用疑似バッファの宣言
-	VERTEX_3D* pVtx;
-
-	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_POS* v0;
+	m_pVB_POS->Lock(0, 0, (void**)&v0, 0);
 	// スケールを設定
-	pVtx[0].pos = D3DXVECTOR3(cosf(-m_Angle + D3DX_PI) * m_Length,      // X座標の設定
-		sinf(-m_Angle + D3DX_PI ) * m_Length,      // Y座標の設定
+	v0[0].pos = D3DXVECTOR3(cosf(-m_Angle + D3DX_PI) * m_Length,      // X座標の設定
+		sinf(-m_Angle + D3DX_PI) * m_Length,      // Y座標の設定
 		0.0f);                                   // Z座標の設定
-	pVtx[1].pos = D3DXVECTOR3(cosf(m_Angle) * m_Length,             // X座標の設定
-		sinf(m_Angle ) * m_Length,             // Y座標の設定
+	v0[1].pos = D3DXVECTOR3(cosf(m_Angle) * m_Length,             // X座標の設定
+		sinf(m_Angle) * m_Length,             // Y座標の設定
 		0.0f);                               // Z座標の設定
-	pVtx[2].pos = D3DXVECTOR3(cosf(m_Angle + D3DX_PI) * m_Length,      // X座標の設定
-		sinf(m_Angle + D3DX_PI ) * m_Length,      // Y座標の設定
+	v0[2].pos = D3DXVECTOR3(cosf(m_Angle + D3DX_PI) * m_Length,      // X座標の設定
+		sinf(m_Angle + D3DX_PI) * m_Length,      // Y座標の設定
 		0.0f);                                  // Z座標の設定
-	pVtx[3].pos = D3DXVECTOR3(cosf(-m_Angle ) * m_Length,          // X座標の設定
-		sinf(-m_Angle ) * m_Length,          // Y座標の設定
+	v0[3].pos = D3DXVECTOR3(cosf(-m_Angle) * m_Length,          // X座標の設定
+		sinf(-m_Angle) * m_Length,          // Y座標の設定
 		0.0f);                             // Z座標の設定
+	m_pVB_POS->Unlock();
 
-	// 頂点法線の設定
-	pVtx[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-	pVtx[1].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-	pVtx[2].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-	pVtx[3].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	// オブジェクトの頂点バッファ(ノーマル座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_NORMAL) * NUM_VERTEX,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_NORMAL, NULL))) {
+		MessageBox(NULL, "ノーマル座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
 
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_NORMAL* v1;
+	m_pVB_NORMAL->Lock(0, 0, (void**)&v1, 0);
 
-	// 頂点カラーの設定（0~255の整数値）
-	pVtx[0].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 左上の色
-	pVtx[1].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 右上の色
-	pVtx[2].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 左下の色
-	pVtx[3].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 右下の色
+	v1[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	v1[1].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	v1[2].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	v1[3].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	m_pVB_NORMAL->Unlock();
 
-														// 頂点データへUVデータの追加
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);                    // 左上のUV座標
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);                    // 右上のUV座標
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);                    // 左下のUV座標
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);                    // 右下のUV座標
+	// オブジェクトの頂点バッファ(色)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_COLOR) * NUM_VERTEX,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_COLOR, NULL))) {
+		MessageBox(NULL, "頂点色生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
 
-															  // 鍵を開ける
-	m_pVtxBuff->Unlock();
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_COLOR* v2;
+	m_pVB_COLOR->Lock(0, 0, (void**)&v2, 0);
+
+	v2[0].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 左上の色
+	v2[1].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 右上の色
+	v2[2].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 左下の色
+	v2[3].color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);  // 右下の色
+	m_pVB_COLOR->Unlock();
+
+	// オブジェクトの頂点バッファ(テクスチャ座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_TEX) * NUM_VERTEX,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_TEX, NULL))) {
+		MessageBox(NULL, "テクスチャ座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_TEX* v3;
+	m_pVB_TEX->Lock(0, 0, (void**)&v3, 0);
+	v3[0].tex = D3DXVECTOR2(0.0f, 0.0f);                    // 左上のUV座標
+	v3[1].tex = D3DXVECTOR2(1.0f, 0.0f);                    // 右上のUV座標
+	v3[2].tex = D3DXVECTOR2(0.0f, 1.0f);                    // 左下のUV座標
+	v3[3].tex = D3DXVECTOR2(1.0f, 1.0f);                    // 右下のUV座標
+	m_pVB_TEX->Unlock();
 }
 
 //=======================================================================================
@@ -227,11 +267,9 @@ void CSceneBillboard::SetTexID(int nID)
 	m_TexPos.x = nID % m_TexWidth * m_TexScl.x;		//  X座標
 	m_TexPos.y = nID / m_TexWidth * m_TexScl.y;		//  Y座標
 
-													// 頂点情報格納用疑似バッファの宣言
-	VERTEX_3D* pVtx;
-
-	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	// 頂点情報格納用疑似バッファの宣言
+	CVertexDecl::VERTEX3D_TEX* pVtx;
+	m_pVB_TEX->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点データへUVデータの追加
 	pVtx[0].tex = D3DXVECTOR2(m_TexPos.x + 0.001f, m_TexPos.y + 0.001f);                    // 左上のUV座標
@@ -239,6 +277,6 @@ void CSceneBillboard::SetTexID(int nID)
 	pVtx[2].tex = D3DXVECTOR2(m_TexPos.x + 0.001f, m_TexPos.y - 0.001f + m_TexScl.y);                    // 左下のUV座標
 	pVtx[3].tex = D3DXVECTOR2(m_TexPos.x - 0.001f + m_TexScl.x, m_TexPos.y - 0.001f + m_TexScl.y);                    // 右下のUV座標
 
-																													  // 鍵を開ける
-	m_pVtxBuff->Unlock();
+	// 鍵を開ける
+	m_pVB_TEX->Unlock();
 }

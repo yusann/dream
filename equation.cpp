@@ -15,7 +15,7 @@ void CEquation::SetVertexScaleXY( LPDIRECT3DVERTEXBUFFER9 pVtxBuffer, float fAng
 {
 	if( pVtxBuffer != NULL){
 		// 頂点情報格納用疑似バッファの宣言
-		VERTEX_3D* pVtx = NULL;
+		CVertexDecl::VERTEX3D_POS* pVtx = NULL;
 
 		// 頂点バッファをロックして、仮想アドレスを取得する
 		pVtxBuffer->Lock( 0, 0, (void**)&pVtx, 0);
@@ -33,77 +33,6 @@ void CEquation::SetVertexScaleXY( LPDIRECT3DVERTEXBUFFER9 pVtxBuffer, float fAng
 		pVtx[3].pos = D3DXVECTOR3( cosf( -fAngle + fRot) * fLength,          // X座標の設定
 								   sinf( -fAngle + fRot) * fLength,          // Y座標の設定
 								   0.0f );                             // Z座標の設定
-
-		// 鍵を開ける
-		pVtxBuffer->Unlock();
-	}
-}
-
-// スケール
-void CEquation::SetVertexScaleXZ( LPDIRECT3DVERTEXBUFFER9 pVtxBuffer, float fAngle, float fLength, float fRot )
-{
-	if( pVtxBuffer != NULL){
-		// 頂点情報格納用疑似バッファの宣言
-		VERTEX_3D* pVtx = NULL;
-
-		// 頂点バッファをロックして、仮想アドレスを取得する
-		pVtxBuffer->Lock( 0, 0, (void**)&pVtx, 0);
-
-		// スケールを設定
-		pVtx[0].pos = D3DXVECTOR3( cosf( -fAngle + D3DX_PI + fRot) * fLength,      // X座標の設定
-								   0.0f,                                     // Y座標の設定
-								   sinf( -fAngle + D3DX_PI + fRot) * fLength );    // Z座標の設定
-		pVtx[1].pos = D3DXVECTOR3( cosf( fAngle + fRot) * fLength,             // X座標の設定
-								   0.0f,                                 // Y座標の設定
-								   sinf( fAngle + fRot) * fLength );           // Z座標の設定
-		pVtx[2].pos = D3DXVECTOR3( cosf( fAngle + D3DX_PI + fRot) * fLength,      // X座標の設定
-								   0.0f,                                    // Y座標の設定
-								   sinf( fAngle + D3DX_PI + fRot) * fLength );    // Z座標の設定
-		pVtx[3].pos = D3DXVECTOR3( cosf( -fAngle + fRot) * fLength,          // X座標の設定
-								   0.0f,                               // Y座標の設定
-								   sinf( -fAngle + fRot) * fLength );        // Z座標の設定
-
-		// 鍵を開ける
-		pVtxBuffer->Unlock();
-	}
-}
-
-// テクスチャ座標
-void CEquation::SetVertexTex( LPDIRECT3DVERTEXBUFFER9 pVtxBuffer, D3DXVECTOR2 texPos, D3DXVECTOR2 texSize )
-{
-	if( pVtxBuffer != NULL){
-		// 頂点情報格納用疑似バッファの宣言
-		VERTEX_3D* pVtx = NULL;
-
-		// 頂点バッファをロックして、仮想アドレスを取得する
-		pVtxBuffer->Lock( 0, 0, (void**)&pVtx, 0);
-	
-		// スケールを設定
-		pVtx[0].tex = D3DXVECTOR2( texPos.x            , texPos.y            );                      // テクスチャUV座標の設定
-		pVtx[1].tex = D3DXVECTOR2( texPos.x + texSize.x, texPos.y            );                      // テクスチャUV座標の設定
-		pVtx[2].tex = D3DXVECTOR2( texPos.x            , texPos.y + texSize.y);                      // テクスチャUV座標の設定
-		pVtx[3].tex = D3DXVECTOR2( texPos.x + texSize.x, texPos.y + texSize.y);                      // テクスチャUV座標の設定
-
-		// 鍵を開ける
-		pVtxBuffer->Unlock();
-	}
-}
-
-// 色
-void CEquation::SetVertexColor( LPDIRECT3DVERTEXBUFFER9 pVtxBuffer, D3DXCOLOR color )
-{
-	if( pVtxBuffer != NULL){
-		// 頂点情報格納用疑似バッファの宣言
-		VERTEX_3D* pVtx = NULL;
-
-		// 頂点バッファをロックして、仮想アドレスを取得する
-		pVtxBuffer->Lock( 0, 0, (void**)&pVtx, 0);
-	
-		// 色の設定
-		pVtx[0].color = color;             // カラーの設定（0~255の整数値）
-		pVtx[1].color = color;             // カラーの設定（0~255の整数値）
-		pVtx[2].color = color;             // カラーの設定（0~255の整数値）
-		pVtx[3].color = color;             // カラーの設定（0~255の整数値）
 
 		// 鍵を開ける
 		pVtxBuffer->Unlock();

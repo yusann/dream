@@ -191,6 +191,9 @@
     <ClCompile Include="shadow.cpp">
       <Filter>ソース ファイル\object\2D\shadow</Filter>
     </ClCompile>
+    <ClCompile Include="vertexDecl.cpp">
+      <Filter>ソース ファイル\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -339,6 +342,9 @@
     </ClInclude>
     <ClInclude Include="shadow.h">
       <Filter>ソース ファイル\object\2D\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="vertexDecl.h">
+      <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

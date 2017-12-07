@@ -213,7 +213,7 @@ void CParticle::Update()
 				// “GŽ€–SŽž
 			case TYPE_ENEMY_DEATH:
 			{
-				CEquation::SetVertexScaleXY(m_pVtxBuff, m_Angle, m_Length, m_Rot);
+				CEquation::SetVertexScaleXY(m_pVB_POS, m_Angle, m_Length, m_Rot);
 				m_Rot += m_fRotMove;
 				break;
 			}

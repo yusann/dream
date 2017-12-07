@@ -10,7 +10,11 @@
 //*************
 // メイン処理
 //*************
-CShadowSphere::CShadowSphere(){}
+CShadowSphere::CShadowSphere() :
+m_pVB_POS(NULL),
+m_pVB_NORMAL(NULL),
+m_pVB_COLOR(NULL),
+m_pVB_TEX(NULL) {}
 CShadowSphere::~CShadowSphere() {}
 
 // 変数初期化
@@ -20,7 +24,11 @@ CShadowSphere::CShadowSphere(int numBlockX, int numBlockY, float radius, D3DXVEC
 	m_SphereRadius(radius),
 	m_Color(color),
 	m_SphereNumX(numBlockX),
-	m_SphereNumY(numBlockY)
+	m_SphereNumY(numBlockY),
+	m_pVB_POS(NULL),
+	m_pVB_NORMAL(NULL),
+	m_pVB_COLOR(NULL),
+	m_pVB_TEX(NULL)
 {
 	m_VtxBuff = NULL;
 	m_SphereIdxBuff = NULL;
@@ -70,6 +78,10 @@ void CShadowSphere::Init( void )
 //==============================================================================
 void CShadowSphere::Uninit( void )
 {
+	SAFE_RELEASE(m_pVB_POS);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_NORMAL);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_COLOR);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_TEX);      // 頂点バッファの破棄
 	SAFE_RELEASE( m_VtxBuff);
 	SAFE_RELEASE( m_SphereIdxBuff);
 	SAFE_RELEASE( m_SphereVtxBuff);
@@ -211,23 +223,22 @@ void CShadowSphere::MakeSphereVex(void)
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	pDevice = CManager::GetRenderer()->GetDevice();
 	if (pDevice == NULL) {
-		MessageBox(NULL, "shadow.cpp => MakeSphereVex => pDeviceがNULL！！", "エラー", MB_OK | MB_ICONASTERISK);
+		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
 		return;
 	}
 
-	// 頂点バッファを作る
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * m_VexNum,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
-		D3DUSAGE_WRITEONLY,                                      // 書き込むしかしない（チェックしない）
-		FVF_VERTEX_3D,                                           // どんな頂点で書くの（0にしてもOK）
-		D3DPOOL_MANAGED,                                         // メモリ管理をお任せにする
-		&m_SphereVtxBuff,
+	// 頂点バッファの生成
+	pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_POS) * m_VexNum,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
+		D3DUSAGE_WRITEONLY,                         // 書き込むしかしない（チェックしない）
+		0,                              // どんな頂点で書くの（0にしてもOK）
+		D3DPOOL_MANAGED,                            // メモリ管理をお任せにする
+		&m_pVB_POS,
 		NULL);
 
-	// 頂点情報格納用疑似バッファの宣言
-	VERTEX_3D* pVtx;
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_POS* v0;
+	m_pVB_POS->Lock(0, 0, (void**)&v0, 0);
 
-	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_SphereVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 	// 半径を記憶
 	float Radius = m_SphereRadius;
 
@@ -237,30 +248,115 @@ void CShadowSphere::MakeSphereVex(void)
 		if (i == 0 || i == m_SphereNumY)
 		{
 			// 頂点情報の設定
-			pVtx[0].pos = D3DXVECTOR3(0.0f,
+			v0[0].pos = D3DXVECTOR3(0.0f,
 				sin(D3DXToRadian(((-180 / (float)m_SphereNumY) * i - 90))) * Radius,                                                                            // Y座標の設定
 				0.0f);
-			pVtx[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);                          // 法線の設定
-			pVtx[0].color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-			pVtx++;
+			v0++;
 		}
 		else
 		{
-			for (int nCntWidth = 0; nCntWidth < m_SphereNumX; nCntWidth++, pVtx++)
+			for (int nCntWidth = 0; nCntWidth < m_SphereNumX; nCntWidth++, v0++)
 			{
 				// 頂点情報の設定
-				pVtx[0].pos = D3DXVECTOR3(cos(D3DXToRadian((360 / (float)m_SphereNumX) * nCntWidth)) * m_SphereRadius,      // X座標の設定（ 3D座標・右回り ）
+				v0[0].pos = D3DXVECTOR3(cos(D3DXToRadian((360 / (float)m_SphereNumX) * nCntWidth)) * m_SphereRadius,      // X座標の設定（ 3D座標・右回り ）
 					sin(D3DXToRadian(((-180 / (float)m_SphereNumY) * i - 90))) * Radius,                                                                            // Y座標の設定
 					sin(D3DXToRadian((360 / (float)m_SphereNumX) * nCntWidth)) * m_SphereRadius);    // Z座標の設定
-				pVtx[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);                          // 法線の設定
-				pVtx[0].color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-				pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 			}
 		}
 	}
-	// 鍵を開ける
-	m_SphereVtxBuff->Unlock();
+	m_pVB_POS->Unlock();
+
+	// オブジェクトの頂点バッファ(ノーマル座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_NORMAL) * m_VexNum,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_NORMAL, NULL))) {
+		MessageBox(NULL, "ノーマル座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_NORMAL* v1;
+	m_pVB_NORMAL->Lock(0, 0, (void**)&v1, 0);
+	for (int i = 0; i < m_SphereNumY + 1; i++)
+	{
+		m_SphereRadius = cos(D3DXToRadian((180 / (float)m_SphereNumY) * i - 90)) * Radius;
+		if (i == 0 || i == m_SphereNumY)
+		{
+			v1[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);                          // 法線の設定
+			v1++;
+		}
+		else
+		{
+			for (int nCntWidth = 0; nCntWidth < m_SphereNumX; nCntWidth++, v1++)
+			{
+				v1[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);                          // 法線の設定
+			}
+		}
+	}
+	m_pVB_NORMAL->Unlock();
+
+	// オブジェクトの頂点バッファ(色)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_COLOR) * m_VexNum,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_COLOR, NULL))) {
+		MessageBox(NULL, "頂点色生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_COLOR* v2;
+	m_pVB_COLOR->Lock(0, 0, (void**)&v2, 0);
+
+	for (int i = 0; i < m_SphereNumY + 1; i++)
+	{
+		m_SphereRadius = cos(D3DXToRadian((180 / (float)m_SphereNumY) * i - 90)) * Radius;
+		if (i == 0 || i == m_SphereNumY)
+		{
+			v2[0].color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+			v2++;
+		}
+		else
+		{
+			for (int nCntWidth = 0; nCntWidth < m_SphereNumX; nCntWidth++, v2++)
+			{
+				v2[0].color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+			}
+		}
+	}
+	m_pVB_COLOR->Unlock();
+
+	// オブジェクトの頂点バッファ(テクスチャ座標)を生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX3D_TEX) * m_VexNum,
+		D3DUSAGE_WRITEONLY,
+		0,
+		D3DPOOL_MANAGED, &m_pVB_TEX, NULL))) {
+		MessageBox(NULL, "テクスチャ座標生成エラー！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	//頂点バッファの中身を埋める
+	CVertexDecl::VERTEX3D_TEX* v3;
+	m_pVB_TEX->Lock(0, 0, (void**)&v3, 0);
+
+	for (int i = 0; i < m_SphereNumY + 1; i++)
+	{
+		m_SphereRadius = cos(D3DXToRadian((180 / (float)m_SphereNumY) * i - 90)) * Radius;
+		if (i == 0 || i == m_SphereNumY)
+		{
+			v3[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			v3++;
+		}
+		else
+		{
+			for (int nCntWidth = 0; nCntWidth < m_SphereNumX; nCntWidth++, v3++)
+			{
+				v3[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			}
+		}
+	}
+	m_pVB_TEX->Unlock();
 }
 
 //=======================================================================================
@@ -391,17 +487,18 @@ void CShadowSphere::DrawSphere()
 	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxPos);   // ワールド座標の代入
 	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);       // ワールド情報セット
 
-	// パイプライン
-	pDevice->SetStreamSource(0,
-		m_SphereVtxBuff,     // ストリームのもとになる頂点のバッファの始点
-		0,                       // オフセット（バイト）
-		sizeof(VERTEX_3D));      // 一つの頂点データのサイズ（ストライド量）
+	// 頂点のデクラレーションの設定
+	LPDIRECT3DVERTEXDECLARATION9 pDecl = *CVertexDecl::Get(CVertexDecl::TYPE_3D);
+	pDevice->SetVertexDeclaration(pDecl);
+
+	// ストリームとして頂点バッファを設定
+	pDevice->SetStreamSource(0, m_pVB_POS, 0, sizeof(CVertexDecl::VERTEX3D_POS));
+	pDevice->SetStreamSource(1, m_pVB_NORMAL, 0, sizeof(CVertexDecl::VERTEX3D_NORMAL));
+	pDevice->SetStreamSource(2, m_pVB_COLOR, 0, sizeof(CVertexDecl::VERTEX3D_COLOR));
+	pDevice->SetStreamSource(3, m_pVB_TEX, 0, sizeof(CVertexDecl::VERTEX3D_TEX));
 
 	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_SphereIdxBuff); 
-
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
 
 	// 描画直前にテクスチャをセット（テクスチャの設定）
 	pDevice->SetTexture(0, NULL);

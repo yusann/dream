@@ -31,6 +31,11 @@ protected:
 	float m_Angle;
 	float m_Length;
 
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_POS;
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_NORMAL;
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_COLOR;
+	LPDIRECT3DVERTEXBUFFER9	m_pVB_TEX;
+
 private:
 	void MakeVex(void);     // í∏ì_ÇÃê›íË
 };

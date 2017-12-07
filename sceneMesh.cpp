@@ -11,7 +11,11 @@
 //*************
 // メイン処理
 //*************
-CSceneMesh::CSceneMesh(int Priority) :CScene(Priority)
+CSceneMesh::CSceneMesh(int Priority) :CScene(Priority),
+m_pVB_POS(NULL),
+m_pVB_NORMAL(NULL),
+m_pVB_COLOR(NULL),
+m_pVB_TEX(NULL)
 {
 	m_Scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 }
@@ -34,6 +38,10 @@ void CSceneMesh::Init(void)
 //=======================================================================================
 void CSceneMesh::Uninit()
 {
+	SAFE_RELEASE(m_pVB_POS);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_NORMAL);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_COLOR);      // 頂点バッファの破棄
+	SAFE_RELEASE(m_pVB_TEX);      // 頂点バッファの破棄
 	SAFE_RELEASE( m_pVtxBuff );      // 頂点バッファの破棄
 	SAFE_RELEASE(m_pIdxBuff);      // インデックスバッファの破棄
 	CScene::Release();
@@ -89,18 +97,19 @@ void CSceneMesh::Draw()
 	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScl);   // ワールドスケールの代入
 	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxPos);   // ワールド座標の代入
 	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);       // ワールド情報セット
+	
+	// 頂点のデクラレーションの設定
+	LPDIRECT3DVERTEXDECLARATION9 pDecl = *CVertexDecl::Get(CVertexDecl::TYPE_3D);
+	pDevice->SetVertexDeclaration(pDecl);
 
-	// パイプライン
-	pDevice->SetStreamSource(0,
-		m_pVtxBuff,     // ストリームのもとになる頂点のバッファの始点
-		0,                       // オフセット（バイト）
-		sizeof(VERTEX_3D));      // 一つの頂点データのサイズ（ストライド量）
+	// ストリームとして頂点バッファを設定
+	pDevice->SetStreamSource(0, m_pVB_POS, 0, sizeof(CVertexDecl::VERTEX3D_POS));
+	pDevice->SetStreamSource(1, m_pVB_NORMAL, 0, sizeof(CVertexDecl::VERTEX3D_NORMAL));
+	pDevice->SetStreamSource(2, m_pVB_COLOR, 0, sizeof(CVertexDecl::VERTEX3D_COLOR));
+	pDevice->SetStreamSource(3, m_pVB_TEX, 0, sizeof(CVertexDecl::VERTEX3D_TEX));
 
-								 // デバイスにインデックスバッファの設定
+	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_pIdxBuff);
-
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
 
 	// 描画直前にテクスチャをセット（テクスチャの設定）
 	pDevice->SetTexture(0, m_pTexture);
