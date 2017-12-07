@@ -19,7 +19,6 @@ public:
 	D3DXVECTOR3 GetRot(void) { return m_Rot; }
 
 protected:
-	D3DXVECTOR3 m_vecUp;    // ã•ûŒü
 	D3DXVECTOR3 m_Rot;      // ‰ñ“]
 	CModelX::MODELX			m_Model;
 };

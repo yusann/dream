@@ -12,6 +12,10 @@
 // メイン処理
 //*************
 CSceneMesh::CSceneMesh(int Priority) :CScene(Priority),
+m_Rot(D3DXVECTOR3(0.0f,0.0f,0.0f)),
+m_PolygonNum(0),
+m_VexNum(0),
+m_pIdxBuff(NULL),
 m_pVB_POS(NULL),
 m_pVB_NORMAL(NULL),
 m_pVB_COLOR(NULL),
@@ -42,7 +46,6 @@ void CSceneMesh::Uninit()
 	SAFE_RELEASE(m_pVB_NORMAL);      // 頂点バッファの破棄
 	SAFE_RELEASE(m_pVB_COLOR);      // 頂点バッファの破棄
 	SAFE_RELEASE(m_pVB_TEX);      // 頂点バッファの破棄
-	SAFE_RELEASE( m_pVtxBuff );      // 頂点バッファの破棄
 	SAFE_RELEASE(m_pIdxBuff);      // インデックスバッファの破棄
 	CScene::Release();
 }

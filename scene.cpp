@@ -13,13 +13,20 @@ int CScene::m_NumScene = 0;                        // 総数
 //*************
 // メイン処理
 //*************
-CScene::CScene( int Priority )
+CScene::CScene( int Priority ) :
+	m_Prev(NULL),
+	m_Next(NULL),
+	m_Priority(NULL),
+	m_ObjType(OBJTYPE_MAX),
+	m_Pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
+	m_Scl(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+	m_Color(D3DXCOLOR(0.0f, 0.0f, 0.0f,0.0f)),
+	m_pTexture(NULL)
 {
 	if( m_Top[ Priority ] == NULL )      // NULLだったら
 	{
 		m_Top[ Priority ] = this;        // 自分を代入
 		m_Priority = Priority;
-		m_Delete = false;
 		m_NumScene++;                        // 総数をカウント
 	}
 	else
@@ -31,7 +38,6 @@ CScene::CScene( int Priority )
 		}
 		scene->m_Next = this;
 		scene->m_Next->m_Priority = Priority;
-		scene->m_Next->m_Delete= m_Delete;
 		scene->m_Next->m_Prev = scene;
 		m_NumScene++;                        // 総数をカウント
 	}

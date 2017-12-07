@@ -19,6 +19,9 @@ public:
 	void SetVexPos();
 	void SetVexUV(float Percentage);
 
+protected:
+	LPDIRECT3DVERTEXBUFFER9 m_pVB;  // 頂点バッファへのポインタ
+
 private:
 	void MakeVex(void);     // 頂点の設定
 	

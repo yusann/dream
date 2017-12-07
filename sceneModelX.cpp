@@ -14,11 +14,11 @@
 //=======================================================================================
 //   コンストラクタ
 //=======================================================================================
-CSceneModelX::CSceneModelX(int Priority) :CScene(Priority)
+CSceneModelX::CSceneModelX(int Priority) :CScene(Priority),
+m_Rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 {
 	// メンバ変数の初期化
 	m_Scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 

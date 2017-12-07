@@ -268,23 +268,6 @@ void CMeshSphere::MakeBuff(void)
 		// X軸のループ
 		for (int nCntWidth = 0; nCntWidth < m_NumBlockX + 1; nCntWidth++, pIdx += 2)                          // ループするとpIdxを2つ前進
 		{
-			/*
-			// 法線裏向き
-			// 1列目以外の1行目の処理
-			if( nCntHeight != 0 && nCntWidth == 0 ) {
-			pIdx[0] = ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + ( nCntHeight * ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + nCntWidth );                  // 同じ処にインデックスをうつ
-			pIdx+=1;                                                                               // 1つ前進
-			}
-			// 重複しない頂点の処理
-			pIdx[0] = ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + ( nCntHeight * ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + nCntWidth );
-			pIdx[1] = ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + ( nCntHeight * ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + nCntWidth ) - ( g_aSphere[ eType ][ nID ].nNumBlockX + 1);
-
-			// 最終列目以外の最終行目の処理
-			if( nCntHeight != g_aSphere[ eType ][ nID ].nNumBlockY-1 && nCntWidth == g_aSphere[ eType ][ nID ].nNumBlockX ) {
-			pIdx[2] = ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + ( nCntHeight * ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 ) + nCntWidth ) - ( g_aSphere[ eType ][ nID ].nNumBlockX + 1 );  // 同じ処にインデックスをうつ
-			pIdx+=1;                                                                               // 1つ前進
-			}
-			*/
 			// 法線表向き
 			// 1列目以外の1行目の処理
 			if (nCntHeight != 0 && nCntWidth == 0) {

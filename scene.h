@@ -52,16 +52,14 @@ protected:
 	D3DXVECTOR3             m_Scl;      // サイズ
 	D3DXCOLOR               m_Color;    // 色
 	LPDIRECT3DTEXTURE9      m_pTexture;  // テクスチャ
-	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;  // 頂点バッファへのポインタ
 
 private:
 	static CScene *m_Top[OBJTYPE_MAX];      // シーンの宣言
+	static int m_NumScene;                  // シーンの総数
 	CScene *m_Prev;
 	CScene *m_Next;
-	static int m_NumScene;                     // シーンの総数
 	int m_Priority;
 	OBJTYPE m_ObjType;
-	bool m_Delete;
 
 };
 

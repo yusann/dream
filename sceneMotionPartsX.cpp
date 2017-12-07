@@ -20,16 +20,19 @@
 //*************
 // ƒƒCƒ“ˆ—
 //*************
-CSceneMotionPartsX::CSceneMotionPartsX(int Priority) :CScene(Priority)
+CSceneMotionPartsX::CSceneMotionPartsX(int Priority) :CScene(Priority),
+m_MotionID(0),
+m_Frame(0),
+m_Key(0),
+m_MotionFrame(0),
+m_Blend(false),
+m_LastKye(false),
+m_pShadow(NULL)
 {
 	// ƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 	m_Scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	m_MotionID = 0;
-	m_Frame = 0;
-	m_Key = 0;
-	m_pShadow = NULL;
 }
 
 CSceneMotionPartsX::~CSceneMotionPartsX()
@@ -85,13 +88,6 @@ void CSceneMotionPartsX::Init()
 								m_pMotionPartsX->pShadow->NumY,
 								m_pMotionPartsX->pShadow->Radius,
 								m_pMotionPartsX->pShadow->Scl);
-
-	m_LastKye = false;
-	m_MotionID = 0;
-	m_Frame = 0;
-	m_Key = 0;
-	m_Blend = false;
-	m_MotionFrame = 0;
 }
 
 //=======================================================================================

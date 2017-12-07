@@ -11,7 +11,8 @@
 //*************
 // メイン処理
 //*************
-CScene2D::CScene2D(int Priority) :CScene(Priority)
+CScene2D::CScene2D(int Priority) :CScene(Priority),
+m_pVB(NULL)
 {
 	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
@@ -34,7 +35,6 @@ void CScene2D::Init()
 //=======================================================================================
 void CScene2D::Uninit()
 {
-	SAFE_RELEASE( m_pVtxBuff );      // 頂点バッファの破棄
 	CScene::Release();
 }
 
@@ -63,7 +63,7 @@ void CScene2D::Draw()
 	pDevice->SetVertexDeclaration(pDecl);
 
 	// ストリームとして頂点バッファを設定
-	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(CVertexDecl::VERTEX2D));
+	pDevice->SetStreamSource(0, m_pVB, 0, sizeof(CVertexDecl::VERTEX2D));
 
 	// 描画直前にテクスチャをセット（テクスチャの設定）
 	pDevice->SetTexture( 0, m_pTexture );
@@ -92,7 +92,7 @@ void CScene2D::MakeVex(void)
 								 D3DUSAGE_WRITEONLY,                         // 書き込むしかしない（チェックしない）
 								 0,                              // どんな頂点で書くの（0にしてもOK）
 								 D3DPOOL_MANAGED,                            // メモリ管理をお任せにする
-								 &m_pVtxBuff,
+								 &m_pVB,
 								 NULL );
 
 	// 頂点情報を設定
@@ -100,7 +100,7 @@ void CScene2D::MakeVex(void)
 	CVertexDecl::VERTEX2D* pVtx;
 
 	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock( 0, 0, (void**)&pVtx, 0);
+	m_pVB->Lock( 0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定（ 2D座標・右回り ）
 	pVtx[0].pos = D3DXVECTOR4( m_Pos.x          , m_Pos.y          , 0.0f, 1.0f);                 // 左上の座標
@@ -121,7 +121,7 @@ void CScene2D::MakeVex(void)
 	pVtx[3].tex = D3DXVECTOR2( 1.0f , 1.0f );                    // 右下のUV座標
 
 	// 鍵を開ける
-	m_pVtxBuff->Unlock();
+	m_pVB->Unlock();
 }
 
 //=======================================================================================
@@ -134,7 +134,7 @@ void CScene2D::SetVexColor()
 	CVertexDecl::VERTEX2D* pVtx;
 
 	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	m_pVB->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点カラーの設定（0~255の整数値）
 	pVtx[0].color = m_Color;  // 左上の色
@@ -143,7 +143,7 @@ void CScene2D::SetVexColor()
 	pVtx[3].color = m_Color;  // 右下の色
 
 	// 鍵を開ける
-	m_pVtxBuff->Unlock();
+	m_pVB->Unlock();
 }
 
 
@@ -157,7 +157,7 @@ void CScene2D::SetVexPos()
 	CVertexDecl::VERTEX2D* pVtx;
 
 	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	m_pVB->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定（ 2D座標・右回り ）
 	pVtx[0].pos = D3DXVECTOR4(m_Pos.x          , m_Pos.y, 0.0f,1.0f);                 // 左上の座標
@@ -166,7 +166,7 @@ void CScene2D::SetVexPos()
 	pVtx[3].pos = D3DXVECTOR4(m_Pos.x + m_Scl.x, m_Pos.y + m_Scl.y, 0.0f,1.0f);                 // 右下の座標
 
 							// 鍵を開ける
-	m_pVtxBuff->Unlock();
+	m_pVB->Unlock();
 }
 
 
@@ -180,7 +180,7 @@ void CScene2D::SetVexUV(float Percentage)
 	CVertexDecl::VERTEX2D* pVtx;
 
 	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	m_pVB->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点データへUVデータの追加
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);                    // 左上のUV座標
@@ -189,5 +189,5 @@ void CScene2D::SetVexUV(float Percentage)
 	pVtx[3].tex = D3DXVECTOR2(Percentage, 1.0f);                    // 右下のUV座標
 
 							// 鍵を開ける
-	m_pVtxBuff->Unlock();
+	m_pVB->Unlock();
 }

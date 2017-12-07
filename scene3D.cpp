@@ -12,16 +12,16 @@
 // メイン処理
 //*************
 CScene3D::CScene3D(int Priority) :CScene(Priority),
-m_pVB_POS(NULL),
-m_pVB_NORMAL(NULL),
-m_pVB_COLOR(NULL),
-m_pVB_TEX(NULL)
+	m_Rot(D3DXVECTOR3(0.0f,0.0f,0.0f)),
+	m_TexWidth(1),
+	m_TexHeight(1),
+	m_TexPos(D3DXVECTOR2(0.0f, 0.0f)),
+	m_TexScl(D3DXVECTOR2(0.0f, 0.0f)),
+	m_pVB_POS(NULL),
+	m_pVB_NORMAL(NULL),
+	m_pVB_COLOR(NULL),
+	m_pVB_TEX(NULL)
 {
-	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_TexWidth = 1;
-	m_TexHeight = 1;
-	m_TexPos = D3DXVECTOR2(0.0f, 0.0f);
-	m_TexScl = D3DXVECTOR2(0.0f, 0.0f);
 }
 
 CScene3D::~CScene3D()
@@ -46,7 +46,6 @@ void CScene3D::Uninit()
 	SAFE_RELEASE(m_pVB_NORMAL);      // 頂点バッファの破棄
 	SAFE_RELEASE(m_pVB_COLOR);      // 頂点バッファの破棄
 	SAFE_RELEASE(m_pVB_TEX);      // 頂点バッファの破棄
-	SAFE_RELEASE( m_pVtxBuff );      // 頂点バッファの破棄
 	CScene::Release();
 }
 
