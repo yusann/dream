@@ -39,6 +39,17 @@ void CVertexDecl::Init(LPDIRECT3DDEVICE9 pDevice)
 	};
 	pDevice->CreateVertexDeclaration(m_vertexElements3D, &m_pVertexDecl[TYPE_3D]);
 
+	// 頂点のフォーマット宣言
+	D3DVERTEXELEMENT9 m_vertexElements2D[] =
+	{
+		//float4 posT ストリーム番号1つしか使えない
+		{ 0, 0,  D3DDECLTYPE_FLOAT4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITIONT, 0 },
+		{ 0, 16,  D3DDECLTYPE_D3DCOLOR, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 },
+		{ 0, 20,  D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
+		D3DDECL_END()
+	};
+	pDevice->CreateVertexDeclaration(m_vertexElements2D, &m_pVertexDecl[TYPE_2D]);
+
 	// エラーチェック
 	for (int i = 0; i < TYPE_MAX; ++i) {
 		if (m_pVertexDecl[i] == NULL) {

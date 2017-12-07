@@ -21,6 +21,7 @@ public:
 
 private:
 	void MakeVex(void);     // ’¸“_‚Ìİ’è
+	
 
 };
 

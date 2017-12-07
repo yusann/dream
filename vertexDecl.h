@@ -11,6 +11,7 @@ public:
 	typedef enum
 	{
 		TYPE_3D = 0,
+		TYPE_2D,
 		TYPE_MAX
 	}TYPE;
 	// 頂点データ構造体
@@ -26,6 +27,14 @@ public:
 	struct VERTEX3D_TEX {
 		D3DXVECTOR2 tex;		// テクスチャ座標
 	};
+
+	// 2D
+	struct VERTEX2D {
+		D3DXVECTOR4	pos;		// 位置
+		D3DCOLOR color;			// 色
+		D3DXVECTOR2 tex;		// テクスチャ座標
+	};
+
 
 	static void Init(LPDIRECT3DDEVICE9 pDevice);
 	static void Uninit(void);

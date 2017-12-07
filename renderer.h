@@ -14,17 +14,6 @@
 // マクロ定義
 #define NUM_POLYGON       (2)                                  // ポリゴン数
 #define NUM_VERTEX        (4)                                  // 頂点数
-#define FVF_VERTEX_2D     (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)                // 頂点フォーマット（ 座標変換済み頂点座標=>2D座標 | 頂点カラー | UVを追加 ）
-
-// 構造体定義
-//  頂点情報（上の頂点フォーマットと構造を合わせること）
-typedef struct
-{
-	D3DXVECTOR3 pos;        // XYZの宣言
-	float rhw;              // RHWの宣言
-	D3DCOLOR color;         // 色の宣言
-	D3DXVECTOR2 tex;        // 頂点データ構造体にもUV追加（必ず最後に追加）2はXY, 3はXYZ
-}VERTEX_2D;
 
 //*****************************************************************************
 //   レンダラクラスの定義

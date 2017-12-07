@@ -140,8 +140,12 @@ void CShadowSphere::Draw( void )
 	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);		// 比較関数（等しければ）
 
 	// 影の描画
-	pDevice->SetStreamSource(0, m_VtxBuff, 0, sizeof(VERTEX_2D));
-	pDevice->SetFVF(FVF_VERTEX_2D);
+	// 頂点のデクラレーションの設定
+	LPDIRECT3DVERTEXDECLARATION9 pDecl = *CVertexDecl::Get(CVertexDecl::TYPE_2D);
+	pDevice->SetVertexDeclaration(pDecl);
+
+	// ストリームとして頂点バッファを設定
+	pDevice->SetStreamSource(0, m_VtxBuff, 0, sizeof(CVertexDecl::VERTEX2D));
 	pDevice->SetTexture(0, NULL);
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, NUM_POLYGON);
 
@@ -172,31 +176,25 @@ void CShadowSphere::MakeVex(void)
 	}
 
 	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * NUM_VERTEX,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
+	pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX2D) * NUM_VERTEX,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
 		D3DUSAGE_WRITEONLY,                         // 書き込むしかしない（チェックしない）
-		FVF_VERTEX_2D,                              // どんな頂点で書くの（0にしてもOK）
+		0,                              // どんな頂点で書くの（0にしてもOK）
 		D3DPOOL_MANAGED,                            // メモリ管理をお任せにする
 		&m_VtxBuff,
 		NULL);
 
 	// 頂点情報を設定
 	// 頂点情報格納用疑似バッファの宣言
-	VERTEX_2D* pVtx;
+	CVertexDecl::VERTEX2D* pVtx;
 
 	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
 	m_VtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定（ 2D座標・右回り ）
-	pVtx[0].pos = D3DXVECTOR3(        0.0f,          0.0f, 0.0f);                 // 左上の座標
-	pVtx[1].pos = D3DXVECTOR3(SCREEN_WIDTH,          0.0f, 0.0f);                 // 右上の座標
-	pVtx[2].pos = D3DXVECTOR3(        0.0f, SCREEN_HEIGHT, 0.0f);                 // 左下の座標
-	pVtx[3].pos = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);                 // 右下の座標
-
-	// rhwの設定（必ず1.0f）
-	pVtx[0].rhw = 1.0f;
-	pVtx[1].rhw = 1.0f;
-	pVtx[2].rhw = 1.0f;
-	pVtx[3].rhw = 1.0f;
+	pVtx[0].pos = D3DXVECTOR4(        0.0f,          0.0f, 0.0f,1.0f);                 // 左上の座標
+	pVtx[1].pos = D3DXVECTOR4(SCREEN_WIDTH,          0.0f, 0.0f,1.0f);                 // 右上の座標
+	pVtx[2].pos = D3DXVECTOR4(        0.0f, SCREEN_HEIGHT, 0.0f,1.0f);                 // 左下の座標
+	pVtx[3].pos = D3DXVECTOR4(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f,1.0f);                 // 右下の座標
 
 	// 頂点カラーの設定（0~255の整数値）
 	pVtx[0].color = m_Color;  // 左上の色

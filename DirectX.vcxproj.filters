@@ -188,9 +188,6 @@
     <ClCompile Include="light.cpp">
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
-    <ClCompile Include="shadow.cpp">
-      <Filter>ソース ファイル\object\2D\shadow</Filter>
-    </ClCompile>
     <ClCompile Include="vertexDecl.cpp">
       <Filter>ソース ファイル\renderer</Filter>
     </ClCompile>
@@ -339,9 +336,6 @@
     </ClInclude>
     <ClInclude Include="light.h">
       <Filter>ソース ファイル\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="shadow.h">
-      <Filter>ソース ファイル\object\2D\shadow</Filter>
     </ClInclude>
     <ClInclude Include="vertexDecl.h">
       <Filter>ソース ファイル\renderer</Filter>

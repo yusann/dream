@@ -374,7 +374,7 @@ void CSceneMotionPartsX::Draw()
 		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
 		{
 			// マテリアルの設定
-			pShaderModel->SetPixelInfo(m_Pos, pMat[j].MatD3D.Diffuse);
+			pShaderModel->SetPixelInfo(pMat[j].MatD3D.Diffuse);
 
 			// テクスチャID取得
 			UINT samplerID = pShaderModel->GetSamplerIndex();

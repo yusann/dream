@@ -113,7 +113,7 @@ void CSceneModelX::Draw()
 	for( int i = 0; i < (int)m_Model.NumMat; i++ )
 	{
 		// ƒ}ƒeƒŠƒAƒ‹‚ÌÝ’è
-		pShaderModel->SetPixelInfo(m_Pos, pMat[i].MatD3D.Diffuse);
+		pShaderModel->SetPixelInfo(pMat[i].MatD3D.Diffuse);
 
 		if (pMat[i].pTextureFilename == NULL)
 		{

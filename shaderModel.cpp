@@ -109,8 +109,7 @@ void CShaderModel::SetVertexInfo( const D3DXMATRIX mtxW )			// ワールド座標
 //=======================================================================================
 //   ピクセルシェーダの情報を代入
 //=======================================================================================
-void CShaderModel::SetPixelInfo(const D3DXVECTOR3 modelPos,		// ターゲット座標
-								const D3DCOLORVALUE diffColor,	// ディフューズカラー
+void CShaderModel::SetPixelInfo(const D3DCOLORVALUE diffColor,	// ディフューズカラー
 								const float specularPower		// スペキュラーパワー
 )
 {
