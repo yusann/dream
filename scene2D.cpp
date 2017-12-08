@@ -59,11 +59,7 @@ void CScene2D::Draw()
 	}
 
 	// 頂点のデクラレーションの設定
-	LPDIRECT3DVERTEXDECLARATION9 pDecl = *CVertexDecl::Get(CVertexDecl::TYPE_2D);
-	pDevice->SetVertexDeclaration(pDecl);
-
-	// ストリームとして頂点バッファを設定
-	pDevice->SetStreamSource(0, m_pVB, 0, sizeof(CVertexDecl::VERTEX2D));
+	CVertexDecl::SetTex2D(pDevice, m_pVB);
 
 	// 描画直前にテクスチャをセット（テクスチャの設定）
 	pDevice->SetTexture( 0, m_pTexture );

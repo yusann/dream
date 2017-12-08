@@ -43,6 +43,13 @@ public:
 		return &m_pVertexDecl[type];
 	}
 
+	static void SetTex3D(LPDIRECT3DDEVICE9 pDevice, 
+		const LPDIRECT3DVERTEXBUFFER9 vb_pos,
+		const LPDIRECT3DVERTEXBUFFER9 vb_normal,
+		const LPDIRECT3DVERTEXBUFFER9 vb_color,
+		const LPDIRECT3DVERTEXBUFFER9 vb_tex);
+	static void SetTex2D(LPDIRECT3DDEVICE9 pDevice, const LPDIRECT3DVERTEXBUFFER9 vb);
+
 private:
 	// 頂点デクラレーションへのポインタ
 	static LPDIRECT3DVERTEXDECLARATION9 m_pVertexDecl[TYPE_MAX];

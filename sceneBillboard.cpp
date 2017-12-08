@@ -76,14 +76,7 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 	}
 
 	// 頂点のデクラレーションの設定
-	LPDIRECT3DVERTEXDECLARATION9 pDecl = *CVertexDecl::Get(CVertexDecl::TYPE_3D);
-	pDevice->SetVertexDeclaration(pDecl);
-
-	// ストリームとして頂点バッファを設定
-	pDevice->SetStreamSource(0, m_pVB_POS, 0, sizeof(CVertexDecl::VERTEX3D_POS));
-	pDevice->SetStreamSource(1, m_pVB_NORMAL, 0, sizeof(CVertexDecl::VERTEX3D_NORMAL));
-	pDevice->SetStreamSource(2, m_pVB_COLOR, 0, sizeof(CVertexDecl::VERTEX3D_COLOR));
-	pDevice->SetStreamSource(3, m_pVB_TEX, 0, sizeof(CVertexDecl::VERTEX3D_TEX));
+	CVertexDecl::SetTex3D(pDevice, m_pVB_POS, m_pVB_NORMAL, m_pVB_COLOR, m_pVB_TEX);
 
 	// 描画直前にテクスチャをセット（テクスチャの設定）
 	pDevice->SetTexture(0, m_pTexture);
