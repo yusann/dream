@@ -14,18 +14,15 @@ public:
 
 	virtual void Create(void) =0;
 	virtual void Delete(void) =0;
-	virtual void Set(void) = 0;
-	virtual void Clear(void) = 0;
+	virtual void SetTech(void) = 0;
+	virtual void Begin(const int pass) = 0;
+	virtual void End(void) = 0;
 
 protected:
-	void CreateVertex(const char* hlslFile);
-	void CreatePixel(const char* hlslFile);
+	void CreateFX(const char* hlslFile);
 
-	LPDIRECT3DVERTEXSHADER9	m_pVertex;		// 頂点シェーダー
-	LPD3DXCONSTANTTABLE		m_pVertexTable;	// 頂点シェーダーのテーブル
-	LPDIRECT3DPIXELSHADER9	m_pPixel;		// ピクセルシェーダー
-	LPD3DXCONSTANTTABLE		m_pPixelTable;	// ピクセルシェーダーのテーブル
-
+	// エフェクト
+	LPD3DXEFFECT            m_pFX;
 };
 
 #endif

@@ -31,8 +31,22 @@ void CShaderModel::Create()
 	Delete();
 
 	// シェーダーの生成
-	CreateVertex("shader/modelVS.hlsl");
-	CreatePixel("shader/modelPS.hlsl");
+	CreateFX("shader/model.fx");
+
+
+	// シェーダプログラムへテクニックへのハンドルの取得
+	m_hTech = m_pFX->GetTechniqueByName("BasicTech");
+
+	// シェーダープログラムのグローバル変数のハンドルの取得
+	m_hMtxWVP = m_pFX->GetParameterByName(0, "g_mtxWVP");
+	m_hMtxW = m_pFX->GetParameterByName(0, "g_mtxW");
+
+	m_hLightDirW = m_pFX->GetParameterByName(0, "g_lightDirW");
+	m_hPosEyeW = m_pFX->GetParameterByName(0, "g_posEyeW");
+	m_hDiffColor = m_pFX->GetParameterByName(0, "g_diffColor");
+	m_hSpecularPower = m_pFX->GetParameterByName(0, "g_specularPower");
+
+	m_hTexture = m_pFX->GetParameterByName(0, "g_texture");
 }
 
 //=======================================================================================
@@ -40,44 +54,37 @@ void CShaderModel::Create()
 //=======================================================================================
 void CShaderModel::Delete()
 {
-	SAFE_RELEASE(m_pPixel);
-	SAFE_RELEASE(m_pPixelTable);
-	SAFE_RELEASE(m_pVertex);
-	SAFE_RELEASE(m_pVertexTable);
-}
-
-//=======================================================================================
-//   モデル用シェーダのセット
-//=======================================================================================
-void CShaderModel::Set(void)
-{
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	if (pDevice == NULL) {
-		MessageBox(NULL, "CShaderModel::Create()のpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
-		return;
-	}
-
-	// シェーダーのセット
-	pDevice->SetVertexShader(m_pVertex);
-	pDevice->SetPixelShader(m_pPixel);
+	SAFE_RELEASE(m_pFX);
 }
 
 //=======================================================================================
 //   モデル用シェーダのクリア
 //=======================================================================================
-void CShaderModel::Clear(void)
+void CShaderModel::SetTech(void)
 {
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	if (pDevice == NULL) {
-		MessageBox(NULL, "CShaderModel::Create()のpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
-		return;
-	}
+	// テクニックの設定（シェーダプログラムの設定）
+	m_pFX->SetTechnique(m_hTech);
+}
+//=======================================================================================
+//   モデル用シェーダのセット
+//=======================================================================================
+void CShaderModel::Begin(const int pass)
+{
+	m_pFX->CommitChanges();
 
-	// シェーダーのクリア
-	pDevice->SetVertexShader(NULL);
-	pDevice->SetPixelShader(NULL);
+	// シェーダプログラムの開始宣言
+	m_pFX->Begin(0, 0);
+	m_pFX->BeginPass(pass);
+}
+
+//=======================================================================================
+//   モデル用シェーダのクリア
+//=======================================================================================
+void CShaderModel::End(void)
+{
+	// シェーダプログラムの終了宣言
+	m_pFX->EndPass();
+	m_pFX->End();
 }
 
 //=======================================================================================
@@ -85,13 +92,6 @@ void CShaderModel::Clear(void)
 //=======================================================================================
 void CShaderModel::SetVertexInfo( const D3DXMATRIX mtxW )			// ワールド座標
 {
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	if (pDevice == NULL) {
-		MessageBox(NULL, "CShaderModel::Create()のpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
-		return;
-	}
-
 	// カメラ情報取得
 	CCamera* pCamera = CManager::GetCamera();
 	// ビュー行列
@@ -102,24 +102,18 @@ void CShaderModel::SetVertexInfo( const D3DXMATRIX mtxW )			// ワールド座標
 	D3DXMATRIX mtxWVP = mtxW * view * proj;
 
 	// 情報代入
-	m_pVertexTable->SetMatrix(pDevice, "mtxWVP", &mtxWVP);
-	m_pVertexTable->SetMatrix(pDevice, "mtxW", &mtxW);
+	m_pFX->SetMatrix(m_hMtxWVP, &mtxWVP);
+	m_pFX->SetMatrix(m_hMtxW, &mtxW);
 }
 
 //=======================================================================================
 //   ピクセルシェーダの情報を代入
 //=======================================================================================
 void CShaderModel::SetPixelInfo(const D3DCOLORVALUE diffColor,	// ディフューズカラー
+								const LPDIRECT3DTEXTURE9 texture,
 								const float specularPower		// スペキュラーパワー
 )
 {
-	// デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	if (pDevice == NULL) {
-		MessageBox(NULL, "CShaderModel::Create()のpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
-		return;
-	}
-
 	// ライト情報取得
 	CLight *pLight = CManager::GetLight();
 	// ライトベクトル（ワールド）
@@ -132,16 +126,9 @@ void CShaderModel::SetPixelInfo(const D3DCOLORVALUE diffColor,	// ディフューズカ
 	D3DXVECTOR3 posEyeW = pCamera->GetPosEye();
 
 	// 情報代入
-	m_pPixelTable->SetValue(pDevice, "lightDirW", &lightDirW, sizeof(lightDirW));
-	m_pPixelTable->SetValue(pDevice, "posEyeW", &posEyeW, sizeof(posEyeW));
-	m_pPixelTable->SetValue(pDevice, "diffColor", &diffColor, sizeof(diffColor));
-	m_pPixelTable->SetFloat(pDevice, "specularPower", specularPower);
-}
-
-//=======================================================================================
-//   テクスチャIDの取得
-//=======================================================================================
-UINT CShaderModel::GetSamplerIndex(void)
-{
-	return m_pPixelTable->GetSamplerIndex("tex");
+	m_pFX->SetValue(m_hLightDirW, &lightDirW, sizeof(lightDirW));
+	m_pFX->SetValue(m_hPosEyeW, &posEyeW, sizeof(posEyeW));
+	m_pFX->SetValue(m_hDiffColor, &diffColor, sizeof(diffColor));
+	m_pFX->SetFloat(m_hSpecularPower, specularPower);
+	m_pFX->SetTexture(m_hTexture, texture);
 }

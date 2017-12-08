@@ -364,25 +364,19 @@ void CSceneMotionPartsX::Draw()
 
 		// シェーダの取得
 		CShaderModel *pShaderModel = CShaderManager::GetModel();
-		pShaderModel->Set();
+		pShaderModel->SetTech();
 		pShaderModel->SetVertexInfo(m_Model[i]->Matrix);
 
 		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
 		{
-			// マテリアルの設定
-			pShaderModel->SetPixelInfo(pMat[j].MatD3D.Diffuse);
+			// ピクセルシェーダの設定
+			pShaderModel->SetPixelInfo(pMat[j].MatD3D.Diffuse, m_pMotionPartsX->Part[i]->pTexture[j]);
 
-			// テクスチャID取得
-			UINT samplerID = pShaderModel->GetSamplerIndex();
-
-			// テクスチャの描画
-			pDevice->SetTexture(samplerID, m_pMotionPartsX->Part[i]->pTexture[j]);
-
+			pShaderModel->Begin();
 			// メッシュの描画
 			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
+			pShaderModel->End();
 		}
-		// シェーダクリア
-		pShaderModel->Clear();
 	}
 }
 

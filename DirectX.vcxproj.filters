@@ -342,10 +342,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shader\modelPS.hlsl">
-      <Filter>シェーダ</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\modelVS.hlsl">
+    <FxCompile Include="shader\model.fx">
       <Filter>シェーダ</Filter>
     </FxCompile>
   </ItemGroup>
