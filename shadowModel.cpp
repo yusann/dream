@@ -148,7 +148,7 @@ void CShadowModel::Draw( void )
 		// ステンシルをクリア
 		pDevice->Clear(0, NULL,
 			D3DCLEAR_STENCIL,								// ステンシル
-			D3DCOLOR_RGBA(100, 255, 155, 255),				// 初期化色
+			D3DCOLOR_RGBA(0, 0, 0, 0),				// 初期化色
 			1.0f,											// 0~1（0は手前、1は遠い）
 			0);
 

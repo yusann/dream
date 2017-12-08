@@ -8,12 +8,14 @@
 class CVertexDecl
 {
 public:
+	// デクラレーションの種類
 	typedef enum
 	{
 		TYPE_3D = 0,
 		TYPE_2D,
 		TYPE_MAX
 	}TYPE;
+
 	// 頂点データ構造体
 	struct VERTEX3D_POS {
 		D3DXVECTOR3	pos;		// 位置
@@ -35,19 +37,19 @@ public:
 		D3DXVECTOR2 tex;		// テクスチャ座標
 	};
 
-
+	// 初期化
 	static void Init(LPDIRECT3DDEVICE9 pDevice);
+	// 終了処理
 	static void Uninit(void);
 
-	static LPDIRECT3DVERTEXDECLARATION9 *Get(TYPE type) {
-		return &m_pVertexDecl[type];
-	}
-
+	// デクラレーションのセット
+	// 3D
 	static void SetTex3D(LPDIRECT3DDEVICE9 pDevice, 
 		const LPDIRECT3DVERTEXBUFFER9 vb_pos,
 		const LPDIRECT3DVERTEXBUFFER9 vb_normal,
 		const LPDIRECT3DVERTEXBUFFER9 vb_color,
 		const LPDIRECT3DVERTEXBUFFER9 vb_tex);
+	// 2D
 	static void SetTex2D(LPDIRECT3DDEVICE9 pDevice, const LPDIRECT3DVERTEXBUFFER9 vb);
 
 private:
