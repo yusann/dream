@@ -34,8 +34,6 @@ CSceneModelX::~CSceneModelX()
 //=======================================================================================
 void CSceneModelX::Init()
 {
-	// テクスチャセット
-	m_pTexture = CTexture::GetTexture((int)CTexture::TEXTYPE_WHITE);
 }
 
 //=======================================================================================
@@ -107,20 +105,23 @@ void CSceneModelX::Draw()
 
 	// シェーダのセット
 	CShaderModel *pShaderModel = CShaderManager::GetModel();
-	pShaderModel->SetTech();
 	pShaderModel->SetVertexInfo(mtxWorld);
 
 	for( int i = 0; i < (int)m_Model.NumMat; i++ )
 	{
-		// マテリアルの設定
-		pShaderModel->SetPixelInfo(pMat[i].MatD3D.Diffuse, m_Model.pTexture[i]);
 
-		if (pMat[i].pTextureFilename == NULL)
+		if (pMat[i].pTextureFilename != NULL)
 		{
-			MessageBox(NULL, "テクスチャ取得失敗", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+			// マテリアルの設定
+			pShaderModel->SetPixelInfo(pMat[i].MatD3D.Diffuse, m_Model.pTexture[i]);
+			pShaderModel->Begin();
 		}
-
-		pShaderModel->Begin();
+		else
+		{
+			// マテリアルの設定
+			pShaderModel->SetPixelInfo(pMat[i].MatD3D.Diffuse, NULL);
+			pShaderModel->Begin(1);
+		}
 		// メッシュの描画
 		m_Model.pMesh->DrawSubset(i);
 		// シェーダクリア

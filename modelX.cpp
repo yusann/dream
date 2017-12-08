@@ -82,7 +82,7 @@ void CModelX::Init()
 			else
 			{
 				// ない時に白いテクスチャを代入
-				m_modelX[j].pTexture[i] = CTexture::GetTexture((int)CTexture::TEXTYPE_WHITE);
+				m_modelX[j].pTexture[i] = NULL;
 			}
 		}
 	}

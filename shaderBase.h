@@ -14,7 +14,6 @@ public:
 
 	virtual void Create(void) =0;
 	virtual void Delete(void) =0;
-	virtual void SetTech(void) = 0;
 	virtual void Begin(const int pass) = 0;
 	virtual void End(void) = 0;
 

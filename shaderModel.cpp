@@ -33,7 +33,6 @@ void CShaderModel::Create()
 	// シェーダーの生成
 	CreateFX("shader/model.fx");
 
-
 	// シェーダプログラムへテクニックへのハンドルの取得
 	m_hTech = m_pFX->GetTechniqueByName("BasicTech");
 
@@ -58,18 +57,12 @@ void CShaderModel::Delete()
 }
 
 //=======================================================================================
-//   モデル用シェーダのクリア
-//=======================================================================================
-void CShaderModel::SetTech(void)
-{
-	// テクニックの設定（シェーダプログラムの設定）
-	m_pFX->SetTechnique(m_hTech);
-}
-//=======================================================================================
-//   モデル用シェーダのセット
+//   モデル用シェーダの開始
 //=======================================================================================
 void CShaderModel::Begin(const int pass)
 {
+	// テクニックの設定（シェーダプログラムの設定）
+	m_pFX->SetTechnique(m_hTech);
 	m_pFX->CommitChanges();
 
 	// シェーダプログラムの開始宣言
@@ -78,7 +71,7 @@ void CShaderModel::Begin(const int pass)
 }
 
 //=======================================================================================
-//   モデル用シェーダのクリア
+//   モデル用シェーダの終了
 //=======================================================================================
 void CShaderModel::End(void)
 {
@@ -109,9 +102,9 @@ void CShaderModel::SetVertexInfo( const D3DXMATRIX mtxW )			// ワールド座標
 //=======================================================================================
 //   ピクセルシェーダの情報を代入
 //=======================================================================================
-void CShaderModel::SetPixelInfo(const D3DCOLORVALUE diffColor,	// ディフューズカラー
-								const LPDIRECT3DTEXTURE9 texture,
-								const float specularPower		// スペキュラーパワー
+void CShaderModel::SetPixelInfo(const D3DCOLORVALUE diffColor,		// ディフューズカラー
+								const LPDIRECT3DTEXTURE9 texture,	// テクスチャ
+								const float specularPower			// スペキュラーパワー
 )
 {
 	// ライト情報取得

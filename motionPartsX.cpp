@@ -346,7 +346,7 @@ void CMotionPartsX::LoadModel(PART *pPart)
 		else
 		{
 			// ない時に白いテクスチャを代入
-			pPart->pTexture[j] = CTexture::GetTexture((int)CTexture::TEXTYPE_WHITE);
+			pPart->pTexture[j] = NULL;
 		}
 	}
 }

@@ -364,15 +364,22 @@ void CSceneMotionPartsX::Draw()
 
 		// シェーダの取得
 		CShaderModel *pShaderModel = CShaderManager::GetModel();
-		pShaderModel->SetTech();
 		pShaderModel->SetVertexInfo(m_Model[i]->Matrix);
 
 		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
 		{
-			// ピクセルシェーダの設定
-			pShaderModel->SetPixelInfo(pMat[j].MatD3D.Diffuse, m_pMotionPartsX->Part[i]->pTexture[j]);
-
-			pShaderModel->Begin();
+			if (m_pMotionPartsX->Part[i]->pTexture[j] != NULL)
+			{
+				// ピクセルシェーダの設定
+				pShaderModel->SetPixelInfo(pMat[j].MatD3D.Diffuse, m_pMotionPartsX->Part[i]->pTexture[j]);
+				pShaderModel->Begin();
+			}
+			else
+			{
+				// ピクセルシェーダの設定
+				pShaderModel->SetPixelInfo(pMat[j].MatD3D.Diffuse, NULL);
+				pShaderModel->Begin(1);
+			}
 			// メッシュの描画
 			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
 			pShaderModel->End();

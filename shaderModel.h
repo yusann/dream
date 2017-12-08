@@ -17,8 +17,6 @@ public:
 	void Create(void) override;
 	// モデル用シェーダの終了処理
 	void Delete(void) override;
-	// テクニックの設定
-	void SetTech(void) override;
 	// モデル用シェーダのセット
 	void Begin(const int pass = 0) override;
 	// モデル用シェーダの消去処理
