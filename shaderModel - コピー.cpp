@@ -38,6 +38,13 @@ void CShaderModel::Create()
 
 	// シェーダープログラムのグローバル変数のハンドルの取得
 	m_hMtxWVP = m_pFX->GetParameterByName(0, "g_mtxWVP");
+	m_hMtxW = m_pFX->GetParameterByName(0, "g_mtxW");
+
+	m_hLightDirW = m_pFX->GetParameterByName(0, "g_lightDirW");
+	m_hPosEyeW = m_pFX->GetParameterByName(0, "g_posEyeW");
+	m_hDiffColor = m_pFX->GetParameterByName(0, "g_diffColor");
+	m_hSpecularPower = m_pFX->GetParameterByName(0, "g_specularPower");
+
 	m_hTexture = m_pFX->GetParameterByName(0, "g_texture");
 }
 
@@ -89,13 +96,32 @@ void CShaderModel::SetVertexInfo( const D3DXMATRIX mtxW )			// ワールド座標
 
 	// 情報代入
 	m_pFX->SetMatrix(m_hMtxWVP, &mtxWVP);
+	m_pFX->SetMatrix(m_hMtxW, &mtxW);
 }
 
 //=======================================================================================
 //   ピクセルシェーダの情報を代入
 //=======================================================================================
-void CShaderModel::SetPixelInfo(const LPDIRECT3DTEXTURE9 texture	// テクスチャ
+void CShaderModel::SetPixelInfo(const D3DCOLORVALUE diffColor,		// ディフューズカラー
+								const LPDIRECT3DTEXTURE9 texture,	// テクスチャ
+								const float specularPower			// スペキュラーパワー
 )
 {
+	// ライト情報取得
+	CLight *pLight = CManager::GetLight();
+	// ライトベクトル（ワールド）
+	D3DXVECTOR3 lightDirW = pLight->GetDir();
+	D3DXVec3Normalize(&lightDirW, &lightDirW);
+
+	// カメラ情報取得
+	CCamera *pCamera = CManager::GetCamera();
+	// カメラ座標（ワールド）
+	D3DXVECTOR3 posEyeW = pCamera->GetPosEye();
+
+	// 情報代入
+	m_pFX->SetValue(m_hLightDirW, &lightDirW, sizeof(lightDirW));
+	m_pFX->SetValue(m_hPosEyeW, &posEyeW, sizeof(posEyeW));
+	m_pFX->SetValue(m_hDiffColor, &diffColor, sizeof(diffColor));
+	m_pFX->SetFloat(m_hSpecularPower, specularPower);
 	m_pFX->SetTexture(m_hTexture, texture);
 }

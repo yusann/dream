@@ -35,10 +35,10 @@ void CShaderBase::CreateFX(const char* hlslFile)		// .hlslのファイル名
 	}
 
 	// シェーダプログラムの読み込みとコンパイル
-	LPD3DXBUFFER	errors = 0;
-	D3DXCreateEffectFromFile(pDevice, TEXT(hlslFile), 0, 0, D3DXSHADER_DEBUG, 0, &m_pFX, &errors);
-	if (errors) {
-		MessageBox(NULL, ".fxファイルがない！", "エラー", MB_OK | MB_ICONASTERISK);
+	LPD3DXBUFFER	err = 0;
+	D3DXCreateEffectFromFile(pDevice, TEXT(hlslFile), 0, 0, D3DXSHADER_DEBUG, 0, &m_pFX, &err);
+	if (err) {
+		MessageBox(NULL, (LPCSTR)err->GetBufferPointer(), "シェーダ読み込みエラー", MB_OK);
 		return;
 	}
 }

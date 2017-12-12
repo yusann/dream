@@ -7,6 +7,9 @@
 #include "renderer.h"
 #include "scene.h"
 #include "sceneMesh.h"
+#include "shaderManager.h"
+#include "shaderBase.h"
+#include "shaderManga.h"
 
 //*************
 // メイン処理
@@ -107,14 +110,34 @@ void CSceneMesh::Draw()
 	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_pIdxBuff);
 
-	// 描画直前にテクスチャをセット（テクスチャの設定）
-	pDevice->SetTexture(0, m_pTexture);
+	CShaderManga *pShader = CShaderManager::GetManga();
+	pShader->SetVertexInfo(mtxWorld,0.5f);
+	pShader->SetPixelInfo(m_Color, m_pTexture);
+
+	pShader->Begin(2);
 
 	// インデックスプリミティブの描画
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,                 // プリミティブの種類
 		0,
 		0,
 		m_VexNum,   // 頂点数
 		0,
 		m_PolygonNum);                       // プリミティブの数（ポリゴンの数）
+	pShader->End();
+
+	pShader->SetVertexInfo(mtxWorld);
+	pShader->SetPixelInfo(m_Color, m_pTexture);
+
+	pShader->Begin();
+
+	// インデックスプリミティブの描画
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,                 // プリミティブの種類
+		0,
+		0,
+		m_VexNum,   // 頂点数
+		0,
+		m_PolygonNum);                       // プリミティブの数（ポリゴンの数）
+	pShader->End();
 }

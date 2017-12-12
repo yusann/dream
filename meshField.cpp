@@ -45,6 +45,7 @@ void CMeshField::Init()
 	// メンバ変数の初期化
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_size = D3DXVECTOR2(FIELD_WIDTH, FIELD_DEPTH);
+	m_Color = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// プライベート変数の初期化
 	m_pIdxBuff = NULL;

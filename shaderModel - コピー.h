@@ -25,7 +25,7 @@ public:
 	// 頂点シェーダの情報を代入
 	void SetVertexInfo(const D3DXMATRIX mtxW);
 	// ピクセルシェーダーの情報を代入
-	void SetPixelInfo(const LPDIRECT3DTEXTURE9 texture);
+	void SetPixelInfo(const D3DCOLORVALUE diffColor,const LPDIRECT3DTEXTURE9 texture, const float specularPower = 60.0f);
 
 private:
 	// テクニックへのハンドル
@@ -33,6 +33,13 @@ private:
 
 	// シェーダプログラムのグローバル変数へのハンドル
 	D3DXHANDLE	m_hMtxWVP;
+	D3DXHANDLE	m_hMtxW;
+
+	D3DXHANDLE	m_hLightDirW;
+	D3DXHANDLE	m_hPosEyeW;
+	D3DXHANDLE	m_hDiffColor;
+	D3DXHANDLE	m_hSpecularPower;
+
 	D3DXHANDLE	m_hTexture;
 
 };
