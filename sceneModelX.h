@@ -21,6 +21,10 @@ public:
 protected:
 	D3DXVECTOR3 m_Rot;      // ‰ñ“]
 	CModelX::MODELX			m_Model;
+private:
+
+	LPDIRECT3DVERTEXBUFFER9 m_pCountourVB;
+	LPDIRECT3DTEXTURE9 m_pContourTex;
 };
 
 #endif

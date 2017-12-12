@@ -203,6 +203,7 @@
     <ClCompile Include="sceneMotionPartsX.cpp" />
     <ClCompile Include="shaderBase.cpp" />
     <ClCompile Include="shaderManager.cpp" />
+    <ClCompile Include="shaderManga.cpp" />
     <ClCompile Include="shaderModel.cpp" />
     <ClCompile Include="shadowModel.cpp" />
     <ClCompile Include="shadowSphere.cpp" />
@@ -254,6 +255,7 @@
     <ClInclude Include="sceneMotionPartsX.h" />
     <ClInclude Include="shaderBase.h" />
     <ClInclude Include="shaderManager.h" />
+    <ClInclude Include="shaderManga.h" />
     <ClInclude Include="shaderModel.h" />
     <ClInclude Include="shadowModel.h" />
     <ClInclude Include="shadowSphere.h" />
@@ -264,6 +266,10 @@
     <ClInclude Include="xbox360.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="shader\manga.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="shader\model.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

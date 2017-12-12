@@ -32,6 +32,8 @@ public:
 		TEXTYPE_UI_GAGEBG,
 		TEXTYPE_UI_NUM,
 
+		TEXTYPE_ANIME_DRAW,
+
 		TEXTYPE_MAX
 	}TEXTYPE;
 	CTexture();                                   // デフォルトコンストラクタ

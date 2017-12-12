@@ -10,6 +10,7 @@
 #include "shaderManager.h"
 #include "shaderBase.h"
 #include "shaderModel.h"
+#include "shaderManga.h"
 
 //=======================================================================================
 //   コンストラクタ
@@ -103,9 +104,23 @@ void CSceneModelX::Draw()
 	D3DXMATERIAL* pMat;
 	pMat = (D3DXMATERIAL*)m_Model.pBuffMat->GetBufferPointer();
 
+
+	// 輪郭シェーダのセット
+	CShaderManga *pShaderManga = CShaderManager::GetManga();
+	pShaderManga->SetVertexInfo(mtxWorld, 0.01f);
+
+	for (int i = 0; i < (int)m_Model.NumMat; i++)
+	{
+		pShaderManga->Begin(2);
+		// メッシュの描画
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+		m_Model.pMesh->DrawSubset(i);
+		// シェーダクリア
+		pShaderManga->End();
+	}
+
 	// シェーダのセット
-	CShaderModel *pShaderModel = CShaderManager::GetModel();
-	pShaderModel->SetVertexInfo(mtxWorld);
+	pShaderManga->SetVertexInfo(mtxWorld);
 
 	for( int i = 0; i < (int)m_Model.NumMat; i++ )
 	{
@@ -113,18 +128,19 @@ void CSceneModelX::Draw()
 		if (pMat[i].pTextureFilename != NULL)
 		{
 			// マテリアルの設定
-			pShaderModel->SetPixelInfo(pMat[i].MatD3D.Diffuse, m_Model.pTexture[i]);
-			pShaderModel->Begin();
+			pShaderManga->SetPixelInfo(pMat[i].MatD3D.Diffuse, m_Model.pTexture[i]);
+			pShaderManga->Begin();
 		}
 		else
 		{
 			// マテリアルの設定
-			pShaderModel->SetPixelInfo(pMat[i].MatD3D.Diffuse, NULL);
-			pShaderModel->Begin(1);
+			pShaderManga->SetPixelInfo(pMat[i].MatD3D.Diffuse, NULL);
+			pShaderManga->Begin(1);
 		}
 		// メッシュの描画
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 		m_Model.pMesh->DrawSubset(i);
 		// シェーダクリア
-		pShaderModel->End();
+		pShaderManga->End();
 	}
 }

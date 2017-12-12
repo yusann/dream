@@ -6,11 +6,13 @@
 #include "shaderManager.h"
 #include "shaderBase.h"
 #include "shaderModel.h"
+#include "shaderManga.h"
 
 //*****************************************************************************
 //   静的メンバー変数宣言
 //*****************************************************************************
-CShaderModel *CShaderManager::m_pModel = NULL;                      // レンダラー
+CShaderModel *CShaderManager::m_pModel = NULL;
+CShaderManga *CShaderManager::m_pManga = NULL;
 
 //==================================================================================================================================================
 // 初期化処理
@@ -20,6 +22,8 @@ void CShaderManager::Init()
 	m_pModel = new CShaderModel;
 	m_pModel->Create();
 
+	m_pManga = new CShaderManga;
+	m_pManga->Create();
 }
 
 //==================================================================================================================================================
@@ -30,5 +34,9 @@ void CShaderManager::Uninit(void)
 	if (m_pModel != NULL) { 
 		m_pModel->Delete();
 		m_pModel = NULL;
+	}
+	if (m_pManga != NULL) {
+		m_pManga->Delete();
+		m_pManga = NULL;
 	}
 }
