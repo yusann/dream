@@ -66,7 +66,7 @@ void CCamera::Uninit()
 {
 	m_VecUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_Move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Rot = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+	m_Rot = D3DXVECTOR3(1.4f, 0.0f, 0.0f);
 	m_Length = CAMERA_LEN;
 	m_fZoom = D3DX_PI / 3.0f;
 	m_PosEye.x = (float)cos(m_Rot.y) * (float)cos(m_Rot.x) * m_Length + m_Move.x;
@@ -147,6 +147,8 @@ void CCamera::ModeGame(void)
 	CPlayer *pPlayer;
 	pPlayer = (CPlayer*)pScene;
 	D3DXVECTOR3 playerPos = pPlayer->GetPos();
+	D3DXVECTOR2 Angle;
+	D3DXVec2Normalize(&Angle, &D3DXVECTOR2(playerPos.x-53.0f, playerPos.z-6.0f));
 	float targetRotY = -pPlayer->GetRot().y;
 
 	// Å’Zƒ‹[ƒg‚ÌŒŸ’m
@@ -161,7 +163,6 @@ void CCamera::ModeGame(void)
 		CInputKey::GetInputXbox()->GetXboxPress(CInputXbox::CONTROLLER_1, XINPUT_GAMEPAD_RIGHT_THUMB))
 	{
 		m_Rot.y = (targetRotY - m_Rot.y)*0.1f + m_Rot.y;
-		m_Rot.x = 0.3f;
 	}
 	if (CInputKey::GetInputXbox()->GetXboxPress(CInputXbox::CONTROLLER_1, XINPUT_GAMEPAD_RIGHT_SHOULDER)||
 		CInputKey::GetInputXbox()->GetAnalogValue(CInputXbox::CONTROLLER_1, CInputXbox::RIGHT).x > 0.5f)
@@ -173,8 +174,8 @@ void CCamera::ModeGame(void)
 	{
 		m_Rot.y += 0.02f;
 	}
-	m_PosEye.x = (float)cos(m_Rot.y + (3.14159265f*0.5f)) * (float)cos(m_Rot.x) * CAMERA_LEN + m_PosAt.x;
-	m_PosEye.z = (float)sin(m_Rot.y + (3.14159265f*0.5f)) * (float)cos(m_Rot.x) * CAMERA_LEN + m_PosAt.z;
+	m_PosEye.x = Angle.x * CAMERA_LEN + m_PosAt.x;
+	m_PosEye.z = Angle.y * CAMERA_LEN + m_PosAt.z;
 	m_PosEye.y = (float)sin(m_Rot.x) * CAMERA_LEN + m_PosAt.y;
 }
 

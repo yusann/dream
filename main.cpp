@@ -6,7 +6,7 @@
 #include "manager.h"
 
 #define CLASS_NAME        "サンプル"            // ウィンドウクラスの名前
-#define WINDOW_NAME       "ウインドウ表示処理"  // ウィンドウの名前（タイトル名）
+#define WINDOW_NAME       "インラージクマ"  // ウィンドウの名前（タイトル名）
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
