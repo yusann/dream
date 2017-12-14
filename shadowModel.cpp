@@ -205,6 +205,11 @@ HRESULT CShadowModel::BuildShadowVolume( LPD3DXMESH pMesh, D3DXVECTOR3 vLight)
 	}
 
 	// シャドウボリュームの側面を追加
+	if (m_Shadow.pVertex != NULL)
+	{
+		delete[] m_Shadow.pVertex;
+		m_Shadow.pVertex = NULL;
+	}
 	m_Shadow.pVertex = new D3DXVECTOR3[dwNumEdge * 6];
 	m_Shadow.iNumVertex = 0;
 	for (i = 0; i < dwNumEdge; i++) {
