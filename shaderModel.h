@@ -28,9 +28,6 @@ public:
 	void SetPixelInfo(const LPDIRECT3DTEXTURE9 texture);
 
 private:
-	// テクニックへのハンドル
-	D3DXHANDLE	m_hTech;
-
 	// シェーダプログラムのグローバル変数へのハンドル
 	D3DXHANDLE	m_hMtxWVP;
 	D3DXHANDLE	m_hTexture;

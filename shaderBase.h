@@ -21,7 +21,11 @@ protected:
 	void CreateFX(const char* hlslFile);
 
 	// エフェクト
-	LPD3DXEFFECT            m_pFX;
+	LPD3DXEFFECT	m_pFX;
+
+	// テクニックへのハンドル
+	D3DXHANDLE	m_hTech;
+
 };
 
 #endif
