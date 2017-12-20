@@ -14,9 +14,6 @@
 #include "sound.h"
 #include "equation.h"
 #include "shaderManager.h"
-#include "shaderBase.h"
-#include "shaderModel.h"
-#include "shaderManga.h"
 
 //*************
 // メイン処理
@@ -350,7 +347,7 @@ void CSceneMotionPartsX::Draw()
 
 	// 輪郭
 	// シェーダの取得
-	CShaderManga *pShaderManga = CShaderManager::GetManga();
+	CShaderManga *pShaderManga = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
 	for (int i = 0; i < (signed)m_pMotionPartsX->Part.size(); i++) {
 
 		// NULLチェック

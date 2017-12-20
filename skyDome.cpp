@@ -9,8 +9,6 @@
 #include "sceneMesh.h"
 #include "skyDome.h"
 #include "texture.h"
-#include "shaderBase.h"
-#include "shaderModel.h"
 #include "shaderManager.h"
 
 CSkyDome::CSkyDome() :CSceneMesh(CScene::OBJTYPE_FIELD)
@@ -126,7 +124,7 @@ void CSkyDome::Draw()
 	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_pIdxBuff);
 
-	CShaderModel *pShader = CShaderManager::GetModel();
+	CShaderModel *pShader = (CShaderModel*)CShaderManager::GetShader(CShaderManager::TYPE_GAME_IMAGE);
 	pShader->SetVertexInfo(mtxWorld);
 	pShader->SetPixelInfo(m_pTexture);
 

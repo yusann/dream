@@ -8,9 +8,6 @@
 #include "scene.h"
 #include "sceneModelX.h"
 #include "shaderManager.h"
-#include "shaderBase.h"
-#include "shaderModel.h"
-#include "shaderManga.h"
 
 //=======================================================================================
 //   コンストラクタ
@@ -106,7 +103,7 @@ void CSceneModelX::Draw()
 
 
 	// 輪郭シェーダのセット
-	CShaderManga *pShaderManga = CShaderManager::GetManga();
+	CShaderManga *pShaderManga = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
 	pShaderManga->SetVertexInfo(mtxWorld, 0.01f);
 
 	for (int i = 0; i < (int)m_Model.NumMat; i++)

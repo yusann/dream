@@ -1,8 +1,9 @@
 #ifndef _SHADER_MANAGER_H_
 #define _SHADER_MANAGER_H_
 
-class CShaderModel;
-class CShaderManga;
+#include "shaderBase.h"
+#include "shaderModel.h"
+#include "shaderManga.h"
 
 //*****************************************************************************
 //   クラスの定義
@@ -10,17 +11,21 @@ class CShaderManga;
 class CShaderManager
 {
 public:
+	typedef enum
+	{
+		TYPE_GAME_IMAGE = 0,
+		TYPE_ANIME,
+		TYPE_MAX,
+	}TYPE;
 	// 初期化
 	static void Init(void);
 	// 終了処理
 	static void Uninit(void);
 
-	static CShaderModel *GetModel() { return m_pModel; }
-	static CShaderManga *GetManga() { return m_pManga; }
+	static CShaderBase *GetShader(int type) { return m_pShader[type]; }
 
 private:
-	static CShaderModel *m_pModel;
-	static CShaderManga *m_pManga;
+	static CShaderBase *m_pShader[TYPE_MAX];
 };
 
 #endif

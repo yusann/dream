@@ -4,26 +4,30 @@
 //=============================================================================
 #include "main.h"
 #include "shaderManager.h"
-#include "shaderBase.h"
-#include "shaderModel.h"
-#include "shaderManga.h"
 
 //*****************************************************************************
 //   静的メンバー変数宣言
 //*****************************************************************************
-CShaderModel *CShaderManager::m_pModel = NULL;
-CShaderManga *CShaderManager::m_pManga = NULL;
+CShaderBase *CShaderManager::m_pShader[CShaderManager::TYPE_MAX];
 
 //==================================================================================================================================================
 // 初期化処理
 //==================================================================================================================================================
 void CShaderManager::Init()
 {
-	m_pModel = new CShaderModel;
-	m_pModel->Create();
+	Uninit();
+	m_pShader[TYPE_GAME_IMAGE] = new CShaderModel;
+	m_pShader[TYPE_GAME_IMAGE]->Create();
 
-	m_pManga = new CShaderManga;
-	m_pManga->Create();
+	m_pShader[TYPE_ANIME]= new CShaderManga;
+	m_pShader[TYPE_ANIME]->Create();
+
+	for (int i = 0; i < TYPE_MAX; ++i)
+	{
+		if (m_pShader[i] == NULL) {
+			MessageBox(NULL, "シェーダ生成エラー", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		}
+	}
 }
 
 //==================================================================================================================================================
@@ -31,12 +35,11 @@ void CShaderManager::Init()
 //==================================================================================================================================================
 void CShaderManager::Uninit(void)
 {
-	if (m_pModel != NULL) { 
-		m_pModel->Delete();
-		m_pModel = NULL;
-	}
-	if (m_pManga != NULL) {
-		m_pManga->Delete();
-		m_pManga = NULL;
+	for (int i = 0; i < TYPE_MAX; ++i)
+	{
+		if (m_pShader[i] != NULL) {
+			m_pShader[i]->Delete();
+			m_pShader[i] = NULL;
+		}
 	}
 }

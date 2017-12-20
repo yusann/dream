@@ -8,8 +8,6 @@
 #include "scene.h"
 #include "sceneMesh.h"
 #include "shaderManager.h"
-#include "shaderBase.h"
-#include "shaderManga.h"
 
 //*************
 // メイン処理
@@ -110,7 +108,7 @@ void CSceneMesh::Draw()
 	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_pIdxBuff);
 
-	CShaderManga *pShader = CShaderManager::GetManga();
+	CShaderManga *pShader = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
 	pShader->SetVertexInfo(mtxWorld,0.5f);
 	pShader->SetPixelInfo(m_Color, m_pTexture);
 
