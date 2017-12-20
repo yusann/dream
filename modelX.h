@@ -16,6 +16,7 @@ public:
 		TYPE_PLAYER = 0,
 		TYPE_ENEMY,
 		TYPE_BLOCK,
+		TYPE_GOAL,
 		TYPE_MAX
 	}TYPE;
 

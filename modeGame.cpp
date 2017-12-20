@@ -27,6 +27,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "camera.h"
+#include "goal.h"
 
 //*****************************************************************************
 //   静的メンバ変数宣言
@@ -49,6 +50,7 @@ void CModeGame::Init(void)
 	CManager::GetSound()->Play(CSound::BGM_STAGE000);
 	CCamera *pCamera = CManager::GetCamera();
 	pCamera->SetRot(D3DXVECTOR3(0.4f,3.0f,0.0f));
+	CGoal::Create(D3DXVECTOR3(55.0f, 157.0f, 0.0f), D3DXVECTOR3(4.0f, 4.0f, 4.0f));
 }
 
 //==================================================================================
@@ -132,9 +134,18 @@ void CModeGame::Update(void)
 		CModeResult::SetClear(false);
 		CFade::SetFade(new CModeResult);
 	}
-#ifdef _DEBUG
 	else
 	{
+		D3DXVECTOR3 pos = pScene->GetPos();
+		if (pos.x >= 40.0f &&
+			pos.x <= 60.0f &&
+			pos.z >= -10.0f &&
+			pos.z <= 20.0f)
+		{
+			CModeResult::SetClear(true);
+			CFade::SetFade(new CModeResult);
+		}
+#ifdef _DEBUG
 		if (player_window)
 		{
 			ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
@@ -144,8 +155,8 @@ void CModeGame::Update(void)
 			pPlayer->ImGui();
 			ImGui::End();
 		}
-	}
 #endif
+	}
 
 #ifdef _DEBUG
 	// ブロックデバッグ

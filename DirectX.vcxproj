@@ -173,6 +173,7 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="equation.cpp" />
     <ClCompile Include="fade.cpp" />
+    <ClCompile Include="goal.cpp" />
     <ClCompile Include="imGui\imgui.cpp" />
     <ClCompile Include="imGui\imgui_demo.cpp" />
     <ClCompile Include="imGui\imgui_draw.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="equation.h" />
     <ClInclude Include="fade.h" />
+    <ClInclude Include="goal.h" />
     <ClInclude Include="imGui\imconfig.h" />
     <ClInclude Include="imGui\imgui.h" />
     <ClInclude Include="imGui\imgui_impl_dx9.h" />

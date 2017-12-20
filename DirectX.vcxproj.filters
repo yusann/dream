@@ -194,6 +194,9 @@
     <ClCompile Include="shaderManga.cpp">
       <Filter>ソース ファイル\shader</Filter>
     </ClCompile>
+    <ClCompile Include="goal.cpp">
+      <Filter>ソース ファイル\object\modelX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -345,6 +348,9 @@
     </ClInclude>
     <ClInclude Include="shaderManga.h">
       <Filter>ソース ファイル\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="goal.h">
+      <Filter>ソース ファイル\object\modelX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
