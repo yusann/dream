@@ -143,7 +143,7 @@ void CObject2D::Update()
 	}
 		break;
 	case TYPE_UI_LIFE:
-	{
+	{/*
 		CPlayer *pPlayer;
 		pPlayer = CModeGame::GetPlayer();
 		if (pPlayer == NULL) { return; }
@@ -152,7 +152,7 @@ void CObject2D::Update()
 		float Percentage = (float)Status.Life / (float)Status.LifeMax;
 		m_Scl.x = m_SclOld.x * Percentage;
 		SetVexPos();
-		SetVexUV(Percentage);
+		SetVexUV(Percentage);*/
 		break;
 	}
 	case TYPE_UI_MAGIC:

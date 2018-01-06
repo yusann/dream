@@ -28,6 +28,7 @@ public:
 
 	// プレイヤーキー判定
 	static BOOL InputPlayerMove(void);				// 移動
+	static BOOL InputPlayerMoveStick(void);			// スティック操作の移動
 	static BOOL InputPlayerMoveU(void);				// 前進
 	static BOOL InputPlayerMoveD(void);				// 後退
 	static BOOL InputPlayerMoveL(void);				// 左移動

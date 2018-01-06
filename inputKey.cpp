@@ -105,6 +105,20 @@ BOOL CInputKey::InputPause(void)
 BOOL CInputKey::InputPlayerMove(void)
 {
 	D3DXVECTOR2 work = m_pInputXbox->GetAnalogValue(CInputXbox::CONTROLLER_1, CInputXbox::LEFT);
+	if (InputPlayerMoveU() ||
+		InputPlayerMoveD() ||
+		InputPlayerMoveL() ||
+		InputPlayerMoveR() ||
+		abs(work.x) + abs(work.y) > 0.5f)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+// スティック操作の移動処理
+BOOL CInputKey::InputPlayerMoveStick(void)
+{
+	D3DXVECTOR2 work = m_pInputXbox->GetAnalogValue(CInputXbox::CONTROLLER_1, CInputXbox::LEFT);
 	if (abs(work.x) + abs(work.y) > 0.5f)
 	{
 		return TRUE;

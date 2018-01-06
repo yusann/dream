@@ -194,6 +194,12 @@
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerStateJumpAttack.cpp" />
+    <ClCompile Include="playerStateJumpDown.cpp" />
+    <ClCompile Include="playerStateJumpUp.cpp" />
+    <ClCompile Include="playerStateLoading.cpp" />
+    <ClCompile Include="playerStateMove.cpp" />
+    <ClCompile Include="playerStateNormal.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="scene2D.cpp" />
@@ -247,6 +253,13 @@
     <ClInclude Include="object2D.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerState.h" />
+    <ClInclude Include="playerStateJumpAttack.h" />
+    <ClInclude Include="playerStateJumpDown.h" />
+    <ClInclude Include="playerStateJumpUp.h" />
+    <ClInclude Include="playerStateLoading.h" />
+    <ClInclude Include="playerStateMove.h" />
+    <ClInclude Include="playerStateNormal.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scene2D.h" />

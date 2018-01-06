@@ -33,11 +33,11 @@ public:
 	void Draw(void);                              // ï`âÊèàóù
 	D3DXVECTOR3 GetRot(void) { return m_Rot; }
 	void SetMotion(int MotionID);
-
-protected:
 	const int GetKey() { return m_Key; }
 	const int GetFrame() { return m_Frame; }
 	const int GetMotionFrame() { return m_MotionFrame; }
+
+protected:
 	const std::vector<CCollision::SPHERE*> GetCollisionSphere() { return m_CollisionSphere; }
 
 	CMotionPartsX::MOTIONPARTSX *m_pMotionPartsX;

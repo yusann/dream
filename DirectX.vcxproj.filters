@@ -203,6 +203,24 @@
     <ClCompile Include="collision.cpp">
       <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
+    <ClCompile Include="playerStateNormal.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateMove.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateJumpUp.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateJumpDown.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateJumpAttack.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateLoading.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -357,6 +375,27 @@
     </ClInclude>
     <ClInclude Include="collision.h">
       <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="playerState.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateNormal.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateMove.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateJumpUp.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateJumpDown.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateJumpAttack.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateLoading.h">
+      <Filter>ソース ファイル\object\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

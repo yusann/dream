@@ -2,6 +2,7 @@
 #define _PLAYER_H_
 
 // 前方宣言
+class CPlayerState;
 #ifdef _DEBUG
 class CMeshSphere;
 #endif
@@ -12,27 +13,18 @@ class CMeshSphere;
 class CPlayer : public CSceneMotionPartsX
 {
 public:
-
-	// 状態
 	typedef enum
 	{
-		MODE_NORMAL = 0,
-		MODE_MOVE,
-		MODE_ATTACK,
-		MODE_JUMP,
-		MODE_JUMPATTACK,
-		MODE_MAX
-	}MODE;
-
-	// ステータス情報
-	typedef struct
-	{
-		int LifeMax;
-		int MagicMax;
-		int Life;
-		int Magic;
-	}STATUS;
-
+		STATE_NORMAL = 0,
+		STATE_MOVE,
+		STATE_JUMPUP,
+		STATE_JUMPDOWN,
+		STATE_DAMAGE,
+		STATE_LOADING,
+		STATE_JUMPATTACK,
+		STATE_ATTACK,
+		STATE_MAX
+	}STATE;
 	CPlayer();             // デフォルトコンストラクタ
 	~CPlayer();                             // デストラクタ
 
@@ -42,27 +34,34 @@ public:
 	void Update(void);      // 更新処理
 	void Draw(void);        // 描画処理
 
-	STATUS GetStatus(void);
 	void Hit(int Damage) { m_Life -= Damage; }
 	const CCollision::SPHERE GetCollision(void) { return m_Collision; }
 
-#ifdef _DEBUG
-	void ImGui(void);
-#endif
-
-private:
-	void InputKey(void);
-	void ModeNormal(void);
-	void ModeMove(void);
-	void ModeAttack(void);
-	void ModeJump(void);
-	void ModeJumpAttack(void);
+	D3DXVECTOR3& Position(void) { return m_Pos; }
+	D3DXVECTOR3& Rotate(void) { return m_Rot; }
+	float GetJumpHeight(void) { return m_Jump; }
+	float GetFloorHeight(void) { return m_FloorPosY; }
+	bool OnBlock(void) { return m_onBlock; }
+	bool InputKeyMove(D3DXVECTOR3 *Move);
+	bool EndMotionKey(void) { return m_LastKye; }
 
 	void CollisionEnemy(void);
 	void CollisionBlock(void);
 	void HitEnemy(int Damage = 1);
 
-	MODE m_Mode;
+	void ChangeState(CPlayerState* pState);
+
+#ifdef _DEBUG
+	void ImGui(void);
+#endif
+
+protected:
+	void ModeAttack(void);
+	void ModeJumpAttack(void);
+
+private:
+	CPlayerState* m_pState;
+
 	D3DXVECTOR3 m_Move;
 	D3DXVECTOR3 m_PosOld;
 	bool m_onBlock;
@@ -73,6 +72,7 @@ private:
 	int m_Magic;
 	float m_FloorPosY;
 	CCollision::SPHERE m_Collision;
+
 };
 
 #endif
