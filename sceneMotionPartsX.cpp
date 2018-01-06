@@ -72,7 +72,7 @@ void CSceneMotionPartsX::Init()
 	{
 		for (int j = 0; j < (signed)m_pMotionPartsX->Motion[i]->Collision.size(); j++)
 		{
-			m_Model[i]->Collision.push_back(new COLLISION_SPHERE);
+			m_Model[i]->Collision.push_back(new CCollision::SPHERE);
 			m_Model[i]->Collision[j]->Pos = m_pMotionPartsX->Motion[i]->Collision[j]->Pos;
 			m_Model[i]->Collision[j]->Scl = m_pMotionPartsX->Motion[i]->Collision[j]->Scl;
 #ifdef _DEBUG

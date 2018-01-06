@@ -2,12 +2,10 @@
 #define _SCENEMOTIONPARTSX_H_
 
 #include "motionPartsX.h"
+#include "collision.h"
 
 // 前方宣言
 class CShadowSphere;
-#ifdef _DEBUG
-class CMeshSphere;
-#endif
 
 //*****************************************************************************
 //   パーツモーションクラスの定義
@@ -18,16 +16,6 @@ public:
 	CSceneMotionPartsX(int Priority = 3);                                   // デフォルトコンストラクタ
 	~CSceneMotionPartsX();                                  // デストラクタ
 
-	// 球の当たり判定情報
-	struct COLLISION_SPHERE
-	{
-#ifdef _DEBUG
-		CMeshSphere			*Sphere;
-#endif
-		D3DXVECTOR3			Pos;
-		float				Scl;
-	};
-
 	// モデル
 	struct MODEL
 	{
@@ -36,7 +24,7 @@ public:
 		D3DXVECTOR3			Rot;
 		D3DXVECTOR3			Scl;
 		D3DXMATRIX			Matrix;
-		std::vector<COLLISION_SPHERE*>	Collision;
+		std::vector<CCollision::SPHERE*>	Collision;
 	};
 
 	void Init(void);                              // 初期化処理
@@ -50,7 +38,7 @@ protected:
 	const int GetKey() { return m_Key; }
 	const int GetFrame() { return m_Frame; }
 	const int GetMotionFrame() { return m_MotionFrame; }
-	const std::vector<COLLISION_SPHERE*> GetCollisionSphere() { return m_CollisionSphere; }
+	const std::vector<CCollision::SPHERE*> GetCollisionSphere() { return m_CollisionSphere; }
 
 	CMotionPartsX::MOTIONPARTSX *m_pMotionPartsX;
 	D3DXVECTOR3				m_Rot;      // 回転
@@ -72,7 +60,7 @@ private:
 
 	std::vector<MODEL*>				m_Model;
 	D3DXMATRIX						m_Matrix;
-	std::vector<COLLISION_SPHERE*>	m_CollisionSphere;
+	std::vector<CCollision::SPHERE*>	m_CollisionSphere;
 	CShadowSphere*					m_pShadow;
 	int m_MotionID;
 	int m_Key;

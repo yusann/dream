@@ -18,7 +18,6 @@
 #include "particle.h"
 #include "sceneMesh.h"
 #include "meshField.h"
-#include "collision.h"
 #include "equation.h"
 #include "sound.h"
 #ifdef _DEBUG
@@ -202,7 +201,7 @@ void CEnemy::ModeAttack()
 	CPlayer* pPlayer = CModeGame::GetPlayer();
 	if (pPlayer == NULL) { return; }
 
-	COLLISION_SPHERE Collision = pPlayer->GetCollision();
+	CCollision::SPHERE Collision = pPlayer->GetCollision();
 
 	// プレイヤーとのベクトル
 	D3DXVECTOR3 Vector;
@@ -318,7 +317,7 @@ bool CEnemy::isPlayer(void)
 	CPlayer* pPlayer = CModeGame::GetPlayer();
 	if (pPlayer == NULL) { return false; }
 
-	COLLISION_SPHERE Collision = pPlayer->GetCollision();
+	CCollision::SPHERE Collision = pPlayer->GetCollision();
 
 	if (CCollision::Sphere(Collision.Pos, Collision.Scl, m_DetectionPos, m_DetectionScl))
 	{

@@ -44,7 +44,7 @@ public:
 
 	STATUS GetStatus(void);
 	void Hit(int Damage) { m_Life -= Damage; }
-	const CCollision::SPHERE GetCollision(void) { return m_Collision; }
+	const COLLISION_SPHERE GetCollision(void) { return m_Collision; }
 
 #ifdef _DEBUG
 	void ImGui(void);
@@ -72,7 +72,7 @@ private:
 	int m_Life;
 	int m_Magic;
 	float m_FloorPosY;
-	CCollision::SPHERE m_Collision;
+	COLLISION_SPHERE m_Collision;
 };
 
 #endif

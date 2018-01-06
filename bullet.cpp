@@ -117,7 +117,7 @@ void CBullet::Update()
 			// ƒuƒƒbƒN‚ÌéŒ¾
 			CPlayer *pPlayer;
 			pPlayer = (CPlayer*)pScene;
-			CSceneMotionPartsX::COLLISION_SPHERE Collision = pPlayer->GetCollision();
+			CCollision::SPHERE Collision = pPlayer->GetCollision();
 
 			if (CCollision::Sphere(m_Pos, BULLET_LEN, Collision.Pos, Collision.Scl))
 			{

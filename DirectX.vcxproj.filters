@@ -54,6 +54,12 @@
     <Filter Include="ソース ファイル\object\2D\shadow">
       <UniqueIdentifier>{9485a73f-8b2b-4ba8-826a-94db3b144b21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\player">
+      <UniqueIdentifier>{5a2c043a-2c31-4b98-b91d-9c70b9db8e01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collision">
+      <UniqueIdentifier>{190eaa78-0889-45a0-9fc3-8477e9ddfbeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,14 +107,8 @@
     <ClCompile Include="skyDome.cpp">
       <Filter>ソース ファイル\object\mash</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>ソース ファイル\object\motionX</Filter>
-    </ClCompile>
     <ClCompile Include="object2D.cpp">
       <Filter>ソース ファイル\object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="collision.cpp">
-      <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
     <ClCompile Include="block.cpp">
       <Filter>ソース ファイル\object\modelX</Filter>
@@ -197,6 +197,12 @@
     <ClCompile Include="goal.cpp">
       <Filter>ソース ファイル\object\modelX</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -221,9 +227,6 @@
       <Filter>ソース ファイル\imGui</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="collision.h">
       <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="manager.h">
@@ -254,9 +257,6 @@
       <Filter>ソース ファイル\object\modelX</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>ソース ファイル\object\motionX</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
       <Filter>ソース ファイル\object\motionX</Filter>
     </ClInclude>
     <ClInclude Include="renderer.h">
@@ -351,6 +351,12 @@
     </ClInclude>
     <ClInclude Include="goal.h">
       <Filter>ソース ファイル\object\modelX</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

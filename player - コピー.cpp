@@ -22,6 +22,7 @@
 
 #include "object2D.h"
 #include "camera.h"
+#include "collision.h"
 
 #include "inputKey.h"
 #ifdef _DEBUG
@@ -549,7 +550,7 @@ void CPlayer::CollisionBlock(void)
 void CPlayer::HitEnemy(int Damage)
 {
 	// 当たり範囲セット
-	std::vector<CCollision::SPHERE*> Collision = GetCollisionSphere();
+	std::vector<COLLISION_SPHERE*> Collision = GetCollisionSphere();
 	for (auto it = Collision.begin(); it != Collision.end(); it++)
 	{
 		// シーンの取得

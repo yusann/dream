@@ -13,9 +13,6 @@
 CGoal::CGoal() :
 	CSceneModelX(CScene::OBJTYPE_BLOCK)
 {
-#ifdef _DEBUG
-	m_Collision = NULL;
-#endif
 }
 
 CGoal::CGoal(D3DXVECTOR3 pos, D3DXVECTOR3 scl) :
