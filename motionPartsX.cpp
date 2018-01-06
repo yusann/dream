@@ -14,7 +14,7 @@ std::unordered_map<char*, CMotionPartsX::MOTIONPARTSX>	CMotionPartsX::m_MotionPa
 // テクスチャパス
 char CMotionPartsX::m_FileName[][128] =
 {
-	"data/text100.txt",
+	"data/MOTION/siba/motion.txt",
 	"data/text101.txt"
 };
 
