@@ -14,7 +14,7 @@ public:
 	void Uninit(void) override;                            // 終了処理
 	void Update(void) override;                            // 更新処理
 	void Draw(void) override;                              // 描画処理
-	void DrawDepth(void) override {};  // 描画処理
+	void DrawDepth(void) override;  // 描画処理
 	
 protected:
 	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff;     // インデックスバッファ

@@ -6,6 +6,9 @@
 #include "renderer.h"
 #include "scene.h"
 
+#include "manager.h"
+#include "light.h"
+
 //   静的メンバ変数
 CScene *CScene::m_Top[OBJTYPE_MAX] = {};        // シーン
 int CScene::m_NumScene = 0;                        // 総数
@@ -71,16 +74,50 @@ void CScene::UpdateAll(void)
 void CScene::DrawAll(void)
 {
 	// 最大数分ループ
-	for( int nCntPriority = 0; nCntPriority < OBJTYPE_MAX; nCntPriority++ )
+	for (int nCntPriority = 0; nCntPriority < OBJTYPE_MAX; nCntPriority++)
 	{
 		CScene *scene = m_Top[nCntPriority];
-		while(scene != NULL)      // NULLだったら
+		while (scene != NULL)      // NULLだったら
 		{
 			CScene *NextScene = scene->m_Next;
 			scene->Draw();
 			scene = NextScene;
 		}
 	}
+
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+	pDevice = CManager::GetRenderer()->GetDevice();
+	if (pDevice == NULL) {
+		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	LPDIRECT3DSURFACE9 campus, back;
+	pDevice->GetRenderTarget(0, &back);
+
+	CManager::GetLight()->GetTexture()->GetSurfaceLevel(0, &campus);
+	pDevice->SetRenderTarget(0, campus);
+
+	// バックバッファ＆Ｚバッファのクリア
+	pDevice->Clear(0, NULL,                                 //
+		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,   // カラーバッファ | 深さ（深度）バッファ（クリアフラグ）
+		D3DCOLOR_RGBA(0, 0, 0, 0),                       // 初期化色
+		1.0f,                                                    // 0~1（0は手前、1は遠い）
+		0);
+
+	// 最大数分ループ
+	for( int nCntPriority = 0; nCntPriority < OBJTYPE_MAX; nCntPriority++ )
+	{
+		CScene *scene = m_Top[nCntPriority];
+		while(scene != NULL)      // NULLだったら
+		{
+			CScene *NextScene = scene->m_Next;
+			scene->DrawDepth();
+			scene = NextScene;
+		}
+	}
+	pDevice->SetRenderTarget(0, back);
+
 }
 
 //==================================================================================================================================================
