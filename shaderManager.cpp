@@ -22,6 +22,9 @@ void CShaderManager::Init()
 	m_pShader[TYPE_ANIME]= new CShaderManga;
 	m_pShader[TYPE_ANIME]->Create();
 
+	m_pShader[TYPE_SHADW_MAP] = new CShaderShadowMap;
+	m_pShader[TYPE_SHADW_MAP]->Create();
+
 	for (int i = 0; i < TYPE_MAX; ++i)
 	{
 		if (m_pShader[i] == NULL) {

@@ -63,18 +63,6 @@ HRESULT CManager::Init( HINSTANCE hInstance, HWND hWnd, BOOL bWindow )
 	// キー判定の生成
 	CInputKey::Init(hInstance, hWnd);
 
-	// サウンドの生成
-	m_pSound = new CSound;
-	m_pSound->Init(hWnd);
-
-	// カメラの生成
-	m_pCamera = new CCamera;
-	m_pCamera->Init();
-
-	// ライトの生成
-	m_pLight = new CLight;
-	m_pLight->Init();
-
 	// テクスチャを読み込み
 	CTexture::Init();
 
@@ -86,6 +74,18 @@ HRESULT CManager::Init( HINSTANCE hInstance, HWND hWnd, BOOL bWindow )
 
 	// シェーダの読み込み
 	CShaderManager::Init();
+
+	// サウンドの生成
+	m_pSound = new CSound;
+	m_pSound->Init(hWnd);
+
+	// カメラの生成
+	m_pCamera = new CCamera;
+	m_pCamera->Init();
+
+	// ライトの生成
+	m_pLight = new CLight;
+	m_pLight->Init();
 
 	// オブジェクトの生成
 	SetMode(new CModeTitle);
@@ -161,7 +161,7 @@ void CManager::Update(void)
 void CManager::Draw(void)
 {
 	m_pCamera->Set();		// カメラセット
-	m_pLight->Set();		// ライトセット
+	//m_pLight->Set();		// ライトセット
 
 	// 描画開始
 	if (m_pRenderer->DrawBegin())

@@ -60,6 +60,15 @@
     <Filter Include="ソース ファイル\collision">
       <UniqueIdentifier>{190eaa78-0889-45a0-9fc3-8477e9ddfbeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\debug">
+      <UniqueIdentifier>{e86c6df7-a022-40e4-807e-6e44df2c80bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\debug\mash">
+      <UniqueIdentifier>{f219b7b9-d4ed-478b-92e7-3c321c307da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\debug\shader">
+      <UniqueIdentifier>{5f7fb076-2a3a-4d15-92c3-f14727c6cd8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -76,12 +85,6 @@
     </ClCompile>
     <ClCompile Include="fade.cpp">
       <Filter>ソース ファイル\object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="meshCube.cpp">
-      <Filter>ソース ファイル\object\mash</Filter>
-    </ClCompile>
-    <ClCompile Include="meshSphere.cpp">
-      <Filter>ソース ファイル\object\mash</Filter>
     </ClCompile>
     <ClCompile Include="renderer.cpp">
       <Filter>ソース ファイル\renderer</Filter>
@@ -221,6 +224,18 @@
     <ClCompile Include="playerStateLoading.cpp">
       <Filter>ソース ファイル\object\player</Filter>
     </ClCompile>
+    <ClCompile Include="meshCube.cpp">
+      <Filter>ソース ファイル\debug\mash</Filter>
+    </ClCompile>
+    <ClCompile Include="meshSphere.cpp">
+      <Filter>ソース ファイル\debug\mash</Filter>
+    </ClCompile>
+    <ClCompile Include="debugShadowMap.cpp">
+      <Filter>ソース ファイル\debug\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderShadowMap.cpp">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -261,12 +276,6 @@
     </ClInclude>
     <ClInclude Include="particle.h">
       <Filter>ソース ファイル\object\billboard</Filter>
-    </ClInclude>
-    <ClInclude Include="meshCube.h">
-      <Filter>ソース ファイル\object\mash</Filter>
-    </ClInclude>
-    <ClInclude Include="meshSphere.h">
-      <Filter>ソース ファイル\object\mash</Filter>
     </ClInclude>
     <ClInclude Include="skyDome.h">
       <Filter>ソース ファイル\object\mash</Filter>
@@ -397,12 +406,27 @@
     <ClInclude Include="playerStateLoading.h">
       <Filter>ソース ファイル\object\player</Filter>
     </ClInclude>
+    <ClInclude Include="meshCube.h">
+      <Filter>ソース ファイル\debug\mash</Filter>
+    </ClInclude>
+    <ClInclude Include="meshSphere.h">
+      <Filter>ソース ファイル\debug\mash</Filter>
+    </ClInclude>
+    <ClInclude Include="debugShadowMap.h">
+      <Filter>ソース ファイル\debug\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderShadowMap.h">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\model.fx">
       <Filter>シェーダ</Filter>
     </FxCompile>
     <FxCompile Include="shader\manga.fx">
+      <Filter>シェーダ</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\shadowMap.fx">
       <Filter>シェーダ</Filter>
     </FxCompile>
   </ItemGroup>

@@ -16,6 +16,7 @@
 #include "scene2D.h"
 #include "fade.h"
 #include "object2D.h"
+#include "debugShadowMap.h"
 
 #include "sceneMesh.h"
 #include "meshField.h"
@@ -100,6 +101,8 @@ void CModeTitle::Init(void)
 
 	CObject2D::Create(CObject2D::TYPE_BG_TITLE);
 	CObject2D::Create(CObject2D::TYPE_UI_PUSH);
+
+	CDebugShadowMap::Create();
 }
 
 //==================================================================================

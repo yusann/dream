@@ -4,6 +4,7 @@
 #include "shaderBase.h"
 #include "shaderModel.h"
 #include "shaderManga.h"
+#include "shaderShadowMap.h"
 
 //*****************************************************************************
 //   ƒNƒ‰ƒX‚Ì’è‹`
@@ -15,6 +16,7 @@ public:
 	{
 		TYPE_GAME_IMAGE = 0,
 		TYPE_ANIME,
+		TYPE_SHADW_MAP,
 		TYPE_MAX,
 	}TYPE;
 	// ‰Šú‰»

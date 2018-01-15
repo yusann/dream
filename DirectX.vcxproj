@@ -170,6 +170,7 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="debugShadowMap.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="equation.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="shaderManager.cpp" />
     <ClCompile Include="shaderManga.cpp" />
     <ClCompile Include="shaderModel.cpp" />
+    <ClCompile Include="shaderShadowMap.cpp" />
     <ClCompile Include="shadowModel.cpp" />
     <ClCompile Include="shadowSphere.cpp" />
     <ClCompile Include="skyDome.cpp" />
@@ -225,6 +227,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
+    <ClInclude Include="debugShadowMap.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="equation.h" />
     <ClInclude Include="fade.h" />
@@ -272,6 +275,7 @@
     <ClInclude Include="shaderManager.h" />
     <ClInclude Include="shaderManga.h" />
     <ClInclude Include="shaderModel.h" />
+    <ClInclude Include="shaderShadowMap.h" />
     <ClInclude Include="shadowModel.h" />
     <ClInclude Include="shadowSphere.h" />
     <ClInclude Include="skyDome.h" />
@@ -286,6 +290,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shader\model.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\shadowMap.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
