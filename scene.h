@@ -33,6 +33,7 @@ public:
 	virtual void Uninit(void) =0;      // 終了処理
 	virtual void Update(void) =0;      // 更新処理
 	virtual void Draw(void)   =0;      // 描画処理
+	virtual void DrawDepth(void) = 0;  // 描画処理
 
 	static void UpdateAll(void);                // すべての更新
 	static void DrawAll(void);                  // すべての描画

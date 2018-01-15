@@ -416,6 +416,96 @@ void CSceneMotionPartsX::Draw()
 	}
 }
 
+//=======================================================================================
+//   深度描画処理
+//=======================================================================================
+void CSceneMotionPartsX::DrawDepth()
+{
+	LPDIRECT3DDEVICE9 pDevice = NULL;                // エラーチェックのためNULLを入れる
+	pDevice = CManager::GetRenderer()->GetDevice();                           // デバイスのポインタを取得
+
+	if (pDevice == NULL)                            // エラーチェック
+	{
+		MessageBox(NULL, "InitのpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+	// 影描画
+	m_pShadow->Draw();
+
+	// 輪郭
+	// シェーダの取得
+	CShaderManga *pShaderManga = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
+	for (int i = 0; i < (signed)m_pMotionPartsX->Part.size(); i++) {
+
+		// NULLチェック
+		if (m_pMotionPartsX->Part[i]->pBuffMat == NULL) { return; }
+		D3DXMATERIAL*	pMat = NULL;					//  マテリアル
+
+														// ワールド情報セット
+		pDevice->SetTransform(D3DTS_WORLD, &m_Model[i]->Matrix);
+
+		D3DMATERIAL9 matDef;
+		pDevice->GetMaterial(&matDef);                 // 現在デバイスに設定されてるアテリアル情報を取得
+
+		pMat = (D3DXMATERIAL*)m_pMotionPartsX->Part[i]->pBuffMat->GetBufferPointer();
+
+		// 頂点シェーダの代入
+		pShaderManga->SetVertexInfo(m_Model[i]->Matrix);
+
+		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
+		{
+			pShaderManga->Begin(2);
+			// メッシュの描画
+			pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
+			pShaderManga->End();
+		}
+	}
+
+
+	// 全パーツ分ループ
+	for (int i = 0; i < (signed)m_pMotionPartsX->Part.size(); i++) {
+
+		// NULLチェック
+		if (m_pMotionPartsX->Part[i]->pBuffMat == NULL) { return; }
+		D3DXMATERIAL*	pMat = NULL;					//  マテリアル
+
+														// ワールド情報セット
+		pDevice->SetTransform(D3DTS_WORLD, &m_Model[i]->Matrix);
+
+		D3DMATERIAL9 matDef;
+		pDevice->GetMaterial(&matDef);                 // 現在デバイスに設定されてるアテリアル情報を取得
+
+		pMat = (D3DXMATERIAL*)m_pMotionPartsX->Part[i]->pBuffMat->GetBufferPointer();
+
+		// シェーダの取得
+		pShaderManga->SetVertexInfo(m_Model[i]->Matrix);
+
+		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
+		{
+			if (m_pMotionPartsX->Part[i]->pTexture[j] != NULL)
+			{
+				// ピクセルシェーダの設定
+				pShaderManga->SetPixelInfo(pMat[j].MatD3D.Diffuse, m_pMotionPartsX->Part[i]->pTexture[j]);
+				pShaderManga->Begin();
+			}
+			else
+			{
+				// ピクセルシェーダの設定
+				pShaderManga->SetPixelInfo(pMat[j].MatD3D.Diffuse, NULL);
+				pShaderManga->Begin(1);
+			}
+			// メッシュの描画
+			pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
+			pShaderManga->End();
+		}
+	}
+}
+
+//=======================================================================================
+//   モーションセット処理
+//=======================================================================================
 void CSceneMotionPartsX::SetMotion(int MotionID)
 {
 	if (m_MotionID == MotionID)
