@@ -23,7 +23,7 @@ public:
 	void End(void) override;
 
 	// 頂点シェーダの情報を代入
-	void SetVertexInfo(const D3DXMATRIX mtxW, const float contourScl = 0.2f);
+	void SetVertexInfo(const D3DXMATRIX mtxW);
 
 private:
 	// シェーダプログラムのグローバル変数へのハンドル

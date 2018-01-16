@@ -4,6 +4,7 @@
 //=============================================================================
 #include "main.h"
 #include "manager.h"
+#include "renderer.h"
 #include "mode.h"
 #include "modeGame.h"
 #include "scene.h"
@@ -38,6 +39,7 @@ void CDebugShadowMap::Init()
 	// ƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 	m_Pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.2f, SCREEN_HEIGHT*0.2f, 0.0f);
+	m_Color = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 	m_pTexture = CManager::GetLight()->GetTexture();
 
 	// e‚Ì‰Šú‰»

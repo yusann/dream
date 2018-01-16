@@ -37,6 +37,7 @@ public:
 
 	static void UpdateAll(void);                // すべての更新
 	static void DrawAll(void);                  // すべての描画
+	static void DrawDepthAll(void);                  // すべての描画
 	static void ReleaseAll(int CntMax = OBJTYPE_MAX);               // すべてのリリース
 
 	static CScene *GetScene(int Priority) { return m_Top[Priority]; }			// シーンの取得処理

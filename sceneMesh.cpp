@@ -190,29 +190,13 @@ void CSceneMesh::DrawDepth()
 	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_pIdxBuff);
 
-	CShaderManga *pShader = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
-	pShader->SetVertexInfo(mtxWorld, 0.5f);
-	pShader->SetPixelInfo(m_Color, m_pTexture);
-
-	pShader->Begin(2);
-
-	// インデックスプリミティブの描画
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
-	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,                 // プリミティブの種類
-		0,
-		0,
-		m_VexNum,   // 頂点数
-		0,
-		m_PolygonNum);                       // プリミティブの数（ポリゴンの数）
-	pShader->End();
+	CShaderShadowMap *pShader = (CShaderShadowMap*)CShaderManager::GetShader(CShaderManager::TYPE_SHADW_MAP);
 
 	pShader->SetVertexInfo(mtxWorld);
-	pShader->SetPixelInfo(m_Color, m_pTexture);
 
 	pShader->Begin();
 
 	// インデックスプリミティブの描画
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,                 // プリミティブの種類
 		0,
 		0,

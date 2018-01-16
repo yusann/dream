@@ -51,9 +51,6 @@
     <Filter Include="ソース ファイル\shader">
       <UniqueIdentifier>{8dac1d43-5bbf-4b81-b949-ab88fdb0f93c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\2D\shadow">
-      <UniqueIdentifier>{9485a73f-8b2b-4ba8-826a-94db3b144b21}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\object\player">
       <UniqueIdentifier>{5a2c043a-2c31-4b98-b91d-9c70b9db8e01}</UniqueIdentifier>
     </Filter>
@@ -68,6 +65,9 @@
     </Filter>
     <Filter Include="ソース ファイル\debug\shader">
       <UniqueIdentifier>{5f7fb076-2a3a-4d15-92c3-f14727c6cd8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\3D\shadow">
+      <UniqueIdentifier>{9485a73f-8b2b-4ba8-826a-94db3b144b21}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -183,10 +183,10 @@
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
     <ClCompile Include="shadowModel.cpp">
-      <Filter>ソース ファイル\object\2D\shadow</Filter>
+      <Filter>ソース ファイル\object\3D\shadow</Filter>
     </ClCompile>
     <ClCompile Include="shadowSphere.cpp">
-      <Filter>ソース ファイル\object\2D\shadow</Filter>
+      <Filter>ソース ファイル\object\3D\shadow</Filter>
     </ClCompile>
     <ClCompile Include="light.cpp">
       <Filter>ソース ファイル\manager</Filter>
@@ -362,10 +362,10 @@
       <Filter>ソース ファイル\manager</Filter>
     </ClInclude>
     <ClInclude Include="shadowModel.h">
-      <Filter>ソース ファイル\object\2D\shadow</Filter>
+      <Filter>ソース ファイル\object\3D\shadow</Filter>
     </ClInclude>
     <ClInclude Include="shadowSphere.h">
-      <Filter>ソース ファイル\object\2D\shadow</Filter>
+      <Filter>ソース ファイル\object\3D\shadow</Filter>
     </ClInclude>
     <ClInclude Include="light.h">
       <Filter>ソース ファイル\manager</Filter>

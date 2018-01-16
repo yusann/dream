@@ -139,7 +139,7 @@ bool CRenderer::DrawBegin(void)
 	// バックバッファ＆Ｚバッファのクリア
 	m_pD3DDevice->Clear(0, NULL,                                 //
 		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,   // カラーバッファ | 深さ（深度）バッファ（クリアフラグ）
-		D3DCOLOR_RGBA(100, 255, 155, 255),                       // 初期化色
+		D3DCOLOR_RGBA(0, 0, 0, 0),                       // 初期化色
 		1.0f,                                                    // 0~1（0は手前、1は遠い）
 		0);
 

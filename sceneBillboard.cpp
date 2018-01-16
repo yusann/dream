@@ -117,9 +117,6 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 1);                   // 参照値の設定
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);     // 参照値 < α
 
-	// ライトの設定（OFF）
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
 	switch (type)
 	{
 	case NORMAL:
@@ -144,9 +141,6 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 		assert(!"タイプ不正sceneBillboard::Draw()");
 		break;
 	}
-
-	// ライトの設定（ON）
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	// アルファテスト（OFF）
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);

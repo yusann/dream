@@ -21,6 +21,7 @@ public:
 	void Uninit(void);                            // I—¹ˆ—
 	void Update(void);                            // XVˆ—
 	void Draw(void);                              // •`‰æˆ—
+	void DrawDepth(void) {};                              // •`‰æˆ—
 
 	static CSkyDome *Create(D3DXVECTOR3 pos,
 		float radius,

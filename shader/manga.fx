@@ -5,6 +5,12 @@ float4x4 g_mtxWVP;
 float4x4 g_mtxWIT;
 float4x4 g_mtxW;
 
+float4x4 g_mtxLightWVP;
+float4x4 g_mtxLightWV;
+float g_lightFar;
+texture g_depthTex;
+float g_depthEpsilon;
+
 float3 g_posEyeW;
 float3 g_lightDirW;
 float4 g_diffColor;
@@ -17,16 +23,9 @@ texture g_animeDrawTex;
 //------------------------------------------------
 // テクスチャサンプラ
 //------------------------------------------------
-sampler TextureSampler =
-sampler_state
-{
-	Texture = <g_texture>;
-};
-sampler TextureSamplerAnime =
-sampler_state
-{
-	Texture = <g_animeDrawTex>;
-};
+sampler TextureSampler		=	sampler_state { Texture = <g_texture>; };
+sampler TextureSamplerAnime	=	sampler_state { Texture = <g_animeDrawTex>; };
+sampler TextureSamplerDepth	=	sampler_state { Texture = <g_depthTex>; };
 
 //------------------------------------------------
 // 頂点シェーダ
@@ -37,7 +36,9 @@ void mainVS(float3 in_pos : POSITION,
 	out float4 out_posH : POSITION,
 	out float2 out_uv : TEXCOORD0,
 	out float3 out_normal : TEXCOORD1,
-	out float3 out_posW : TEXCOORD2)
+	out float3 out_posW : TEXCOORD2,
+	out float4 out_lightPosH : TEXCOORD3,
+	out float  out_depthWV : TEXCOORD4)
 {
 	// 変換後座標
 	out_posH = mul(float4(in_pos, 1.0f), g_mtxWVP);
@@ -50,6 +51,12 @@ void mainVS(float3 in_pos : POSITION,
 
 	// UV
 	out_uv = in_uv;
+
+	// ライトから見る座標変換
+	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
+
+	// ライトから見る深度値変換
+	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
 }
 
 //------------------------------------------------
@@ -58,6 +65,8 @@ void mainVS(float3 in_pos : POSITION,
 void mainPS(float2 in_uv : TEXCOORD0,
 	float3 in_normalW : TEXCOORD1,
 	float3 in_posW : TEXCOORD2,
+	float4 in_lightPosH : TEXCOORD3,
+	float  in_depthWV : TEXCOORD4,
 	out float4 out_color : COLOR0)
 {
 	// 法線
@@ -79,8 +88,19 @@ void mainPS(float2 in_uv : TEXCOORD0,
 	float4 diffuse = tex2D(TextureSampler, in_uv) * g_diffColor * tex2D(TextureSamplerAnime, float2(diff,0.1f));
 
 	// 色の出力
-	out_color = diffuse + rimlight;
-	out_color.w = 1.0f;
+	float4 color;
+	color = diffuse + rimlight;
+	color.w = 1.0f;
+
+	// 影の処理 /////
+	// テクスチャ座標の算出
+	in_lightPosH.xy /= in_lightPosH.w;
+	in_lightPosH.x = in_lightPosH.x * 0.5f + 0.5f;
+	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
+
+	// 深度値の対比
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).r + g_depthEpsilon) < in_depthWV ? 0.2f : 1.0f;
+	out_color = float4(color.rgb * s, color.a);
 }
 
 //------------------------------------------------
@@ -90,7 +110,9 @@ void mainVS_noTex(float3 in_pos : POSITION,
 	float3 in_normal : NORMAL0,
 	out float4 out_posH : POSITION,
 	out float3 out_normal : TEXCOORD1,
-	out float3 out_posW : TEXCOORD2)
+	out float3 out_posW : TEXCOORD2,
+	out float4 out_lightPosH : TEXCOORD3,
+	out float  out_depthWV : TEXCOORD4)
 {
 	// 変換後座標
 	out_posH = mul(float4(in_pos, 1.0f), g_mtxWVP);
@@ -100,6 +122,12 @@ void mainVS_noTex(float3 in_pos : POSITION,
 
 	// 法線
 	out_normal = normalize(mul(float4(in_normal, 0.0f), g_mtxWIT).xyz);
+
+	// ライトから見る座標変換
+	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
+
+	// ライトから見る深度値変換
+	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
 }
 
 //------------------------------------------------
@@ -107,6 +135,8 @@ void mainVS_noTex(float3 in_pos : POSITION,
 //------------------------------------------------
 void mainPS_noTex(float3 in_normalW : TEXCOORD1,
 	float3 in_posW : TEXCOORD2,
+	float4 in_lightPosH : TEXCOORD3,
+	float  in_depthWV : TEXCOORD4,
 	out float4 out_color : COLOR0)
 {
 	// 法線
@@ -128,8 +158,166 @@ void mainPS_noTex(float3 in_normalW : TEXCOORD1,
 	float4 diffuse = g_diffColor * tex2D(TextureSamplerAnime, float2(diff, 0.5f));
 
 	// 色の出力
-	out_color = diffuse + rimlight;
-	out_color.w = 1.0f;
+	float4 color;
+	color = diffuse + rimlight;
+	color.w = 1.0f;
+
+	// 影の処理 /////
+	// テクスチャ座標の算出
+	in_lightPosH.xy /= in_lightPosH.w;
+	in_lightPosH.x = in_lightPosH.x * 0.5f + 0.5f;
+	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
+
+	// 深度値の対比
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).r + g_depthEpsilon) < in_depthWV ? 0.2f : 1.0f;
+	out_color = float4(color.rgb * s, color.a);
+}
+
+
+//------------------------------------------------
+// 頂点シェーダ
+//------------------------------------------------
+void shadowVS(float3 in_pos : POSITION,
+	float3 in_normal : NORMAL0,
+	float2 in_uv : TEXCOORD0,
+	out float4 out_posH : POSITION,
+	out float2 out_uv : TEXCOORD0,
+	out float3 out_normal : TEXCOORD1,
+	out float3 out_posW : TEXCOORD2,
+	out float4 out_lightPosH : TEXCOORD3,
+	out float  out_depthWV : TEXCOORD4)
+{
+	// 変換後座標
+	out_posH = mul(float4(in_pos, 1.0f), g_mtxWVP);
+
+	// ワールド座標
+	out_posW = mul(float4(in_pos, 1.0f), g_mtxW).xyz;
+
+	// 法線
+	out_normal = normalize(mul(float4(in_normal, 0.0f), g_mtxWIT).xyz);
+
+	// UV
+	out_uv = in_uv;
+
+	// ライトから見る座標変換
+	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
+
+	// ライトから見る深度値変換
+	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
+}
+
+//------------------------------------------------
+// ピクセルシェーダ
+//------------------------------------------------
+void shadowPS(float2 in_uv : TEXCOORD0,
+	float3 in_normalW : TEXCOORD1,
+	float3 in_posW : TEXCOORD2,
+	float4 in_lightPosH : TEXCOORD3,
+	float  in_depthWV : TEXCOORD4,
+	out float4 out_color : COLOR0)
+{
+	// 法線
+	in_normalW = normalize(in_normalW);
+
+	// カメラまでのベクトル
+	float3 toEyeW = normalize(g_posEyeW - in_posW);
+
+	// ディフューズ
+	float diff = dot(in_normalW, -g_lightDirW)*0.5f + 0.5f;
+
+	float rim = 1.0f - abs(dot(toEyeW, in_normalW))*1.2f;
+
+	// リムライト（縁）
+	float3 lightColor = float3(0.2f, 0.2f, 0.2f);
+	float4 rimlight = float4(lightColor * rim, 0.0f);
+
+	//// ディフューズセット（平行光源）
+	float4 diffuse = tex2D(TextureSampler, in_uv) * g_diffColor * tex2D(TextureSamplerAnime, float2(diff, 0.1f));
+
+	// 色の出力
+	float4 color;
+	color = diffuse + rimlight;
+	color.w = 1.0f;
+
+	// 影の処理 /////
+	// テクスチャ座標の算出
+	in_lightPosH.xy /= in_lightPosH.w;
+	in_lightPosH.x = in_lightPosH.x * 0.5f + 0.5f;
+	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
+
+	// 深度値の対比
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).r + g_depthEpsilon) > in_depthWV ? 0.2f : 1.0f;
+	out_color = float4(color.rgb * s, color.a);
+}
+
+//------------------------------------------------
+// テクスチャなし頂点シェーダ
+//------------------------------------------------
+void shadowVS_noTex(float3 in_pos : POSITION,
+	float3 in_normal : NORMAL0,
+	out float4 out_posH : POSITION,
+	out float3 out_normal : TEXCOORD1,
+	out float3 out_posW : TEXCOORD2,
+	out float4 out_lightPosH : TEXCOORD3,
+	out float  out_depthWV : TEXCOORD4)
+{
+	// 変換後座標
+	out_posH = mul(float4(in_pos, 1.0f), g_mtxWVP);
+
+	// ワールド座標
+	out_posW = mul(float4(in_pos, 1.0f), g_mtxW).xyz;
+
+	// 法線
+	out_normal = normalize(mul(float4(in_normal, 0.0f), g_mtxWIT).xyz);
+
+	// ライトから見る座標変換
+	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
+
+	// ライトから見る深度値変換
+	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
+}
+
+//------------------------------------------------
+// テクスチャなしシェーダ
+//------------------------------------------------
+void shadowPS_noTex(float3 in_normalW : TEXCOORD1,
+	float3 in_posW : TEXCOORD2,
+	float4 in_lightPosH : TEXCOORD3,
+	float  in_depthWV : TEXCOORD4,
+	out float4 out_color : COLOR0)
+{
+	// 法線
+	in_normalW = normalize(in_normalW);
+
+	// カメラまでのベクトル
+	float3 toEyeW = normalize(g_posEyeW - in_posW);
+
+	// ディフューズ
+	float diff = dot(in_normalW, -g_lightDirW)*0.4f + 0.5f;
+
+	float rim = 1.0f - abs(dot(toEyeW, in_normalW))*1.2f;
+
+	// リムライト（縁）
+	float3 lightColor = float3(0.2f, 0.2f, 0.2f);
+	float4 rimlight = float4(lightColor * rim, 0.0f);
+
+	//// ディフューズセット（平行光源）
+	float4 diffuse = g_diffColor * tex2D(TextureSamplerAnime, float2(diff, 0.5f));
+
+	// 色の出力
+	float4 color;
+	color = diffuse + rimlight;
+	color.w = 1.0f;
+
+	// 影の処理 /////
+	// テクスチャ座標の算出
+	in_lightPosH.xy /= in_lightPosH.w;
+	in_lightPosH.x = in_lightPosH.x * 0.5f + 0.5f;
+	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
+
+	// 深度値の対比
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).r + g_depthEpsilon) > in_depthWV ? 0.2f : 1.0f;
+	out_color = float4(color.rgb * s, color.a);
 }
 
 //------------------------------------------------
@@ -171,5 +359,15 @@ technique BasicTech
 	{
 		vertexShader = compile vs_3_0 contourVS();
 		pixelShader = compile ps_3_0 contourPS();
+	}
+	pass P3
+	{
+		vertexShader = compile vs_3_0 shadowVS();
+		pixelShader = compile ps_3_0 shadowPS();
+	}
+	pass P4
+	{
+		vertexShader = compile vs_3_0 shadowVS_noTex();
+		pixelShader = compile ps_3_0 shadowPS_noTex();
 	}
 }

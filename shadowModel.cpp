@@ -94,6 +94,7 @@ void CShadowModel::Update( void )
 //==============================================================================
 void CShadowModel::Draw( void )
 {
+	/*
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	pDevice = CManager::GetRenderer()->GetDevice();
@@ -156,6 +157,7 @@ void CShadowModel::Draw( void )
 	// 描画ステータスの復帰
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
+	*/
 }
 
 //-----------------------------------------------------------------------------

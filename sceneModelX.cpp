@@ -196,41 +196,17 @@ void CSceneModelX::DrawDepth()
 
 
 	// 輪郭シェーダのセット
-	CShaderManga *pShaderManga = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
-	pShaderManga->SetVertexInfo(mtxWorld, 0.01f);
-
-	for (int i = 0; i < (int)m_Model.NumMat; i++)
-	{
-		pShaderManga->Begin(2);
-		// メッシュの描画
-		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
-		m_Model.pMesh->DrawSubset(i);
-		// シェーダクリア
-		pShaderManga->End();
-	}
+	CShaderShadowMap *pShader = (CShaderShadowMap*)CShaderManager::GetShader(CShaderManager::TYPE_SHADW_MAP);
+	pShader->SetVertexInfo(mtxWorld);
 
 	// シェーダのセット
-	pShaderManga->SetVertexInfo(mtxWorld);
+	pShader->Begin();
 
 	for( int i = 0; i < (int)m_Model.NumMat; i++ )
 	{
-
-		if (pMat[i].pTextureFilename != NULL)
-		{
-			// マテリアルの設定
-			pShaderManga->SetPixelInfo(pMat[i].MatD3D.Diffuse, m_Model.pTexture[i]);
-			pShaderManga->Begin();
-		}
-		else
-		{
-			// マテリアルの設定
-			pShaderManga->SetPixelInfo(pMat[i].MatD3D.Diffuse, NULL);
-			pShaderManga->Begin(1);
-		}
 		// メッシュの描画
-		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 		m_Model.pMesh->DrawSubset(i);
-		// シェーダクリア
-		pShaderManga->End();
 	}
+	// シェーダクリア
+	pShader->End();
 }

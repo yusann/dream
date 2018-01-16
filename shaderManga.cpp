@@ -42,6 +42,12 @@ void CShaderManga::Create()
 	m_hMtxWIT = m_pFX->GetParameterByName(0, "g_mtxWIT");
 	m_hMtxW = m_pFX->GetParameterByName(0, "g_mtxW");
 
+	m_hMtxLightWVP = m_pFX->GetParameterByName(0, "g_mtxLightWVP");
+	m_hMtxLightWV = m_pFX->GetParameterByName(0, "g_mtxLightWV");
+	m_hLightFar = m_pFX->GetParameterByName(0, "g_lightFar");
+	m_hDepthTex = m_pFX->GetParameterByName(0, "g_depthTex");
+	m_hDepthEpsilon = m_pFX->GetParameterByName(0, "g_depthEpsilon");
+
 	m_hLightDirW = m_pFX->GetParameterByName(0, "g_lightDirW");
 	m_hPosEyeW = m_pFX->GetParameterByName(0, "g_posEyeW");
 	m_hDiffColor = m_pFX->GetParameterByName(0, "g_diffColor");
@@ -102,11 +108,32 @@ void CShaderManga::SetVertexInfo( const D3DXMATRIX mtxW, const float contourScl 
 	D3DXMatrixInverse(&mtxWIT, NULL, &mtxW);
 	D3DXMatrixTranspose(&mtxWIT, &mtxWIT);
 
+	// ƒ‰ƒCƒgî•ñŽæ“¾
+	CLight* pLight = CManager::GetLight();
+	// ƒ‰ƒCƒgƒrƒ…[s—ñ
+	D3DXMATRIX lightView = pLight->GetMtxView();
+	// ƒ‰ƒCƒgƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
+	D3DXMATRIX lightProj = pLight->GetMtxProj();
+	// ƒ‰ƒCƒgƒ[ƒ‹ƒhEƒrƒ…[EƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
+	D3DXMATRIX mtxLightWVP = mtxW * lightView * lightProj;
+	// ƒ‰ƒCƒgƒ[ƒ‹ƒhEƒrƒ…[s—ñ
+	D3DXMATRIX mtxLightWV = mtxW * lightView;
+	// ƒ‰ƒCƒg”ÍˆÍ‚ÌŽæ“¾
+	float lightFar = pLight->GetFar();
+
+	static float depthEpsilon = 5.0f;
+	ImGui::DragFloat("Depth Epsilon", &depthEpsilon, 0.01f);
+
+
 	// î•ñ‘ã“ü
 	m_pFX->SetMatrix(m_hMtxWVP, &mtxWVP);
 	m_pFX->SetMatrix(m_hMtxWIT, &mtxWIT);
 	m_pFX->SetMatrix(m_hMtxW, &mtxW);
 	m_pFX->SetFloat(m_hContourScl, contourScl);
+	m_pFX->SetMatrix(m_hMtxLightWVP, &mtxLightWVP);
+	m_pFX->SetMatrix(m_hMtxLightWV, &mtxLightWV);
+	m_pFX->SetFloat(m_hLightFar, lightFar);
+	m_pFX->SetFloat(m_hDepthEpsilon, depthEpsilon*0.001f);
 }
 
 //=======================================================================================
@@ -121,6 +148,8 @@ void CShaderManga::SetPixelInfo(const D3DCOLORVALUE diffColor,		// ƒfƒBƒtƒ…[ƒYƒ
 	// ƒ‰ƒCƒgƒxƒNƒgƒ‹iƒ[ƒ‹ƒhj
 	D3DXVECTOR3 lightDirW = pLight->GetDir();
 	D3DXVec3Normalize(&lightDirW, &lightDirW);
+	// [“xƒeƒNƒXƒ`ƒƒ
+	LPDIRECT3DTEXTURE9 depthTex = pLight->GetTexture();
 
 	// ƒJƒƒ‰î•ñŽæ“¾
 	CCamera *pCamera = CManager::GetCamera();
@@ -133,4 +162,5 @@ void CShaderManga::SetPixelInfo(const D3DCOLORVALUE diffColor,		// ƒfƒBƒtƒ…[ƒYƒ
 	m_pFX->SetValue(m_hDiffColor, &diffColor, sizeof(diffColor));
 	m_pFX->SetTexture(m_hTexture, texture);
 	m_pFX->SetTexture(m_hAnimeDrawTex, CTexture::GetTexture(CTexture::TEXTYPE_ANIME_DRAW));
+	m_pFX->SetTexture(m_hDepthTex, depthTex);
 }

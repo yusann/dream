@@ -36,19 +36,19 @@ void CLight::Init()
 		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
 		return;
 	}
-	ZeroMemory(&m_Light, sizeof(D3DLIGHT9));              // 初期化  ={0}も可
-	m_Light.Type = D3DLIGHT_DIRECTIONAL;             // タイプ
-	m_Light.Position = D3DXVECTOR3(1000.0f, 1000.0f, 1000.0f);
-	m_Light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);       // 平行光源（ライトの色）
-	m_Light.Ambient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.0f);       // 環境光
-	m_Light.Direction = D3DXVECTOR3(1.0f, -1.0f, 1.0f);               // 向き
+	m_PosEye = D3DXVECTOR3(1000.0f, 1000.0f, 1000.0f);
+	m_PosAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_VecUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	m_Direction = D3DXVECTOR3(1.0f, -1.0f, 1.0f);               // 向き
+
+	m_Far = 3000.0f;
 	// 単位ベクトルの算出
-	D3DXVECTOR3	vecDir = -1.0f * m_Light.Position;
-	D3DXVec3Normalize((D3DXVECTOR3*)&m_Light.Direction, &vecDir);
+	D3DXVECTOR3	vecDir = -1.0f *m_PosEye;
+	D3DXVec3Normalize((D3DXVECTOR3*)&m_Direction, &vecDir);
 
 	m_pTexture = NULL;
 	D3DXCreateTexture(pDevice, SCREEN_WIDTH, SCREEN_HEIGHT, 1,
-		D3DUSAGE_RENDERTARGET, D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, &m_pTexture);
+		D3DUSAGE_RENDERTARGET, D3DFMT_R32F, D3DPOOL_DEFAULT, &m_pTexture);
 }
 
 //=======================================================================================
@@ -63,6 +63,14 @@ void CLight::Uninit()
 //=======================================================================================
 void CLight::Update()
 {
+	static float posX = 500.0f;
+	static float posY = 500.0f;
+	static float posZ = 500.0f;
+	ImGui::DragFloat("LightFar", &m_Far, 10.0f);
+	ImGui::DragFloat("LightposX", &posX, 1.0f);
+	ImGui::DragFloat("LightposY", &posY, 1.0f);
+	ImGui::DragFloat("LightposZ", &posZ, 1.0f);
+	m_PosEye = D3DXVECTOR3(posX, posY, posZ);
 }
 
 //=======================================================================================
@@ -83,13 +91,8 @@ void CLight::Set()
 		D3DX_PI / 3.0f,										// 画角（視野角）60度にするためπ÷３
 		(float)SCREEN_WIDTH / SCREEN_HEIGHT,			// アスペクト比（floatで計算する、float>intなので片方でOK）
 		1.0f,											// near 必ず0.0fより大きいこと  どこから描画するか
-		10000.0f);										// far どこまで描画するか
-	pDevice->SetTransform(D3DTS_PROJECTION, &m_MtxProj);
+		m_Far);										// far どこまで描画するか
 
 	// ビュー行列の作成 LH左手座標系
-	D3DXVECTOR3	pos = m_Light.Position;
-	D3DXMatrixLookAtLH(&m_MtxView, &pos, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), &D3DXVECTOR3(0.0f, 1.0f, 0.0f));    // Eye,At,Upの情報からビュー行列(mtxView)を作る関数
-
-																	  // ビュー行列セット
-	pDevice->SetTransform(D3DTS_VIEW, &m_MtxView);
+	D3DXMatrixLookAtLH(&m_MtxView, &m_PosEye, &m_PosAt, &m_VecUp);    // Eye,At,Upの情報からビュー行列(mtxView)を作る関数
 }

@@ -161,13 +161,40 @@ void CManager::Update(void)
 void CManager::Draw(void)
 {
 	m_pCamera->Set();		// カメラセット
-	//m_pLight->Set();		// ライトセット
+	m_pLight->Set();		// ライトセット
 
 	// 描画開始
 	if (m_pRenderer->DrawBegin())
 	{
+
+		LPDIRECT3DDEVICE9 pDevice = NULL;
+		pDevice = m_pRenderer->GetDevice();
+		if (pDevice == NULL) {
+			MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+			return;
+		}
+
+		LPDIRECT3DSURFACE9 campus, back;
+		pDevice->GetRenderTarget(0, &back);
+
+		CManager::GetLight()->GetTexture()->GetSurfaceLevel(0, &campus);
+		pDevice->SetRenderTarget(0, campus);
+
+		// バックバッファ＆Ｚバッファのクリア
+		pDevice->Clear(0, NULL,                                 //
+			D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,   // カラーバッファ | 深さ（深度）バッファ（クリアフラグ）
+			D3DCOLOR_RGBA(0, 0, 0, 0),                       // 初期化色
+			1.0f,                                                    // 0~1（0は手前、1は遠い）
+			0);
+
+		CScene::DrawDepthAll();             // シーン
+
+		pDevice->SetRenderTarget(0, back);
+
 		// 描画処理
 		CScene::DrawAll();             // シーン
+
+
 
 #ifdef _DEBUG
 		ImGui::Render();

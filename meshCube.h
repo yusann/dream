@@ -14,6 +14,7 @@ public:
 	void Uninit(void);                            // I—¹ˆ—
 	void Update(D3DXVECTOR3 Pos, D3DXVECTOR3 Scl);                            // XVˆ—
 	void Draw(void);                              // •`‰æˆ—
+	void DrawDepth(void) {};                              // •`‰æˆ—
 
 	static CMeshCube *Create(void);                  // ì¬
 	

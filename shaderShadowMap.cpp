@@ -78,23 +78,24 @@ void CShaderShadowMap::End(void)
 //=======================================================================================
 //   頂点シェーダの情報を代入
 //=======================================================================================
-void CShaderShadowMap::SetVertexInfo( const D3DXMATRIX mtxW, const float contourScl )			// ワールド座標
+void CShaderShadowMap::SetVertexInfo( const D3DXMATRIX mtxW )			// ワールド座標
 {
-	// カメラ情報取得
-	CCamera* pCamera = CManager::GetCamera();
+	// ライト情報取得
+	CLight* pLight = CManager::GetLight();
+
 	// ビュー行列
-	D3DXMATRIX view = pCamera->GetMtxView();
+	D3DXMATRIX view = pLight->GetMtxView();
 	// プロジェクション行列
-	D3DXMATRIX proj = pCamera->GetMtxProj();
+	D3DXMATRIX proj = pLight->GetMtxProj();
 	// ワールド・ビュー・プロジェクション行列
 	D3DXMATRIX mtxWVP = mtxW * view * proj;
 	// 逆転置行列
-	D3DXMATRIX mtxWIT;
-	D3DXMatrixInverse(&mtxWIT, NULL, &mtxW);
-	D3DXMatrixTranspose(&mtxWIT, &mtxWIT);
+	D3DXMATRIX mtxWV = mtxW * view;
+
+	float lightFar = pLight->GetFar();
 
 	// 情報代入
 	m_pFX->SetMatrix(m_hMtxLightWVP, &mtxWVP);
-	m_pFX->SetMatrix(m_hMtxLightWV, &mtxWIT);
-	m_pFX->SetFloat(m_hFar, contourScl);
+	m_pFX->SetMatrix(m_hMtxLightWV, &mtxWV);
+	m_pFX->SetFloat(m_hFar, lightFar);
 }
