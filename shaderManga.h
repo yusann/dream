@@ -31,10 +31,10 @@ private:
 	// シェーダプログラムのグローバル変数へのハンドル
 	D3DXHANDLE	m_hMtxWVP;
 	D3DXHANDLE	m_hMtxWIT;
+	D3DXHANDLE	m_hMtxWI;
 	D3DXHANDLE	m_hMtxW;
 
 	D3DXHANDLE	m_hMtxLightWVP;
-	D3DXHANDLE	m_hMtxLightWV;
 	D3DXHANDLE	m_hLightFar;
 	D3DXHANDLE	m_hDepthTex;
 	D3DXHANDLE	m_hDepthEpsilon;

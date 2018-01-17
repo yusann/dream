@@ -126,13 +126,13 @@ void CMeshCube::Draw()
 	// デバイスにインデックスバッファの設定
 	pDevice->SetIndices(m_pIdxBuff);
 
-	// インデックスプリミティブの描画
-	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,                 // プリミティブの種類
-		0,
-		0,
-		m_VexNum,   // 頂点数
-		0,
-		m_PolygonNum);                       // プリミティブの数（ポリゴンの数）
+	//// インデックスプリミティブの描画
+	//pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,                 // プリミティブの種類
+	//	0,
+	//	0,
+	//	m_VexNum,   // 頂点数
+	//	0,
+	//	m_PolygonNum);                       // プリミティブの数（ポリゴンの数）
 
 	// ライトの設定（ON）
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);

@@ -430,7 +430,6 @@ void CSceneMotionPartsX::DrawDepth()
 		return;
 	}
 
-	// 輪郭
 	// シェーダの取得
 	CShaderShadowMap *pShader = (CShaderShadowMap*)CShaderManager::GetShader(CShaderManager::TYPE_SHADW_MAP);
 
@@ -456,7 +455,45 @@ void CSceneMotionPartsX::DrawDepth()
 		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
 		{
 			// メッシュの描画
-			pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
+		}
+		pShader->End();
+	}
+}
+
+//=======================================================================================
+//   ステンシルシャドウモデル描画処理
+//=======================================================================================
+void CSceneMotionPartsX::DrawStencilShadow()
+{
+	LPDIRECT3DDEVICE9 pDevice = NULL;                // エラーチェックのためNULLを入れる
+	pDevice = CManager::GetRenderer()->GetDevice();                           // デバイスのポインタを取得
+
+	if (pDevice == NULL)                            // エラーチェック
+	{
+		MessageBox(NULL, "InitのpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	// シェーダの取得
+	CShaderManga *pShader = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
+
+	// 全パーツ分ループ
+	for (int i = 0; i < (signed)m_pMotionPartsX->Part.size(); i++) {
+
+		// NULLチェック
+		if (m_pMotionPartsX->Part[i]->pBuffMat == NULL) { return; }
+
+		// ワールド情報セット
+		pDevice->SetTransform(D3DTS_WORLD, &m_Model[i]->Matrix);
+
+		// シェーダの取得
+		pShader->SetVertexInfo(m_Model[i]->Matrix);
+		pShader->Begin(3);
+
+		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
+		{
+			// メッシュの描画
 			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
 		}
 		pShader->End();

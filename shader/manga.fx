@@ -3,10 +3,10 @@
 //------------------------------------------------
 float4x4 g_mtxWVP;
 float4x4 g_mtxWIT;
+float4x4 g_mtxWI;
 float4x4 g_mtxW;
 
 float4x4 g_mtxLightWVP;
-float4x4 g_mtxLightWV;
 float g_lightFar;
 texture g_depthTex;
 float g_depthEpsilon;
@@ -56,7 +56,9 @@ void mainVS(float3 in_pos : POSITION,
 	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
 
 	// ライトから見る深度値変換
-	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
+	//out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWVP).z / g_lightFar;
+	// lightPosH.z / farと計算が一緒のため要らない
+	out_depthWV = out_lightPosH.z / g_lightFar;
 }
 
 //------------------------------------------------
@@ -89,8 +91,9 @@ void mainPS(float2 in_uv : TEXCOORD0,
 
 	// 色の出力
 	float4 color;
-	color = diffuse + rimlight;
-	color.w = 1.0f;
+	out_color = diffuse + rimlight;
+	out_color.w = 1.0f;
+	return;
 
 	// 影の処理 /////
 	// テクスチャ座標の算出
@@ -127,7 +130,7 @@ void mainVS_noTex(float3 in_pos : POSITION,
 	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
 
 	// ライトから見る深度値変換
-	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
+	out_depthWV = out_lightPosH.z / g_lightFar;
 }
 
 //------------------------------------------------
@@ -159,8 +162,9 @@ void mainPS_noTex(float3 in_normalW : TEXCOORD1,
 
 	// 色の出力
 	float4 color;
-	color = diffuse + rimlight;
-	color.w = 1.0f;
+	out_color = diffuse + rimlight;
+	out_color.w = 1.0f;
+	return;
 
 	// 影の処理 /////
 	// テクスチャ座標の算出
@@ -203,7 +207,7 @@ void shadowVS(float3 in_pos : POSITION,
 	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
 
 	// ライトから見る深度値変換
-	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
+	out_depthWV = out_lightPosH.z / g_lightFar;
 }
 
 //------------------------------------------------
@@ -274,7 +278,7 @@ void shadowVS_noTex(float3 in_pos : POSITION,
 	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
 
 	// ライトから見る深度値変換
-	out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWV).z / g_lightFar;
+	out_depthWV = out_lightPosH.z / g_lightFar;
 }
 
 //------------------------------------------------
@@ -341,6 +345,35 @@ void contourPS( out float4 out_color : COLOR0 )
 }
 
 //------------------------------------------------
+// ステンシルシャドウ頂点シェーダ
+//------------------------------------------------
+void stencilShadowVS(
+	float3 in_pos : POSITION,
+	float3 in_normal : NORMAL0,
+	out float4 out_posH : POSITION)
+{
+	// 法線
+	in_normal = normalize(in_normal);
+	float3 normalW = normalize(mul(float4(in_normal, 0.0f), g_mtxW).xyz);
+	float3 lightDirL = normalize(mul(float4(g_lightDirW, 0.0f), g_mtxWI).xyz);
+
+	// 法線とライトの向きチェック
+	float edge = dot(normalW, -lightDirL);
+
+	// 反対側のみ伸ばす
+	if (edge < 0.0f)
+	{
+		// 変換後座標
+		out_posH = mul(float4(in_pos + (lightDirL*1000.0f), 1.0f), g_mtxWVP);
+	}
+	else
+	{
+		// 変換後座標
+		out_posH = mul(float4(in_pos, 1.0f), g_mtxWVP);
+	}
+}
+
+//------------------------------------------------
 // テクニック宣言
 //------------------------------------------------
 technique BasicTech
@@ -362,10 +395,14 @@ technique BasicTech
 	}
 	pass P3
 	{
+		vertexShader = compile vs_3_0 stencilShadowVS();
+	}
+	pass P4
+	{
 		vertexShader = compile vs_3_0 shadowVS();
 		pixelShader = compile ps_3_0 shadowPS();
 	}
-	pass P4
+	pass P5
 	{
 		vertexShader = compile vs_3_0 shadowVS_noTex();
 		pixelShader = compile ps_3_0 shadowPS_noTex();

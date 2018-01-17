@@ -20,8 +20,7 @@
 #endif
 
 CBlock::CBlock() :
-	CSceneModelX(CScene::OBJTYPE_BLOCK),
-	m_pShadow(NULL)
+	CSceneModelX(CScene::OBJTYPE_BLOCK)
 {
 #ifdef _DEBUG
 	m_Collision = NULL;
@@ -29,8 +28,7 @@ CBlock::CBlock() :
 }
 
 CBlock::CBlock(D3DXVECTOR3 pos, D3DXVECTOR3 scl) :
-	CSceneModelX(CScene::OBJTYPE_BLOCK),
-	m_pShadow(NULL)
+	CSceneModelX(CScene::OBJTYPE_BLOCK)
 {
 	m_Scl = scl;
 	m_Pos = pos;
@@ -60,39 +58,6 @@ void CBlock::Init( void )
 	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	// 親の初期化
 	CSceneModelX::Init();
-	m_pShadow = CShadowModel::Create(m_Model.pMesh);
-
-
-	// 変換行列の宣言
-	D3DXMATRIX mtxRot;             // ローカル回転
-	D3DXMATRIX mtxScl;             // ローカルスケール
-	D3DXMATRIX mtxPos;             // ローカル座標
-	D3DXMATRIX mtxWorld;           // ワールド情報
-
-								   // ローカル回転の代入
-	D3DXMatrixRotationYawPitchRoll(&mtxRot,
-		m_Rot.y,
-		m_Rot.x,
-		m_Rot.z);
-
-	// ローカルスケールの代入
-	D3DXMatrixScaling(&mtxScl,
-		m_Scl.x,
-		m_Scl.y,
-		m_Scl.z);
-
-	// ローカル座標の代入
-	D3DXMatrixTranslation(&mtxPos,
-		m_Pos.x,
-		m_Pos.y,
-		m_Pos.z);
-
-	// ワールド情報処理
-	D3DXMatrixIdentity(&mtxWorld);                       // ワールドの中身を初期化
-	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRot);   // ワールド回転の代入
-	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScl);   // ワールドスケールの代入
-	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxPos);   // ワールド座標の代入
-	m_pShadow->SetMatrix(mtxWorld);
 #ifdef _DEBUG
 	m_Collision = CMeshCube::Create();
 #endif
@@ -106,11 +71,6 @@ void CBlock::Init( void )
 //==============================================================================
 void CBlock::Uninit( void )
 {
-	if (m_pShadow != NULL)
-	{
-		m_pShadow->Uninit();
-		m_pShadow = NULL;
-	}
 	CSceneModelX::Uninit();
 }
 

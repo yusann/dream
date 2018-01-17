@@ -16,7 +16,7 @@ void mainVS(float3 in_posL : POSITION,
 	out_posH = mul(float4(in_posL, 1.0f), g_mtxLightWVP);
 
 	// ê[ìxíl
-	out_depthWV = mul(float4(in_posL, 1.0f), g_mtxLightWV).z / g_far;
+	out_depthWV = mul(float4(in_posL, 1.0f), g_mtxLightWVP).z / g_far;
 }
 
 //------------------------------------------------

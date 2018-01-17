@@ -29,7 +29,6 @@ public:
 #endif
 
 private:
-	CShadowModel* m_pShadow;
 #ifdef _DEBUG
 	CMeshCube* m_Collision;
 #endif

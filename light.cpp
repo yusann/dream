@@ -42,6 +42,8 @@ void CLight::Init()
 	m_Direction = D3DXVECTOR3(1.0f, -1.0f, 1.0f);               // 向き
 
 	m_Far = 3000.0f;
+	m_DepthEpsilon = 5.0f;
+	m_DepthEpsilonScl = 1.0f;
 	// 単位ベクトルの算出
 	D3DXVECTOR3	vecDir = -1.0f *m_PosEye;
 	D3DXVec3Normalize((D3DXVECTOR3*)&m_Direction, &vecDir);
@@ -64,13 +66,21 @@ void CLight::Uninit()
 void CLight::Update()
 {
 	static float posX = 500.0f;
-	static float posY = 500.0f;
+	static float posY = 1000.0f;
 	static float posZ = 500.0f;
 	ImGui::DragFloat("LightFar", &m_Far, 10.0f);
 	ImGui::DragFloat("LightposX", &posX, 1.0f);
 	ImGui::DragFloat("LightposY", &posY, 1.0f);
 	ImGui::DragFloat("LightposZ", &posZ, 1.0f);
+	ImGui::DragFloat("Depth Epsilon", &m_DepthEpsilon, 0.01f);
+	ImGui::InputFloat("Depth Epsilon Scl", &m_DepthEpsilonScl);
 	m_PosEye = D3DXVECTOR3(posX, posY, posZ);
+
+	// 単位ベクトルの算出
+	D3DXVECTOR3	vecDir = -1.0f *m_PosEye;
+	D3DXVec3Normalize((D3DXVECTOR3*)&m_Direction, &vecDir);
+
+	ImGui::Text("Light Direction(%.3f,%.3f,%.3f)", m_Direction.x, m_Direction.y, m_Direction.z);
 }
 
 //=======================================================================================

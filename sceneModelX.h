@@ -17,6 +17,7 @@ public:
 	void Update(void) override;                            // XVˆ—
 	void Draw(void) override;                              // •`‰æˆ—
 	void DrawDepth(void) override;  // •`‰æˆ—
+	void DrawStencilShadow(void) override;  // •`‰æˆ—
 	D3DXVECTOR3 GetRot(void) { return m_Rot; }
 
 protected:

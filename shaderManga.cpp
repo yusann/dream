@@ -40,10 +40,10 @@ void CShaderManga::Create()
 	// シェーダープログラムのグローバル変数のハンドルの取得
 	m_hMtxWVP = m_pFX->GetParameterByName(0, "g_mtxWVP");
 	m_hMtxWIT = m_pFX->GetParameterByName(0, "g_mtxWIT");
+	m_hMtxWI = m_pFX->GetParameterByName(0, "g_mtxWI");
 	m_hMtxW = m_pFX->GetParameterByName(0, "g_mtxW");
 
 	m_hMtxLightWVP = m_pFX->GetParameterByName(0, "g_mtxLightWVP");
-	m_hMtxLightWV = m_pFX->GetParameterByName(0, "g_mtxLightWV");
 	m_hLightFar = m_pFX->GetParameterByName(0, "g_lightFar");
 	m_hDepthTex = m_pFX->GetParameterByName(0, "g_depthTex");
 	m_hDepthEpsilon = m_pFX->GetParameterByName(0, "g_depthEpsilon");
@@ -104,9 +104,9 @@ void CShaderManga::SetVertexInfo( const D3DXMATRIX mtxW, const float contourScl 
 	// ワールド・ビュー・プロジェクション行列
 	D3DXMATRIX mtxWVP = mtxW * view * proj;
 	// 逆転置行列
-	D3DXMATRIX mtxWIT;
-	D3DXMatrixInverse(&mtxWIT, NULL, &mtxW);
-	D3DXMatrixTranspose(&mtxWIT, &mtxWIT);
+	D3DXMATRIX mtxWIT,mtxWI;
+	D3DXMatrixInverse(&mtxWI, NULL, &mtxW);
+	D3DXMatrixTranspose(&mtxWIT, &mtxWI);
 
 	// ライト情報取得
 	CLight* pLight = CManager::GetLight();
@@ -116,24 +116,22 @@ void CShaderManga::SetVertexInfo( const D3DXMATRIX mtxW, const float contourScl 
 	D3DXMATRIX lightProj = pLight->GetMtxProj();
 	// ライトワールド・ビュー・プロジェクション行列
 	D3DXMATRIX mtxLightWVP = mtxW * lightView * lightProj;
-	// ライトワールド・ビュー行列
-	D3DXMATRIX mtxLightWV = mtxW * lightView;
 	// ライト範囲の取得
 	float lightFar = pLight->GetFar();
-
-	static float depthEpsilon = 5.0f;
-	ImGui::DragFloat("Depth Epsilon", &depthEpsilon, 0.01f);
-
+	float depthEpsilon = pLight->GetDepthEpsilon() * pLight->GetDepthEpsilonScl();
 
 	// 情報代入
 	m_pFX->SetMatrix(m_hMtxWVP, &mtxWVP);
 	m_pFX->SetMatrix(m_hMtxWIT, &mtxWIT);
+	m_pFX->SetMatrix(m_hMtxWI, &mtxWI);
 	m_pFX->SetMatrix(m_hMtxW, &mtxW);
 	m_pFX->SetFloat(m_hContourScl, contourScl);
 	m_pFX->SetMatrix(m_hMtxLightWVP, &mtxLightWVP);
-	m_pFX->SetMatrix(m_hMtxLightWV, &mtxLightWV);
 	m_pFX->SetFloat(m_hLightFar, lightFar);
-	m_pFX->SetFloat(m_hDepthEpsilon, depthEpsilon*0.001f);
+	m_pFX->SetFloat(m_hDepthEpsilon, depthEpsilon);
+	D3DXVECTOR3 lightDirW = pLight->GetDir();
+	D3DXVec3Normalize(&lightDirW, &lightDirW);
+	m_pFX->SetValue(m_hLightDirW, &lightDirW, sizeof(lightDirW));
 }
 
 //=======================================================================================

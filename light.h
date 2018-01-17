@@ -26,6 +26,8 @@ public:
 	// プロジェクション行列取得
 	D3DXMATRIX	GetMtxProj() { return m_MtxProj; }
 	float		GetFar() { return m_Far; }
+	float		GetDepthEpsilon() { return m_DepthEpsilon; }
+	float		GetDepthEpsilonScl() { return m_DepthEpsilonScl; }
 	LPDIRECT3DTEXTURE9 GetTexture() { return m_pTexture; }
 
 private:
@@ -37,6 +39,8 @@ private:
 	D3DXMATRIX  m_MtxView;		// ビュー行列
 	D3DXMATRIX  m_MtxProj;		// プロジェクション行列
 	float       m_Far;
+	float		m_DepthEpsilon;
+	float		m_DepthEpsilonScl;
 	LPDIRECT3DTEXTURE9 m_pTexture;
 };
 

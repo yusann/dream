@@ -90,6 +90,7 @@ HRESULT CManager::Init( HINSTANCE hInstance, HWND hWnd, BOOL bWindow )
 	// オブジェクトの生成
 	SetMode(new CModeTitle);
 
+
 #ifdef _DEBUG
 	ImGui_ImplDX9_Init(hWnd, GetRenderer()->GetDevice());
 #endif

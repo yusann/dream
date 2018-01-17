@@ -52,7 +52,7 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 	d3dpp.BackBufferFormat			 = d3ddm.Format;				// カラーモードの指定
 	d3dpp.SwapEffect				 = D3DSWAPEFFECT_DISCARD;		// 映像信号に同期してフリップする
 	d3dpp.EnableAutoDepthStencil	 = TRUE;						// デプスバッファ（Ｚバッファ）とステンシルバッファを作成
-	d3dpp.AutoDepthStencilFormat	 = D3DFMT_D24S8;				// デプスバッファとして16bitを使う
+	d3dpp.AutoDepthStencilFormat	 = D3DFMT_D24S8;				// デプスバッファとして24bitを使う
 	d3dpp.Windowed					 = bWindow;						// ウィンドウモード
 	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;		// リフレッシュレート
 	d3dpp.PresentationInterval       = D3DPRESENT_INTERVAL_DEFAULT;	// インターバル

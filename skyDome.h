@@ -22,6 +22,7 @@ public:
 	void Update(void);                            // XVˆ—
 	void Draw(void);                              // •`‰æˆ—
 	void DrawDepth(void) {};                              // •`‰æˆ—
+	void DrawStencilShadow(void) {};                              // •`‰æˆ—
 
 	static CSkyDome *Create(D3DXVECTOR3 pos,
 		float radius,

@@ -205,3 +205,69 @@ void CSceneMesh::DrawDepth()
 		m_PolygonNum);                       // プリミティブの数（ポリゴンの数）
 	pShader->End();
 }
+
+//=======================================================================================
+//   ステンシルシャドウモデル描画処理
+//=======================================================================================
+void CSceneMesh::DrawStencilShadow()
+{
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+	pDevice = CManager::GetRenderer()->GetDevice();
+	if (pDevice == NULL) {
+		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	// 変換行列の宣言
+	D3DXMATRIX mtxRot;             // ローカル回転
+	D3DXMATRIX mtxScl;             // ローカルスケール
+	D3DXMATRIX mtxPos;             // ローカル座標
+	D3DXMATRIX mtxWorld;           // ワールド情報
+
+								   // ローカル回転の代入
+	D3DXMatrixRotationYawPitchRoll(&mtxRot,
+		m_Rot.y,
+		m_Rot.x,
+		m_Rot.z);
+
+	// ローカルスケールの代入
+	D3DXMatrixScaling(&mtxScl,
+		m_Scl.x,
+		m_Scl.y,
+		m_Scl.z);
+
+	// ローカル座標の代入
+	D3DXMatrixTranslation(&mtxPos,
+		m_Pos.x,
+		m_Pos.y,
+		m_Pos.z);
+
+	// ワールド情報処理
+	D3DXMatrixIdentity(&mtxWorld);                       // ワールドの中身を初期化
+	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRot);   // ワールド回転の代入
+	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScl);   // ワールドスケールの代入
+	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxPos);   // ワールド座標の代入
+	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);       // ワールド情報セット
+
+														 // 頂点のデクラレーションの設定
+	CVertexDecl::SetTex3D(pDevice, m_pVB_POS, m_pVB_NORMAL, m_pVB_COLOR, m_pVB_TEX);
+
+	// デバイスにインデックスバッファの設定
+	pDevice->SetIndices(m_pIdxBuff);
+
+	CShaderManga *pShader = (CShaderManga*)CShaderManager::GetShader(CShaderManager::TYPE_ANIME);
+
+	pShader->SetVertexInfo(mtxWorld);
+
+	pShader->Begin(3);
+
+	// インデックスプリミティブの描画
+	//pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,                 // プリミティブの種類
+	//	0,
+	//	0,
+	//	m_VexNum,   // 頂点数
+	//	0,
+	//	m_PolygonNum);                       // プリミティブの数（ポリゴンの数）
+	pShader->End();
+}

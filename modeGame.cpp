@@ -14,6 +14,7 @@
 #include "scene.h"
 #include "scene2D.h"
 #include "fade.h"
+#include "shadowModel.h"
 
 #include "sceneMesh.h"
 #include "skyDome.h"
@@ -51,6 +52,7 @@ void CModeGame::Init(void)
 	CCamera *pCamera = CManager::GetCamera();
 	pCamera->SetRot(D3DXVECTOR3(0.4f,3.0f,0.0f));
 	CGoal::Create(D3DXVECTOR3(55.0f, 157.0f, 0.0f), D3DXVECTOR3(4.0f, 4.0f, 4.0f));
+	CShadowModel::Create();
 }
 
 //==================================================================================
