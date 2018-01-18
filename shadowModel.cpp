@@ -101,7 +101,7 @@ void CShadowModel::Draw( void )
 	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);				// 参照値
 	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_LESSEQUAL);	// 比較関数（以下なら）
 
-	CScene2D::Draw();
+	//CScene2D::Draw();
 
 	// 描画ステータスの復帰
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);

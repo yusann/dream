@@ -175,22 +175,32 @@ void CManager::Draw(void)
 			return;
 		}
 
-		LPDIRECT3DSURFACE9 campus, back;
-		pDevice->GetRenderTarget(0, &back);
+		D3DVIEWPORT9 backViewPort;
+		D3DVIEWPORT9 viewPort = m_pLight->GetViewPort();
+		LPDIRECT3DSURFACE9 campus, back, backZBuffer;
+		LPDIRECT3DSURFACE9 ZBuffer = m_pLight->GetZBufferSurface();
 
-		CManager::GetLight()->GetTexture()->GetSurfaceLevel(0, &campus);
+		//pDevice->GetViewport(&backViewPort);
+		pDevice->GetRenderTarget(0, &back);
+		pDevice->GetDepthStencilSurface(&backZBuffer);
+		m_pLight->GetTexture()->GetSurfaceLevel(0, &campus);
+
+		//pDevice->SetViewport(&viewPort);
 		pDevice->SetRenderTarget(0, campus);
+		pDevice->SetDepthStencilSurface(ZBuffer);
 
 		// バックバッファ＆Ｚバッファのクリア
 		pDevice->Clear(0, NULL,                                 //
 			D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,   // カラーバッファ | 深さ（深度）バッファ（クリアフラグ）
-			D3DCOLOR_RGBA(0, 0, 0, 0),                       // 初期化色
+			D3DCOLOR_RGBA(255, 255, 255, 255),                       // 初期化色
 			1.0f,                                                    // 0~1（0は手前、1は遠い）
 			0);
 
 		CScene::DrawDepthAll();             // シーン
 
 		pDevice->SetRenderTarget(0, back);
+		pDevice->SetDepthStencilSurface(backZBuffer);
+		//pDevice->SetViewport(&backViewPort);
 
 		// 描画処理
 		CScene::DrawAll();             // シーン

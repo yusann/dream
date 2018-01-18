@@ -35,6 +35,7 @@ private:
 	D3DXHANDLE	m_hMtxW;
 
 	D3DXHANDLE	m_hMtxLightWVP;
+	D3DXHANDLE	m_hMtxLightWV;
 	D3DXHANDLE	m_hLightFar;
 	D3DXHANDLE	m_hDepthTex;
 	D3DXHANDLE	m_hDepthEpsilon;

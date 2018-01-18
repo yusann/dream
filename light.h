@@ -29,6 +29,8 @@ public:
 	float		GetDepthEpsilon() { return m_DepthEpsilon; }
 	float		GetDepthEpsilonScl() { return m_DepthEpsilonScl; }
 	LPDIRECT3DTEXTURE9 GetTexture() { return m_pTexture; }
+	LPDIRECT3DSURFACE9 GetZBufferSurface() { return m_pZBufferSurface; }
+	D3DVIEWPORT9 GetViewPort() { return m_viewPort; }
 
 private:
 	D3DXVECTOR3 m_PosEye;		// ç¿ïW
@@ -42,6 +44,8 @@ private:
 	float		m_DepthEpsilon;
 	float		m_DepthEpsilonScl;
 	LPDIRECT3DTEXTURE9 m_pTexture;
+	LPDIRECT3DSURFACE9 m_pZBufferSurface;
+	D3DVIEWPORT9 m_viewPort;
 };
 
 #endif

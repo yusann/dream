@@ -44,6 +44,7 @@ void CShaderManga::Create()
 	m_hMtxW = m_pFX->GetParameterByName(0, "g_mtxW");
 
 	m_hMtxLightWVP = m_pFX->GetParameterByName(0, "g_mtxLightWVP");
+	m_hMtxLightWV = m_pFX->GetParameterByName(0, "g_mtxLightWV");
 	m_hLightFar = m_pFX->GetParameterByName(0, "g_lightFar");
 	m_hDepthTex = m_pFX->GetParameterByName(0, "g_depthTex");
 	m_hDepthEpsilon = m_pFX->GetParameterByName(0, "g_depthEpsilon");
@@ -116,6 +117,8 @@ void CShaderManga::SetVertexInfo( const D3DXMATRIX mtxW, const float contourScl 
 	D3DXMATRIX lightProj = pLight->GetMtxProj();
 	// ライトワールド・ビュー・プロジェクション行列
 	D3DXMATRIX mtxLightWVP = mtxW * lightView * lightProj;
+	// ライトワールド・ビュー・プロジェクション行列
+	D3DXMATRIX mtxLightWV = mtxW * lightView;
 	// ライト範囲の取得
 	float lightFar = pLight->GetFar();
 	float depthEpsilon = pLight->GetDepthEpsilon() * pLight->GetDepthEpsilonScl();
@@ -126,7 +129,9 @@ void CShaderManga::SetVertexInfo( const D3DXMATRIX mtxW, const float contourScl 
 	m_pFX->SetMatrix(m_hMtxWI, &mtxWI);
 	m_pFX->SetMatrix(m_hMtxW, &mtxW);
 	m_pFX->SetFloat(m_hContourScl, contourScl);
+
 	m_pFX->SetMatrix(m_hMtxLightWVP, &mtxLightWVP);
+	m_pFX->SetMatrix(m_hMtxLightWV, &mtxLightWV);
 	m_pFX->SetFloat(m_hLightFar, lightFar);
 	m_pFX->SetFloat(m_hDepthEpsilon, depthEpsilon);
 	D3DXVECTOR3 lightDirW = pLight->GetDir();

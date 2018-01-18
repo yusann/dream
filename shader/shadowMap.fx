@@ -10,22 +10,22 @@ float g_far;
 //------------------------------------------------
 void mainVS(float3 in_posL : POSITION,
 	out float4 out_posH : POSITION,
-	out float out_depthWV : TEXCOORD0)
+	out float2 out_depth : TEXCOORD0)
 {
 	// 変換後座標
 	out_posH = mul(float4(in_posL, 1.0f), g_mtxLightWVP);
 
 	// 深度値
-	out_depthWV = mul(float4(in_posL, 1.0f), g_mtxLightWVP).z / g_far;
+	out_depth = out_posH.zw;
 }
 
 //------------------------------------------------
 // ピクセルシェーダ
 //------------------------------------------------
-void mainPS(float in_depthWV : TEXCOORD0,
+void mainPS(float2 in_depthWV : TEXCOORD0,
 	out float4 out_color : COLOR0)
 {
-	out_color = in_depthWV;
+	out_color = in_depthWV.x/ in_depthWV.y;
 }
 
 //------------------------------------------------

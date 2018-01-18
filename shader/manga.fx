@@ -37,8 +37,7 @@ void mainVS(float3 in_pos : POSITION,
 	out float2 out_uv : TEXCOORD0,
 	out float3 out_normal : TEXCOORD1,
 	out float3 out_posW : TEXCOORD2,
-	out float4 out_lightPosH : TEXCOORD3,
-	out float  out_depthWV : TEXCOORD4)
+	out float4 out_lightPosH : TEXCOORD3)
 {
 	// 変換後座標
 	out_posH = mul(float4(in_pos, 1.0f), g_mtxWVP);
@@ -58,7 +57,6 @@ void mainVS(float3 in_pos : POSITION,
 	// ライトから見る深度値変換
 	//out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWVP).z / g_lightFar;
 	// lightPosH.z / farと計算が一緒のため要らない
-	out_depthWV = out_lightPosH.z / g_lightFar;
 }
 
 //------------------------------------------------
@@ -68,7 +66,6 @@ void mainPS(float2 in_uv : TEXCOORD0,
 	float3 in_normalW : TEXCOORD1,
 	float3 in_posW : TEXCOORD2,
 	float4 in_lightPosH : TEXCOORD3,
-	float  in_depthWV : TEXCOORD4,
 	out float4 out_color : COLOR0)
 {
 	// 法線
@@ -91,18 +88,17 @@ void mainPS(float2 in_uv : TEXCOORD0,
 
 	// 色の出力
 	float4 color;
-	out_color = diffuse + rimlight;
-	out_color.w = 1.0f;
-	return;
+	color = diffuse + rimlight;
+	color.w = 1.0f;
 
 	// 影の処理 /////
 	// テクスチャ座標の算出
-	in_lightPosH.xy /= in_lightPosH.w;
+	in_lightPosH.xyz /= in_lightPosH.w;
 	in_lightPosH.x = in_lightPosH.x * 0.5f + 0.5f;
 	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
 
 	// 深度値の対比
-	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).r + g_depthEpsilon) < in_depthWV ? 0.2f : 1.0f;
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).x + g_depthEpsilon) < in_lightPosH.z ? 0.2f : 1.0f;
 	out_color = float4(color.rgb * s, color.a);
 }
 
@@ -130,7 +126,7 @@ void mainVS_noTex(float3 in_pos : POSITION,
 	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
 
 	// ライトから見る深度値変換
-	out_depthWV = out_lightPosH.z / g_lightFar;
+	out_depthWV = out_lightPosH.z / out_lightPosH.w;
 }
 
 //------------------------------------------------
@@ -139,7 +135,6 @@ void mainVS_noTex(float3 in_pos : POSITION,
 void mainPS_noTex(float3 in_normalW : TEXCOORD1,
 	float3 in_posW : TEXCOORD2,
 	float4 in_lightPosH : TEXCOORD3,
-	float  in_depthWV : TEXCOORD4,
 	out float4 out_color : COLOR0)
 {
 	// 法線
@@ -162,18 +157,17 @@ void mainPS_noTex(float3 in_normalW : TEXCOORD1,
 
 	// 色の出力
 	float4 color;
-	out_color = diffuse + rimlight;
-	out_color.w = 1.0f;
-	return;
+	color = diffuse + rimlight;
+	color.w = 1.0f;
 
 	// 影の処理 /////
 	// テクスチャ座標の算出
-	in_lightPosH.xy /= in_lightPosH.w;
+	in_lightPosH.xyz /= in_lightPosH.w;
 	in_lightPosH.x = in_lightPosH.x * 0.5f + 0.5f;
 	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
 
 	// 深度値の対比
-	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).r + g_depthEpsilon) < in_depthWV ? 0.2f : 1.0f;
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).x + g_depthEpsilon) < in_lightPosH.z ? 0.2f : 1.0f;
 	out_color = float4(color.rgb * s, color.a);
 }
 
