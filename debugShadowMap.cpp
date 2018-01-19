@@ -5,6 +5,7 @@
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
+#include "GBuffer.h"
 #include "mode.h"
 #include "modeGame.h"
 #include "scene.h"
@@ -13,40 +14,36 @@
 #include "light.h"
 #include "texture.h"
 
-CDebugShadowMap::CDebugShadowMap():CScene2D(CScene::OBJTYPE_UI)
-{
-}
 
-CDebugShadowMap::~CDebugShadowMap()
-{
-}
+std::vector<CDebugShadowMap*> CDebugShadowMap::m_Debug;
+
+CDebugShadowMap::CDebugShadowMap():
+	m_Pos(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+	m_Scl(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+	m_pTexture(NULL),
+	m_pVB(NULL){}
 
 //=======================================================================================
 // 作成処理
 //=======================================================================================
-CDebugShadowMap *CDebugShadowMap::Create(){
+CDebugShadowMap *CDebugShadowMap::Create(D3DXVECTOR3 pos, D3DXVECTOR3 scl){
 	CDebugShadowMap *pScene2D;                            // 変数宣言
 	pScene2D = new CDebugShadowMap;                       // 動的確保
-	pScene2D->Init();                            // 初期化
+	pScene2D->Init(pos,scl);                            // 初期化
+	m_Debug.push_back(pScene2D);
 	return pScene2D;                             // 値を返す
 }
 
 //=======================================================================================
 //   初期化処理
 //=======================================================================================
-void CDebugShadowMap::Init()
+void CDebugShadowMap::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scl)
 {
 	// メンバ変数の初期化
-	m_Pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
-	m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.2f, SCREEN_HEIGHT*0.2f, 0.0f);
-	m_Color = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-	m_pTexture = CManager::GetLight()->GetTexture();
-
-	// 親の初期化
-	CScene2D::Init();
-
-	// タイプの代入
-	CScene::SetObjType(CScene::OBJTYPE_NONE);
+	m_Pos = pos;
+	m_Scl = scl;
+	m_pTexture = NULL;
+	MakeVex();
 }
 
 //=======================================================================================
@@ -54,15 +51,16 @@ void CDebugShadowMap::Init()
 //=======================================================================================
 void CDebugShadowMap::Uninit()
 {
-	CScene2D::Uninit();
+	SAFE_RELEASE(m_pVB);
+	SAFE_RELEASE(m_pTexture);
 }
 
 //=======================================================================================
 //   更新処理
 //=======================================================================================
-void CDebugShadowMap::Update()
+void CDebugShadowMap::Update(LPDIRECT3DTEXTURE9 pTexture)
 {
-	m_pTexture = CManager::GetLight()->GetTexture();
+	m_pTexture = pTexture;
 }
 
 //=======================================================================================
@@ -70,5 +68,95 @@ void CDebugShadowMap::Update()
 //=======================================================================================
 void CDebugShadowMap::Draw()
 {
-	CScene2D::Draw();
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+	pDevice = CManager::GetRenderer()->GetDevice();
+	if (pDevice == NULL) {
+		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	// 頂点のデクラレーションの設定
+	CVertexDecl::SetTex2D(pDevice, m_pVB);
+
+	// 描画直前にテクスチャをセット（テクスチャの設定）
+	pDevice->SetTexture(0, m_pTexture);
+
+	// ポリゴンの描画
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,        // プリミティブの種類
+		0,                          // オフセット（頂点数）
+		NUM_POLYGON);              // プリミティブの数（ポリゴンの数）
+}
+
+//=======================================================================================
+//   描画処理
+//=======================================================================================
+void CDebugShadowMap::DrawAll()
+{
+	for (int i = 0; i < (signed)m_Debug.size(); i++)
+	{
+		m_Debug[i]->Draw();
+	}
+}
+
+//=======================================================================================
+//   描画処理
+//=======================================================================================
+void CDebugShadowMap::UninitAll()
+{
+	for (int i = 0; i < (signed)m_Debug.size(); i++)
+	{
+		m_Debug[i]->Uninit();
+	}
+	m_Debug.clear();
+}
+
+//=======================================================================================
+// ポリゴンの頂点設定
+//=======================================================================================
+void CDebugShadowMap::MakeVex(void)
+{
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+	pDevice = CManager::GetRenderer()->GetDevice();
+	if (pDevice == NULL) {
+		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	// 頂点バッファの生成
+	pDevice->CreateVertexBuffer(sizeof(CVertexDecl::VERTEX2D) * NUM_VERTEX,           // 作成したい頂点バッファのサイズ（一つの頂点*頂点数）
+		D3DUSAGE_WRITEONLY,                         // 書き込むしかしない（チェックしない）
+		0,                              // どんな頂点で書くの（0にしてもOK）
+		D3DPOOL_MANAGED,                            // メモリ管理をお任せにする
+		&m_pVB,
+		NULL);
+
+	// 頂点情報を設定
+	// 頂点情報格納用疑似バッファの宣言
+	CVertexDecl::VERTEX2D* pVtx;
+
+	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
+	m_pVB->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点座標の設定（ 2D座標・右回り ）
+	pVtx[0].pos = D3DXVECTOR4(m_Pos.x, m_Pos.y, 0.0f, 1.0f);                 // 左上の座標
+	pVtx[1].pos = D3DXVECTOR4(m_Pos.x + m_Scl.x, m_Pos.y, 0.0f, 1.0f);                 // 右上の座標
+	pVtx[2].pos = D3DXVECTOR4(m_Pos.x, m_Pos.y + m_Scl.y, 0.0f, 1.0f);                 // 左下の座標
+	pVtx[3].pos = D3DXVECTOR4(m_Pos.x + m_Scl.x, m_Pos.y + m_Scl.y, 0.0f, 1.0f);                 // 右下の座標
+
+	// 頂点カラーの設定（0~255の整数値）
+	pVtx[0].color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);  // 左上の色
+	pVtx[1].color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);  // 右上の色
+	pVtx[2].color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);  // 左下の色
+	pVtx[3].color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);  // 右下の色
+
+	// 頂点データへUVデータの追加
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);                    // 左上のUV座標
+	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);                    // 右上のUV座標
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);                    // 左下のUV座標
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);                    // 右下のUV座標
+
+	// 鍵を開ける
+	m_pVB->Unlock();
 }

@@ -13,6 +13,7 @@ class CTexture;
 class CMode;
 class CCamera;
 class CLight;
+class CGBuffer;
 
 #ifdef _DEBUG
 extern LRESULT ImGui_ImplDX9_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -47,6 +48,7 @@ public:
 	static CSound    *GetSound()    { return m_pSound; }
 	static CCamera   *GetCamera()   { return m_pCamera; }
 	static CLight    *GetLight()    { return m_pLight; }
+	static CGBuffer  *GetGBuffer()  { return m_pGBuffer; }
 
 private:
 	static CRenderer *m_pRenderer;            // ÉåÉìÉ_ÉâÅ[
@@ -54,6 +56,7 @@ private:
 	static CMode *m_pMode;
 	static CCamera *m_pCamera;
 	static CLight *m_pLight;
+	static CGBuffer *m_pGBuffer;
 };
 
 #endif

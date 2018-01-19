@@ -69,6 +69,9 @@
     <Filter Include="ソース ファイル\object\3D\shadow">
       <UniqueIdentifier>{9485a73f-8b2b-4ba8-826a-94db3b144b21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{9e67239a-2848-4d50-8beb-233358ca7a8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -89,24 +92,6 @@
     <ClCompile Include="renderer.cpp">
       <Filter>ソース ファイル\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="scene2D.cpp">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="scene3D.cpp">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="sceneBillboard.cpp">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="sceneModelX.cpp">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="sceneMesh.cpp">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="skyDome.cpp">
       <Filter>ソース ファイル\object\mash</Filter>
     </ClCompile>
@@ -118,9 +103,6 @@
     </ClCompile>
     <ClCompile Include="particle.cpp">
       <Filter>ソース ファイル\object\billboard</Filter>
-    </ClCompile>
-    <ClCompile Include="sceneMotionPartsX.cpp">
-      <Filter>ソース ファイル\renderer</Filter>
     </ClCompile>
     <ClCompile Include="imGui\imgui.cpp">
       <Filter>ソース ファイル\imGui</Filter>
@@ -236,6 +218,33 @@
     <ClCompile Include="shaderShadowMap.cpp">
       <Filter>ソース ファイル\shader</Filter>
     </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene2D.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene3D.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneBillboard.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneMesh.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneModelX.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneMotionPartsX.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderGBuffer.cpp">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>ソース ファイル\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -287,27 +296,6 @@
       <Filter>ソース ファイル\object\motionX</Filter>
     </ClInclude>
     <ClInclude Include="renderer.h">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="scene2D.h">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="scene3D.h">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="sceneBillboard.h">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="sceneMesh.h">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="sceneModelX.h">
-      <Filter>ソース ファイル\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="sceneMotionPartsX.h">
       <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
@@ -418,6 +406,33 @@
     <ClInclude Include="shaderShadowMap.h">
       <Filter>ソース ファイル\shader</Filter>
     </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene2D.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene3D.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneBillboard.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneMesh.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneModelX.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneMotionPartsX.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderGBuffer.h">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>ソース ファイル\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\model.fx">
@@ -427,6 +442,9 @@
       <Filter>シェーダ</Filter>
     </FxCompile>
     <FxCompile Include="shader\shadowMap.fx">
+      <Filter>シェーダ</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\GBuffer.fx">
       <Filter>シェーダ</Filter>
     </FxCompile>
   </ItemGroup>

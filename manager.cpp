@@ -16,6 +16,7 @@
 #include "modelX.h"
 #include "motionPartsX.h"
 
+#include "GBuffer.h"
 #include "scene.h"
 #include "scene2D.h"
 
@@ -33,6 +34,7 @@
 #include "enemy.h"
 
 #include "shaderManager.h"
+#include "debugShadowMap.h"
 
 //*****************************************************************************
 //   静的メンバー変数宣言
@@ -42,6 +44,7 @@ CSound *CManager::m_pSound = NULL;
 CMode *CManager::m_pMode = NULL;
 CCamera *CManager::m_pCamera = NULL;
 CLight *CManager::m_pLight = NULL;
+CGBuffer *CManager::m_pGBuffer = NULL;
 
 CManager::CManager()
 {
@@ -87,6 +90,9 @@ HRESULT CManager::Init( HINSTANCE hInstance, HWND hWnd, BOOL bWindow )
 	m_pLight = new CLight;
 	m_pLight->Init();
 
+	m_pGBuffer = new CGBuffer;
+	m_pGBuffer->Init(m_pRenderer->GetDevice());
+
 	// オブジェクトの生成
 	SetMode(new CModeTitle);
 
@@ -105,6 +111,11 @@ HRESULT CManager::Init( HINSTANCE hInstance, HWND hWnd, BOOL bWindow )
 void CManager::Uninit(void)
 {
 	SAFE_UNINIT(m_pMode);
+
+
+	m_pGBuffer->Uninit();
+
+	CDebugShadowMap::UninitAll();
 
 	// オブジェクトの破棄
 	CScene::ReleaseAll();
@@ -174,18 +185,18 @@ void CManager::Draw(void)
 			MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
 			return;
 		}
-
+		/*
 		D3DVIEWPORT9 backViewPort;
 		D3DVIEWPORT9 viewPort = m_pLight->GetViewPort();
 		LPDIRECT3DSURFACE9 campus, back, backZBuffer;
 		LPDIRECT3DSURFACE9 ZBuffer = m_pLight->GetZBufferSurface();
 
-		//pDevice->GetViewport(&backViewPort);
+		pDevice->GetViewport(&backViewPort);
 		pDevice->GetRenderTarget(0, &back);
 		pDevice->GetDepthStencilSurface(&backZBuffer);
 		m_pLight->GetTexture()->GetSurfaceLevel(0, &campus);
 
-		//pDevice->SetViewport(&viewPort);
+		pDevice->SetViewport(&viewPort);
 		pDevice->SetRenderTarget(0, campus);
 		pDevice->SetDepthStencilSurface(ZBuffer);
 
@@ -200,12 +211,14 @@ void CManager::Draw(void)
 
 		pDevice->SetRenderTarget(0, back);
 		pDevice->SetDepthStencilSurface(backZBuffer);
-		//pDevice->SetViewport(&backViewPort);
+		pDevice->SetViewport(&backViewPort);
+		*/
+		m_pGBuffer->SetTexture(pDevice);
 
 		// 描画処理
 		CScene::DrawAll();             // シーン
 
-
+		CDebugShadowMap::DrawAll();
 
 #ifdef _DEBUG
 		ImGui::Render();

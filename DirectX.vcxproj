@@ -174,6 +174,7 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="equation.cpp" />
     <ClCompile Include="fade.cpp" />
+    <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="imGui\imgui.cpp" />
     <ClCompile Include="imGui\imgui_demo.cpp" />
@@ -210,6 +211,7 @@
     <ClCompile Include="sceneModelX.cpp" />
     <ClCompile Include="sceneMotionPartsX.cpp" />
     <ClCompile Include="shaderBase.cpp" />
+    <ClCompile Include="shaderGBuffer.cpp" />
     <ClCompile Include="shaderManager.cpp" />
     <ClCompile Include="shaderManga.cpp" />
     <ClCompile Include="shaderModel.cpp" />
@@ -231,6 +233,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="equation.h" />
     <ClInclude Include="fade.h" />
+    <ClInclude Include="GBuffer.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="imGui\imconfig.h" />
     <ClInclude Include="imGui\imgui.h" />
@@ -272,6 +275,7 @@
     <ClInclude Include="sceneModelX.h" />
     <ClInclude Include="sceneMotionPartsX.h" />
     <ClInclude Include="shaderBase.h" />
+    <ClInclude Include="shaderGBuffer.h" />
     <ClInclude Include="shaderManager.h" />
     <ClInclude Include="shaderManga.h" />
     <ClInclude Include="shaderModel.h" />
@@ -285,6 +289,10 @@
     <ClInclude Include="xbox360.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="shader\GBuffer.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="shader\manga.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

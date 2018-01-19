@@ -11,6 +11,7 @@
 #include "light.h"
 #include "camera.h"
 #include "texture.h"
+#include "GBuffer.h"
 
 //*************
 // ƒƒCƒ“ˆ—
@@ -152,7 +153,8 @@ void CShaderManga::SetPixelInfo(const D3DCOLORVALUE diffColor,		// ƒfƒBƒtƒ…[ƒYƒ
 	D3DXVECTOR3 lightDirW = pLight->GetDir();
 	D3DXVec3Normalize(&lightDirW, &lightDirW);
 	// [“xƒeƒNƒXƒ`ƒƒ
-	LPDIRECT3DTEXTURE9 depthTex = pLight->GetTexture();
+	//LPDIRECT3DTEXTURE9 depthTex = pLight->GetTexture();
+	LPDIRECT3DTEXTURE9 depthTex = CManager::GetGBuffer()->GetTextureColor();
 
 	// ƒJƒƒ‰î•ñæ“¾
 	CCamera *pCamera = CManager::GetCamera();

@@ -35,11 +35,13 @@ public:
 	virtual void Draw(void)   =0;      // •`‰æˆ—
 	virtual void DrawDepth(void) = 0;  // •`‰æˆ—
 	virtual void DrawStencilShadow(void) = 0;  // •`‰æˆ—
+	virtual void DrawGBuffer(void) = 0;  // •`‰æˆ—
 
 	static void UpdateAll(void);                // ‚·‚×‚Ä‚ÌXV
 	static void DrawAll(void);                  // ‚·‚×‚Ä‚Ì•`‰æ
 	static void DrawDepthAll(void);                  // ‚·‚×‚Ä‚Ì•`‰æ
 	static void DrawStencilShadowAll(void);                  // ‚·‚×‚Ä‚Ì•`‰æ
+	static void DrawGBufferAll(void);                  // ‚·‚×‚Ä‚Ì•`‰æ
 	static void ReleaseAll(int CntMax = OBJTYPE_MAX);               // ‚·‚×‚Ä‚ÌƒŠƒŠ[ƒX
 
 	static CScene *GetScene(int Priority) { return m_Top[Priority]; }			// ƒV[ƒ“‚Ìæ“¾ˆ—

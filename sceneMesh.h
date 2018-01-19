@@ -16,6 +16,7 @@ public:
 	void Draw(void) override;                              // 描画処理
 	void DrawDepth(void) override;  // 描画処理
 	void DrawStencilShadow(void) override;  // 描画処理
+	void DrawGBuffer(void) override {};  // 描画処理
 	
 protected:
 	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff;     // インデックスバッファ

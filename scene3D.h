@@ -16,6 +16,7 @@ public:
 	void Draw(void) override;                              // •`‰æˆ—
 	void DrawDepth(void) override {};  // •`‰æˆ—
 	void DrawStencilShadow(void) override {};  // •`‰æˆ—
+	void DrawGBuffer(void) override {};  // •`‰æˆ—
 	void SetTexID(int ID = 0);
 	
 protected:
