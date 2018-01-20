@@ -417,51 +417,6 @@ void CSceneMotionPartsX::Draw()
 }
 
 //=======================================================================================
-//   深度描画処理
-//=======================================================================================
-void CSceneMotionPartsX::DrawDepth()
-{
-	LPDIRECT3DDEVICE9 pDevice = NULL;                // エラーチェックのためNULLを入れる
-	pDevice = CManager::GetRenderer()->GetDevice();                           // デバイスのポインタを取得
-
-	if (pDevice == NULL)                            // エラーチェック
-	{
-		MessageBox(NULL, "InitのpDeveceのNULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
-		return;
-	}
-
-	// シェーダの取得
-	CShaderShadowMap *pShader = (CShaderShadowMap*)CShaderManager::GetShader(CShaderManager::TYPE_SHADW_MAP);
-
-	// 全パーツ分ループ
-	for (int i = 0; i < (signed)m_pMotionPartsX->Part.size(); i++) {
-
-		// NULLチェック
-		if (m_pMotionPartsX->Part[i]->pBuffMat == NULL) { return; }
-		D3DXMATERIAL*	pMat = NULL;					//  マテリアル
-
-														// ワールド情報セット
-		pDevice->SetTransform(D3DTS_WORLD, &m_Model[i]->Matrix);
-
-		D3DMATERIAL9 matDef;
-		pDevice->GetMaterial(&matDef);                 // 現在デバイスに設定されてるアテリアル情報を取得
-
-		pMat = (D3DXMATERIAL*)m_pMotionPartsX->Part[i]->pBuffMat->GetBufferPointer();
-
-		// シェーダの取得
-		pShader->SetVertexInfo(m_Model[i]->Matrix);
-		pShader->Begin();
-
-		for (int j = 0; j < (int)m_pMotionPartsX->Part[i]->NumMat; j++)
-		{
-			// メッシュの描画
-			m_pMotionPartsX->Part[i]->pMesh->DrawSubset(j);
-		}
-		pShader->End();
-	}
-}
-
-//=======================================================================================
 //   ステンシルシャドウモデル描画処理
 //=======================================================================================
 void CSceneMotionPartsX::DrawStencilShadow()

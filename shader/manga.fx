@@ -25,7 +25,11 @@ texture g_animeDrawTex;
 //------------------------------------------------
 sampler TextureSampler		=	sampler_state { Texture = <g_texture>; };
 sampler TextureSamplerAnime	=	sampler_state { Texture = <g_animeDrawTex>; };
-sampler TextureSamplerDepth	=	sampler_state { Texture = <g_depthTex>; };
+sampler TextureSamplerDepth	=	sampler_state {
+	Texture = <g_depthTex>;
+	AddressU = CLAMP;
+	AddressV = CLAMP;
+};
 
 //------------------------------------------------
 // 頂点シェーダ
@@ -98,7 +102,7 @@ void mainPS(float2 in_uv : TEXCOORD0,
 	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
 
 	// 深度値の対比
-	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).x + g_depthEpsilon) < in_lightPosH.z ? 0.2f : 1.0f;
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).x + g_depthEpsilon) < in_lightPosH.z ? 0.7f : 1.0f;
 	out_color = float4(color.rgb * s, color.a);
 }
 
@@ -167,7 +171,7 @@ void mainPS_noTex(float3 in_normalW : TEXCOORD1,
 	in_lightPosH.y = in_lightPosH.y * -0.5f + 0.5f;
 
 	// 深度値の対比
-	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).x + g_depthEpsilon) < in_lightPosH.z ? 0.2f : 1.0f;
+	float s = (tex2D(TextureSamplerDepth, in_lightPosH.xy).x + g_depthEpsilon) < in_lightPosH.z ? 0.7f : 1.0f;
 	out_color = float4(color.rgb * s, color.a);
 }
 

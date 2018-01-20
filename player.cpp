@@ -22,6 +22,7 @@
 
 #include "object2D.h"
 #include "camera.h"
+#include "light.h"
 
 #include "inputKey.h"
 #ifdef _DEBUG

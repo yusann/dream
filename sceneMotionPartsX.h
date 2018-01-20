@@ -31,7 +31,7 @@ public:
 	void Uninit(void) override;                            // I—¹ˆ—
 	void Update(void) override;                            // XVˆ—
 	void Draw(void) override;                              // •`‰æˆ—
-	void DrawDepth(void) override;  // •`‰æˆ—
+	void DrawDepth(void) override {};  // •`‰æˆ—
 	void DrawStencilShadow(void) override;  // •`‰æˆ—
 	void DrawGBuffer(void) override {};  // •`‰æˆ—
 

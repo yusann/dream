@@ -36,10 +36,12 @@ void CLight::Init()
 		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
 		return;
 	}
-	m_PosEye = D3DXVECTOR3(1000.0f, 1000.0f, 1000.0f);
+	m_Rot = D3DXVECTOR2(1.0f, 0.0f);
 	m_PosAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_VecUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_Direction = D3DXVECTOR3(1.0f, -1.0f, 1.0f);               // 向き
+	m_Length = 1000.0f;
+	SetPos(&m_PosEye,m_PosAt, m_Length, m_Rot);
 
 	m_Far = 3000.0f;
 	m_DepthEpsilon = 5.0f;
@@ -74,16 +76,18 @@ void CLight::Uninit()
 //=======================================================================================
 void CLight::Update()
 {
-	static float posX = 500.0f;
-	static float posY = 1000.0f;
-	static float posZ = 500.0f;
+	static float posX = 1.0f;
+	static float posY = 0.0f;
+	static float len = 1000.0f;
 	ImGui::DragFloat("LightFar", &m_Far, 10.0f);
-	ImGui::DragFloat("LightposX", &posX, 1.0f);
-	ImGui::DragFloat("LightposY", &posY, 1.0f);
-	ImGui::DragFloat("LightposZ", &posZ, 1.0f);
+	ImGui::DragFloat("LightposX", &posX, 0.001f);
+	ImGui::DragFloat("LightposY", &posY, 0.001f);
+	ImGui::DragFloat("LightLen", &len, 1.0f);
 	ImGui::DragFloat("Depth Epsilon", &m_DepthEpsilon, 0.01f);
 	ImGui::InputFloat("Depth Epsilon Scl", &m_DepthEpsilonScl);
-	m_PosEye = D3DXVECTOR3(posX, posY, posZ);
+	m_Rot = D3DXVECTOR2(posX, posY);
+	m_Length = len;
+	SetPos(&m_PosEye, m_PosAt, m_Length, m_Rot);
 
 	// 単位ベクトルの算出
 	D3DXVECTOR3	vecDir = -1.0f *m_PosEye;
@@ -120,4 +124,37 @@ void CLight::Set()
 
 	// ビュー行列の作成 LH左手座標系
 	D3DXMatrixLookAtLH(&m_MtxView, &m_PosEye, &m_PosAt, &m_VecUp);    // Eye,At,Upの情報からビュー行列(mtxView)を作る関数
+}
+
+void CLight::Set(D3DXVECTOR3 posAt, float len)
+{
+	D3DXVECTOR3 PosEye,PosAt;
+	PosAt = posAt;
+	SetPos(&PosEye, PosAt, len, m_Rot);
+
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+	pDevice = CManager::GetRenderer()->GetDevice();
+	if (pDevice == NULL) {
+		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
+		return;
+	}
+
+	// プロジェクション行列
+	D3DXMatrixPerspectiveFovLH(&m_MtxProj,				// Fovは画角
+		D3DX_PI / 3.0f,										// 画角（視野角）60度にするためπ÷３
+		1.0f,			// アスペクト比（floatで計算する、float>intなので片方でOK）
+		1.0f,											// near 必ず0.0fより大きいこと  どこから描画するか
+		m_Far);										// far どこまで描画するか
+
+	// ビュー行列の作成 LH左手座標系
+	D3DXMatrixLookAtLH(&m_MtxView, &PosEye, &PosAt, &m_VecUp);    // Eye,At,Upの情報からビュー行列(mtxView)を作る関数
+}
+
+void CLight::SetPos(D3DXVECTOR3* posEye, const D3DXVECTOR3 posAt, const float len, const D3DXVECTOR2 rot)
+{
+	posEye->x = (float)cos(rot.y) * (float)cos(rot.x) * len;
+	posEye->z = (float)sin(rot.y) * (float)cos(rot.x) * len;
+	posEye->y = (float)sin(rot.x) * len;
+	*posEye += posAt;
 }
