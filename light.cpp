@@ -76,6 +76,8 @@ void CLight::Uninit()
 //=======================================================================================
 void CLight::Update()
 {
+#ifdef DEBUG
+
 	static float posX = 1.0f;
 	static float posY = 0.0f;
 	static float len = 1000.0f;
@@ -94,6 +96,8 @@ void CLight::Update()
 	D3DXVec3Normalize((D3DXVECTOR3*)&m_Direction, &vecDir);
 
 	ImGui::Text("Light Direction(%.3f,%.3f,%.3f)", m_Direction.x, m_Direction.y, m_Direction.z);
+
+#endif // DEBUG
 }
 
 //=======================================================================================

@@ -218,7 +218,7 @@ void CManager::Draw(void)
 		// •`‰æˆ—
 		CScene::DrawAll();             // ƒV[ƒ“
 
-		CDebugShadowMap::DrawAll();
+		//CDebugShadowMap::DrawAll();
 
 #ifdef _DEBUG
 		ImGui::Render();
