@@ -76,7 +76,7 @@ void CLight::Uninit()
 //=======================================================================================
 void CLight::Update()
 {
-#ifdef DEBUG
+#ifdef _DEBUG
 
 	static float posX = 1.0f;
 	static float posY = 0.0f;
