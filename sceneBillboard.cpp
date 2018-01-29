@@ -9,6 +9,7 @@
 #include "sceneBillboard.h"
 #include "camera.h"
 #include "equation.h"
+#include "shaderManager.h"
 
 //*************
 // メイン処理
@@ -60,6 +61,8 @@ void CSceneBillboard::Uninit()
 //=======================================================================================
 void CSceneBillboard::Update()
 {
+	m_Angle = CEquation::Angle(m_Scl.x, m_Scl.y);
+	m_Length = CEquation::Length(m_Scl.x, m_Scl.y);
 }
 
 //=======================================================================================
@@ -77,9 +80,6 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 
 	// 頂点のデクラレーションの設定
 	CVertexDecl::SetTex3D(pDevice, m_pVB_POS, m_pVB_NORMAL, m_pVB_COLOR, m_pVB_TEX);
-
-	// 描画直前にテクスチャをセット（テクスチャの設定）
-	pDevice->SetTexture(0, m_pTexture);
 
 	// カメラの取得
 	CCamera* pCamera;
@@ -112,7 +112,14 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 
 	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);       // ワールド情報セット
 	
-	 // アルファテスト（ON）
+
+	CShaderModel *pShader = (CShaderModel*)CShaderManager::GetShader(CShaderManager::TYPE_GAME_IMAGE);
+	pShader->SetVertexInfo(mtxWorld);
+	pShader->SetPixelInfo(m_pTexture);
+
+	pShader->Begin();
+
+	// アルファテスト（ON）
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);         // アルファテストを可能に
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 1);                   // 参照値の設定
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);     // 参照値 < α
@@ -134,7 +141,7 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 			0,                          // オフセット（頂点数）
 			NUM_POLYGON);              // プリミティブの数（ポリゴンの数）
 
-		// 加算合成（OFF）
+									   // 加算合成（OFF）
 		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 		break;
 	default:
@@ -144,6 +151,8 @@ void CSceneBillboard::Draw(DRAWTYPE type)
 
 	// アルファテスト（OFF）
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	pShader->End();
 }
 
 //=======================================================================================

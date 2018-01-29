@@ -42,9 +42,15 @@ void CObject2D::Init(TYPE Type)
 	switch (Type)
 	{
 	case TYPE_BG_TITLE:
-		m_Pos = D3DXVECTOR3(100.0f,50.0f,0.0f);
-		m_Scl = D3DXVECTOR3(1024.0f, 256.0f, 0.0f);
+		m_Pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
+		m_Scl = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
 		m_pTexture = CTexture::GetTexture( CTexture::TEXTYPE_TITLELOGO);
+		break;
+	case TYPE_BG_TITLE_SIBA:
+		m_Pos = D3DXVECTOR3(-200.0f, SCREEN_HEIGHT -300.0f, 0.0f);
+		m_Scl = D3DXVECTOR3(500.0f, 500.0f, 0.0f);
+		m_TexScl = D3DXVECTOR2(0.5f, 1.0f);
+		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_TITLEBG);
 		break;
 	case TYPE_BG_TUTORIAL:
 		m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -79,12 +85,6 @@ void CObject2D::Init(TYPE Type)
 	case TYPE_UI_LIFEBG:
 		m_Pos = D3DXVECTOR3(SCREEN_WIDTH*0.06f, SCREEN_HEIGHT*0.95f, 0.0f);
 		m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.18f, SCREEN_HEIGHT*0.015f, 0.0f);
-		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_UI_GAGEBG);
-		m_Color.a = 0.7f;
-		break;
-	case TYPE_UI_MAGICBG:
-		m_Pos = D3DXVECTOR3(SCREEN_WIDTH*0.06f, SCREEN_HEIGHT*0.97f, 0.0f);
-		m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.09f, SCREEN_HEIGHT*0.0075f, 0.0f);
 		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_UI_GAGEBG);
 		m_Color.a = 0.7f;
 		break;
@@ -142,17 +142,20 @@ void CObject2D::Update()
 		SetVexColor();
 	}
 		break;
-	case TYPE_UI_LIFE:
-	{/*
-		CPlayer *pPlayer;
-		pPlayer = CModeGame::GetPlayer();
-		if (pPlayer == NULL) { return; }
-		CPlayer::STATUS Status = pPlayer->GetStatus();
-		if (Status.Life < 0) { Status.Life = 0; }
-		float Percentage = (float)Status.Life / (float)Status.LifeMax;
-		m_Scl.x = m_SclOld.x * Percentage;
-		SetVexPos();
-		SetVexUV(Percentage);*/
+	case TYPE_BG_TITLE_SIBA:
+	{
+		static int sibaTime = 0;
+		sibaTime = sibaTime % 100 + 1;
+		if ((sibaTime > 80 && sibaTime < 85) ||
+			(sibaTime > 95 && sibaTime < 100))
+		{
+			m_TexPos = D3DXVECTOR2(0.5f, 0.0f);
+		}
+		else
+		{
+			m_TexPos = D3DXVECTOR2(0.0f, 0.0f);
+		}
+		SetVexUV();
 		break;
 	}
 	case TYPE_UI_MAGIC:

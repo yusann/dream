@@ -12,7 +12,9 @@
 // メイン処理
 //*************
 CScene2D::CScene2D(int Priority) :CScene(Priority),
-m_pVB(NULL)
+m_pVB(NULL),
+m_TexPos(D3DXVECTOR2(0.0f,0.0f)),
+m_TexScl(D3DXVECTOR2(1.0f, 1.0f))
 {
 	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
@@ -111,10 +113,10 @@ void CScene2D::MakeVex(void)
 	pVtx[3].color = m_Color;  // 右下の色
 
 	// 頂点データへUVデータの追加
-	pVtx[0].tex = D3DXVECTOR2( 0.0f , 0.0f );                    // 左上のUV座標
-	pVtx[1].tex = D3DXVECTOR2( 1.0f , 0.0f );                    // 右上のUV座標
-	pVtx[2].tex = D3DXVECTOR2( 0.0f , 1.0f );                    // 左下のUV座標
-	pVtx[3].tex = D3DXVECTOR2( 1.0f , 1.0f );                    // 右下のUV座標
+	pVtx[0].tex = m_TexPos;                    // 左上のUV座標
+	pVtx[1].tex = D3DXVECTOR2(m_TexPos.x+ m_TexScl.x, m_TexPos.y);                    // 右上のUV座標
+	pVtx[2].tex = D3DXVECTOR2(m_TexPos.x, m_TexPos.y + m_TexScl.y);                    // 左下のUV座標
+	pVtx[3].tex = m_TexPos+ m_TexScl;                    // 右下のUV座標
 
 	// 鍵を開ける
 	m_pVB->Unlock();
@@ -169,7 +171,7 @@ void CScene2D::SetVexPos()
 //=======================================================================================
 // ポリゴンのUV座標更新
 //=======================================================================================
-void CScene2D::SetVexUV(float Percentage)
+void CScene2D::SetVexUV()
 {
 	// 頂点情報を設定
 	// 頂点情報格納用疑似バッファの宣言
@@ -179,10 +181,10 @@ void CScene2D::SetVexUV(float Percentage)
 	m_pVB->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点データへUVデータの追加
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);                    // 左上のUV座標
-	pVtx[1].tex = D3DXVECTOR2(Percentage, 0.0f);                    // 右上のUV座標
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);                    // 左下のUV座標
-	pVtx[3].tex = D3DXVECTOR2(Percentage, 1.0f);                    // 右下のUV座標
+	pVtx[0].tex = m_TexPos;                    // 左上のUV座標
+	pVtx[1].tex = D3DXVECTOR2(m_TexPos.x+ m_TexScl.x, m_TexPos.y);                    // 右上のUV座標
+	pVtx[2].tex = D3DXVECTOR2(m_TexPos.x, m_TexPos.y + m_TexScl.y);                    // 左下のUV座標
+	pVtx[3].tex = m_TexPos+ m_TexScl;                    // 右下のUV座標
 
 							// 鍵を開ける
 	m_pVB->Unlock();

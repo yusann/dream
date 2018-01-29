@@ -20,10 +20,12 @@ public:
 
 	void SetVexColor();
 	void SetVexPos();
-	void SetVexUV(float Percentage);
+	void SetVexUV();
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9 m_pVB;  // 頂点バッファへのポインタ
+	D3DXVECTOR2 m_TexPos;
+	D3DXVECTOR2 m_TexScl;
 
 private:
 	void MakeVex(void);     // 頂点の設定

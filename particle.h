@@ -1,8 +1,6 @@
 #ifndef _PARTICLE_H_
 #define _PARTICLE_H_
 
-#define PARTICLE_MAX (1024)
-
 //*****************************************************************************
 //   パーティクルクラス定義
 //*****************************************************************************
@@ -16,6 +14,7 @@ public:
 		TYPE_ENEMY_DASH,			// 敵ダッシュ
 		TYPE_PLAYER_HIT,			// ヒット
 		TYPE_PLAYER_DISCOVERY,		// ヒット
+		TYPE_RUN,					// 走る
 		TYPE_SWITCH_OFF,			// スイッチOFF
 		TYPE_MAX					// 最大数
 	}TYPE;
@@ -25,6 +24,7 @@ public:
 	{
 		OBJTYPE_NORMAL,			// 丸
 		OBJTYPE_STAR,			// 星
+		OBJTYPE_SMOKE,			// 
 		OBJTYPE_SURPRISED,		// ビックリマーク
 		OBJTYPE_MAX				// 最大数
 	}OBJTYPE;
@@ -75,6 +75,7 @@ private:
 
 	// パーティクルタイプ
 	static void EnemyDeath(TYPE type, D3DXVECTOR3 pos);
+	static void Run(TYPE type, D3DXVECTOR3 pos);
 
 	TYPE					m_type;
 	DRAW_TYPE				m_drawType;					// 描画タイプ

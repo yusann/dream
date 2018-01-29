@@ -19,6 +19,8 @@
 #include "inputKey.h"
 
 #include "camera.h"
+#include "sceneBillboard.h"
+#include "particle.h"
 
 //=======================================================================================
 //   コンストラクタ（初期化）
@@ -38,6 +40,12 @@ void CPlayerStateMove::Update(CPlayer* pPlayer)
 		// 押していない時はノーマル状態に遷移
 		pPlayer->ChangeState(new CPlayerStateNormal);
 		return;
+	}
+	static int frame = 0;
+	frame = frame % 10 + 1;
+	if (frame == 10)
+	{
+		CParticle::SetParticl(CParticle::TYPE_RUN, pPlayer->Position());
 	}
 
 	// 移動処理

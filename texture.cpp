@@ -13,12 +13,12 @@ char CTexture::m_TexName[TEXTYPE_MAX][128] =
 {
 	"data/TEXTURE/bg.jpg",
 	"data/TEXTURE/field000.jpg",
-	"data/TEXTURE/kobeni0.png",
+	"data/TEXTURE/smoke000.png",
 	"data/TEXTURE/bullet000.jpg",
 
 	"data/TEXTURE/sky000.jpg",
-	"data/TEXTURE/title000.jpg",
-	"data/TEXTURE/title001.png",
+	"data/TEXTURE/title_siba.png",
+	"data/TEXTURE/title000.png",
 	"data/TEXTURE/tutorial000.jpg",
 	"data/TEXTURE/result000.jpg",
 	"data/TEXTURE/result001.jpg",

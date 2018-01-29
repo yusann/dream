@@ -34,11 +34,6 @@ m_Move(D3DXVECTOR3(0.0f,0.0f,0.0f))
 //=======================================================================================
 void CPlayerStateJumpUp::Update(CPlayer* pPlayer)
 {
-	int Key = pPlayer->GetKey();
-	if (Key < 1)
-	{
-		return;
-	}
 	// ƒL[”»’è
 	pPlayer->InputKeyMove(&m_Move);
 

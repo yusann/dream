@@ -94,6 +94,10 @@ void CParticle::SetParticl(TYPE type, D3DXVECTOR3 pos)
 		// プレイヤーヒット時
 	case TYPE_PLAYER_DISCOVERY:
 		break;
+		// プレイヤーヒット時
+	case TYPE_RUN:
+		Run(type, pos);
+		break;
 
 	default:
 		assert(!"タイプ不正particle::SetParticl(...)");
@@ -163,6 +167,14 @@ void CParticle::Init(TYPE type, OBJTYPE objType, D3DXVECTOR3 pos, D3DXVECTOR3 si
 		m_Color.a = 0.0f;
 		break;
 
+	case OBJTYPE_SMOKE:
+		m_Pos.x += CEquation::Random(-20, 20)*0.1f;
+		m_Pos.z += CEquation::Random(-20, 20)*0.1f;
+		m_Pos.y += 2.0f;
+		m_Rot = CEquation::Random(-314, 314)*0.01f;
+		m_drawType = DRAW_TYPE_NORMAL;		// 描画モード
+		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_SMOKE);		// テクスチャ
+		break;
 
 	default:
 		assert(!"タイプ不正particle::Init(...)");
@@ -197,14 +209,13 @@ void CParticle::Update()
 
 		if (m_nLife > m_nChangeTime)
 		{
-			m_TexID = CEquation::MaxLoop(0, 16, m_TexID, 0.5f);
-			CSceneBillboard::SetTexID((int)m_TexID);
-
 			// サイズ更新
 			m_Scl -= m_sizeMove;
 			// 移動処理
 			m_Pos.x += cos(m_fAngle) * m_fSpeed;
 			m_Pos.z += sin(m_fAngle) * m_fSpeed;
+			CSceneBillboard::Update();
+			CEquation::SetVertexScaleXY(m_pVB_POS, m_Angle, m_Length, m_Rot);
 		}
 		else
 		{
@@ -233,9 +244,11 @@ void CParticle::Update()
 				// スイッチOFF時
 			case TYPE_SWITCH_OFF:
 				break;
-
-			default:
-				assert(!"タイプ不正particle::Updata(...)");
+			case TYPE_RUN:
+				// サイズ更新
+				m_Scl += m_sizeMove;
+				CSceneBillboard::Update();
+				CEquation::SetVertexScaleXY(m_pVB_POS, m_Angle, m_Length, m_Rot);
 				break;
 			}
 		}
@@ -277,13 +290,22 @@ void CParticle::EnemyDeath(TYPE type, D3DXVECTOR3 pos)
 			PARTICLE_ENEMY_DEATH_STAR_STARTTIME,
 			PARTICLE_ENEMY_DEATH_STAR_CHANGETIME);
 	}
-	//// ノーマルタイプの生成
-	//Create(type, 
-	//	OBJTYPE_NORMAL,
-	//	pos,
-	//	D3DXVECTOR3(PARTICLE_ENEMY_DEATH_NORMAL_SIZE, PARTICLE_ENEMY_DEATH_NORMAL_SIZE, 0.0f),
-	//	PARTICLE_ENEMY_DEATH_NORMAL_LIFE,
-	//	0.0f,
-	//	0.0f,
-	//	D3DXVECTOR3(PARTICLE_ENEMY_DEATH_NORMAL_SIZE_MOVE, PARTICLE_ENEMY_DEATH_NORMAL_SIZE_MOVE, 0.0f));
+}
+//=======================================================================================
+//   走る時パーティクル生成
+//=======================================================================================
+void CParticle::Run(TYPE type, D3DXVECTOR3 pos)
+{
+	// 煙の生成
+	Create(type,
+		OBJTYPE_SMOKE,
+		pos,
+		D3DXVECTOR3(3.0f, 3.0f, 0.0f),
+		30,
+		0.0f,
+		0.0f,
+		D3DXVECTOR3(-0.2f, -0.2f, 0.0f),
+		0.05f,
+		0,
+		20);
 }

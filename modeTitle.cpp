@@ -100,6 +100,7 @@ void CModeTitle::Init(void)
 	pCamera->SetPosAt(D3DXVECTOR3(55.0f,55.0f,0.0f));
 
 	CObject2D::Create(CObject2D::TYPE_BG_TITLE);
+	CObject2D::Create(CObject2D::TYPE_BG_TITLE_SIBA);
 	CObject2D::Create(CObject2D::TYPE_UI_PUSH);
 
 	CShadowModel::Create();
