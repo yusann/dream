@@ -197,6 +197,7 @@
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerStateAttack.cpp" />
+    <ClCompile Include="playerStateDamage.cpp" />
     <ClCompile Include="playerStateDash.cpp" />
     <ClCompile Include="playerStateJumpAttack.cpp" />
     <ClCompile Include="playerStateJumpDown.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
     <ClInclude Include="playerStateAttack.h" />
+    <ClInclude Include="playerStateDamage.h" />
     <ClInclude Include="playerStateDash.h" />
     <ClInclude Include="playerStateJumpAttack.h" />
     <ClInclude Include="playerStateJumpDown.h" />

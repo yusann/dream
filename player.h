@@ -35,30 +35,27 @@ public:
 	void Update(void);      // çXêVèàóù
 	void Draw(void);        // ï`âÊèàóù
 
-	void Hit(int Damage) { m_Life -= Damage; }
+	void Hit(D3DXVECTOR2 damageVector);
 	const CCollision::SPHERE GetCollision(void) { return m_Collision; }
 
 	D3DXVECTOR3& Position(void) { return m_Pos; }
 	D3DXVECTOR3& Rotate(void) { return m_Rot; }
 	float GetJumpHeight(void) { return m_Jump; }
-	float GetFloorHeight(void) { return m_FloorPosY; }
 	bool OnBlock(void) { return m_onBlock; }
 	bool InputKeyMove(D3DXVECTOR3 *Move, const float speed = 0.5f);
 	bool EndMotionKey(void) { return m_LastKye; }
 
+	float GetFloorHeight(void);
 	void CollisionEnemy(void);
 	void CollisionBlock(void);
 	void HitEnemy(int Damage = 1);
+	void DamageMove(const D3DXVECTOR2 Move);
 
 	void ChangeState(CPlayerState* pState);
 
 #ifdef _DEBUG
 	void ImGui(void);
 #endif
-
-protected:
-	void ModeAttack(void);
-	void ModeJumpAttack(void);
 
 private:
 	CPlayerState* m_pState;
@@ -73,7 +70,7 @@ private:
 	int m_Magic;
 	float m_FloorPosY;
 	CCollision::SPHERE m_Collision;
-
+	bool m_isDamage;
 };
 
 #endif

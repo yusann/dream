@@ -45,14 +45,6 @@ void CPlayerStateJumpAttack::Update(CPlayer* pPlayer)
 	// プレイヤーに対応する床の高さ
 	m_FloorHeight = pPlayer->GetFloorHeight();
 
-	// 地面判定
-	if (!pPlayer->OnBlock())
-	{
-		CMeshField *pMeshField = CModeGame::GetMeshField();
-		if (pMeshField == NULL) { return; }
-		m_FloorHeight = pMeshField->GetHeight(pPlayer->Position());
-	}
-
 	// めり込み処理
 	if (pPlayer->Position().y < m_FloorHeight)
 	{

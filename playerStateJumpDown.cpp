@@ -45,14 +45,6 @@ void CPlayerStateJumpDown::Update(CPlayer* pPlayer)
 
 	m_FloorHeight = pPlayer->GetFloorHeight();
 
-	// ’n–Ê”»’è
-	if (!pPlayer->OnBlock())
-	{
-		CMeshField *pMeshField = CModeGame::GetMeshField();
-		if (pMeshField == NULL) { return; }
-		m_FloorHeight = pMeshField->GetHeight(pPlayer->Position());
-	}
-
 	// ‚ß‚èž‚Ýˆ—
 	float playerPosY = pPlayer->Position().y;
 	if (playerPosY < m_FloorHeight)

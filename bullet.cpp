@@ -121,7 +121,6 @@ void CBullet::Update()
 
 			if (CCollision::Sphere(m_Pos, BULLET_LEN, Collision.Pos, Collision.Scl))
 			{
-				pPlayer->Hit(40);
 				Uninit();
 				return;
 			}

@@ -57,10 +57,6 @@ void mainVS(float3 in_pos : POSITION,
 
 	// ライトから見る座標変換
 	out_lightPosH = mul(float4(in_pos, 1.0f), g_mtxLightWVP);
-
-	// ライトから見る深度値変換
-	//out_depthWV = mul(float4(in_pos, 1.0f), g_mtxLightWVP).z / g_lightFar;
-	// lightPosH.z / farと計算が一緒のため要らない
 }
 
 //------------------------------------------------

@@ -251,6 +251,9 @@
     <ClCompile Include="playerStateDash.cpp">
       <Filter>ソース ファイル\object\player</Filter>
     </ClCompile>
+    <ClCompile Include="playerStateDamage.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -443,6 +446,9 @@
       <Filter>ソース ファイル\object\player</Filter>
     </ClInclude>
     <ClInclude Include="playerStateDash.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateDamage.h">
       <Filter>ソース ファイル\object\player</Filter>
     </ClInclude>
   </ItemGroup>

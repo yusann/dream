@@ -31,9 +31,10 @@
 
 #include "playerState.h"
 #include "playerStateNormal.h"
+#include "playerStateDamage.h"
 
 #define MOVE (0.5f)
-#define PLAYER_LIFE					(1000)
+#define PLAYER_LIFE					(5)
 #define PLAYER_MAGIC				(72)
 #define PLAYER_JUMP					(1.6f)        // ジャンプ力
 
@@ -75,6 +76,7 @@ void CPlayer::Init(D3DXVECTOR3 pos)
 	m_FloorPosY = 0.0f;
 	m_Collision.Pos = m_Pos;
 	m_Collision.Scl = 2.0f;
+	m_isDamage = false;
 
 	m_pMotionPartsX = CMotionPartsX::GetMotionPartsX(CMotionPartsX::TYPE_PLAYER);
 
@@ -108,63 +110,6 @@ void CPlayer::Uninit()
 //=======================================================================================
 void CPlayer::Update()
 {
-	/*
-	// 座標記憶
-	m_PosOld = m_Pos;
-
-	// 重力
-	m_Move.y -= PLAYER_GRAVITY;
-
-	// 移動処理
-	m_Pos += m_Move;
-	m_Move.x = 0.0f;
-	m_Move.z = 0.0f;
-	m_Collision.Pos = D3DXVECTOR3(m_Pos.x, m_Pos.y + 2.0f, m_Pos.z);
-#ifdef _DEBUG
-	m_Collision.Sphere->Update(m_Collision.Pos, m_Collision.Scl);
-#endif
-
-	// ブロックの当たり判定
-	m_onBlock = false;
-	CollisionBlock();
-
-	// 地面判定
-	if (!m_onBlock)
-	{
-		CMeshField *pMeshField = CModeGame::GetMeshField();
-		if (pMeshField == NULL) { return; }
-		m_FloorPosY = pMeshField->GetHeight(m_Pos);
-	}
-#ifdef _DEBUG
-	ImGui::Text("m_FloorPosY %.2f", m_FloorPosY);
-#endif // _DEBUG
-
-	// 着地時処理
-	if (m_Pos.y < m_FloorPosY && m_Move.y < 0.0f)
-	{
-		m_Move.y = 0.0f;
-		m_Pos.y = m_FloorPosY;
-	}
-
-	// 移動できる範囲
-	if (m_Pos.x > 550.0f) m_Pos.x = 550.0f;
-	if (m_Pos.x < -600.0f) m_Pos.x = -600.0f;
-	if (m_Pos.z > 550.0f) m_Pos.z = 550.0f;
-	if (m_Pos.z < -600.0f) m_Pos.z = -600.0f;
-
-	// モーションの代入　更新
-	CSceneMotionPartsX::SetMotion(0);
-	CSceneMotionPartsX::Update();
-
-	// 敵との当たり判定
-	CollisionEnemy();
-
-	// 死亡
-	if (m_Life <= 0) {
-		Uninit();
-		return;
-	}
-	*/
 	m_pState->Update(this);
 
 	CSceneMotionPartsX::Update();
@@ -180,6 +125,18 @@ void CPlayer::Update()
 	// 敵との当たり判定
 	CollisionEnemy();
 
+	// 無敵時間経過
+	static int damageTime = 0;
+	if (m_isDamage)
+	{
+		damageTime++;
+		if (damageTime >= 100)
+		{
+			m_isDamage = false;
+			damageTime = 0;
+		}
+	}
+
 	// 死亡
 	if (m_Life <= 0) {
 		Uninit();
@@ -192,190 +149,26 @@ void CPlayer::Update()
 //=======================================================================================
 void CPlayer::Draw()
 {
-	CSceneMotionPartsX::Draw();
-}
-
-/*
-//=======================================================================================
-//   キー判定処理
-//=======================================================================================
-void CPlayer::InputKey(void)
-{
-	// カメラ情報取得
-	CCamera* pCamera = CManager::GetCamera();
-	if (pCamera == NULL) { return; }
-	D3DXVECTOR3 CameraPos = pCamera->GetPosEye();
-
-	// カメラとのベクトル
-	D3DXVECTOR3 Vector;
-	Vector.x = CameraPos.x - m_Pos.x;
-	Vector.z = CameraPos.z - m_Pos.z;
-	Vector.y = 0.0f;
-
-	// カメラとの角度
-	float Angle = -atan2(Vector.z, Vector.x) + D3DX_PI*0.5f;
-
-	// 前進キー判定
-	bool Input_MoveDown = false;
-	m_Speed = 0.5f;
-
-	if (CInputKey::InputPlayerDash())
+	if (m_isDamage)
 	{
-		m_Speed = 1.5f;
-	}
-	if (CInputKey::InputPlayerMove())
-	{
-		if (m_Mode != MODE_JUMP) m_Mode = MODE_MOVE;
-		D3DXVECTOR2 Move = CInputKey::GetAnalogLValue();
-		m_Rot.y = atan2(Move.x, Move.y);
-		m_Rot.y += Angle;
-		m_Move.x = cosf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-		m_Move.z = sinf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-	}
-
-	// 前進
-	if (CInputKey::InputPlayerMoveU())
-	{
-		if (m_Mode != MODE_JUMP) m_Mode = MODE_MOVE;
-		if (m_Rot.y - Angle >  D3DX_PI) { m_Rot.y -= D3DX_PI * 2; }
-		if (m_Rot.y - Angle < -D3DX_PI) { m_Rot.y += D3DX_PI * 2; }
-		m_Rot.y += (Angle - m_Rot.y)*0.1f;
-		m_Move.x = cosf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-		m_Move.z = sinf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-	}
-
-	// 後退
-	if (CInputKey::InputPlayerMoveD())
-	{
-		if (m_Mode != MODE_JUMP) m_Mode = MODE_MOVE;
-		Angle += D3DX_PI;
-
-		// 近いルードで回す
-		if (m_Rot.y - Angle >  D3DX_PI) { m_Rot.y -= D3DX_PI * 2; }
-		if (m_Rot.y - Angle < -D3DX_PI) { m_Rot.y += D3DX_PI * 2; }
-
-		// 角度計算
-		m_Rot.y += (Angle - m_Rot.y)*0.1f;
-
-		// 前進キーフラグ
-		Input_MoveDown = true;
-		m_Move.x = cosf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-		m_Move.z = sinf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-	}
-
-	// 左移動
-	if (CInputKey::InputPlayerMoveL())
-	{
-		if (m_Mode != MODE_JUMP) m_Mode = MODE_MOVE;
-		if (Input_MoveDown)
+		static int i = 0;
+		i = i % 10 + 1;
+		if (i > 3)
 		{
-			Angle += D3DX_PI*0.5f;
-		}
-		else
-		{
-			Angle -= D3DX_PI*0.5f;
-		}
-		if (m_Rot.y - Angle >  D3DX_PI) { m_Rot.y -= D3DX_PI * 2; }
-		if (m_Rot.y - Angle < -D3DX_PI) { m_Rot.y += D3DX_PI * 2; }
-		m_Rot.y += (Angle - m_Rot.y)*0.1f;
-		m_Move.x = cosf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-		m_Move.z = sinf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-	}
-
-	// 右移動
-	if (CInputKey::InputPlayerMoveR())
-	{
-		if (m_Mode != MODE_JUMP) m_Mode = MODE_MOVE;
-
-		// 前進キーを押しているとき
-		if (Input_MoveDown)
-		{
-			Angle -= D3DX_PI*0.5f;
-		}
-		else
-		{
-			Angle += D3DX_PI*0.5f;
-		}
-		if (m_Rot.y - Angle >  D3DX_PI) { m_Rot.y -= D3DX_PI * 2; }
-		if (m_Rot.y - Angle < -D3DX_PI) { m_Rot.y += D3DX_PI * 2; }
-		m_Rot.y += (Angle - m_Rot.y)*0.1f;
-		m_Move.x = cosf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-		m_Move.z = sinf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-	}
-
-	// 攻撃
-	if (CInputKey::InputPlayerAttack())
-	{
-		m_Mode = MODE_ATTACK;
-	}
-
-	// ジャンプ
-	if (m_Mode != MODE_JUMP)
-	{
-		if (CInputKey::InputPlayerJump())
-		{
-			m_Mode = MODE_JUMP;
-			m_Move.y = m_Jump;
+			CSceneMotionPartsX::Draw();
 		}
 	}
 	else
 	{
-		if (CInputKey::InputPlayerJump())
-		{
-			m_Mode = MODE_JUMPATTACK;
-		}
-	}
-}
-*/
-
-//=======================================================================================
-//   攻撃モード処理
-//=======================================================================================
-void CPlayer::ModeAttack()
-{
-	int Key = GetKey();
-	if (Key < 1 )
-	{
-		m_Move.x = cosf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-		m_Move.z = sinf(-m_Rot.y + (-3.14f*0.5f))*m_Speed;
-	}
-	HitEnemy();
-
-	if (m_LastKye)
-	{
-		// ニュートラルモード変更
-		//m_Mode = MODE_NORMAL;
+		CSceneMotionPartsX::Draw();
 	}
 }
 
-//=======================================================================================
-//   ジャンプアタックモード処理
-//=======================================================================================
-void CPlayer::ModeJumpAttack()
+void CPlayer::Hit(D3DXVECTOR2 damageVector)
 {
-	int Key = GetKey();
-	int Frame = GetFrame();
-	if (Key == 0 && Frame == 1)
-	{
-		m_Move.y = 1.0f;
-	}
-	if (Key <= 1) return;
-	if (Key == 2)
-	{
-		m_Move.y = 0.0f;
-	}
-	else
-	{
-		m_Move.y -= 0.3f;
-	}
-	HitEnemy();
-
-	// 着地時処理
-	if (m_Pos.y <= m_FloorPosY)
-	{
-		m_Move.y = 1.0f;
-		//m_Mode = MODE_NORMAL;
-	}
+	ChangeState(new CPlayerStateDamage(damageVector));
+	m_Life --;
+	m_isDamage = true;
 }
 
 //=======================================================================================
@@ -383,6 +176,8 @@ void CPlayer::ModeJumpAttack()
 //=======================================================================================
 void CPlayer::CollisionEnemy(void)
 {
+	if (m_isDamage)
+		return;
 	// シーンの取得
 	CScene *pScene;
 	pScene = CScene::GetScene(CScene::OBJTYPE_ENEMY);
@@ -398,7 +193,7 @@ void CPlayer::CollisionEnemy(void)
 		
 		if ( CCollision::Sphere( m_Collision.Pos, m_Collision.Scl, EnemyPos, EnemyScl ) )
 		{
-			Hit(10);
+			Hit(D3DXVECTOR2( m_Pos.x- EnemyPos.x,m_Pos.z-EnemyPos.z));
 			return;
 		}
 		pScene = pScene->SetNextScene();
@@ -660,6 +455,27 @@ bool CPlayer::InputKeyMove(D3DXVECTOR3 *pMove, const float speed)
 		bPushKey = true;
 	}
 	return bPushKey;
+}
+
+void CPlayer::DamageMove(const D3DXVECTOR2 Move)
+{
+	D3DXVECTOR2 move;
+	D3DXVec2Normalize(&move, &Move);
+
+	m_Pos.x += move.x*1.5f;
+	m_Pos.z += move.y*1.5f;
+}
+
+float CPlayer::GetFloorHeight()
+{
+	// 地面判定
+	if (!OnBlock())
+	{
+		CMeshField *pMeshField = CModeGame::GetMeshField();
+		if (pMeshField == NULL) { return m_FloorPosY; }
+		m_FloorPosY = pMeshField->GetHeight(m_Pos);
+	}
+	return m_FloorPosY;
 }
 
 //=======================================================================================

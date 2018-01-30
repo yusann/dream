@@ -56,14 +56,6 @@ void CPlayerStateAttack::Update(CPlayer* pPlayer)
 
 	m_FloorPosY = pPlayer->GetFloorHeight();
 
-	// ’n–Ê”»’è
-	if (!pPlayer->OnBlock())
-	{
-		CMeshField *pMeshField = CModeGame::GetMeshField();
-		if (pMeshField == NULL) { return; }
-		m_FloorPosY = pMeshField->GetHeight(pPlayer->Position());
-	}
-
 	// ‚ß‚èž‚Ýˆ—
 	if (pPlayer->Position().y < m_FloorPosY)
 	{
