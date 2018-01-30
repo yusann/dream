@@ -245,6 +245,12 @@
     <ClCompile Include="GBuffer.cpp">
       <Filter>ソース ファイル\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="playerStateAttack.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateDash.cpp">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -432,6 +438,12 @@
     </ClInclude>
     <ClInclude Include="GBuffer.h">
       <Filter>ソース ファイル\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateAttack.h">
+      <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateDash.h">
+      <Filter>ソース ファイル\object\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

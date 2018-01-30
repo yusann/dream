@@ -3,12 +3,11 @@
 // Author : YUUSAN KA
 //=============================================================================
 #include "main.h"
-#include "playerStateMove.h"
+#include "playerStateDash.h"
 #include "playerStateNormal.h"
 #include "playerStateJumpUp.h"
 #include "playerStateJumpDown.h"
 #include "playerStateAttack.h"
-#include "playerStateDash.h"
 
 #include "manager.h"
 #include "mode.h"
@@ -29,25 +28,19 @@
 //=======================================================================================
 //   コンストラクタ（初期化）
 //=======================================================================================
-CPlayerStateMove::CPlayerStateMove():
+CPlayerStateDash::CPlayerStateDash():
 m_Move(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_FloorPosY(0.0f){}
 
 //=======================================================================================
 //   更新処理
 //=======================================================================================
-void CPlayerStateMove::Update(CPlayer* pPlayer)
+void CPlayerStateDash::Update(CPlayer* pPlayer)
 {
 	// キー判定
-	if (!pPlayer->InputKeyMove(&m_Move))
+	if (!CInputKey::InputPlayerDash())
 	{
-		// 押していない時はノーマル状態に遷移
-		pPlayer->ChangeState(new CPlayerStateNormal);
-		return;
-	}
-	if (CInputKey::InputPlayerDash())
-	{
-		pPlayer->ChangeState(new CPlayerStateDash());
+		pPlayer->ChangeState(new CPlayerStateNormal());
 		return;
 	}
 	if (CInputKey::InputPlayerAttack())
@@ -56,6 +49,7 @@ void CPlayerStateMove::Update(CPlayer* pPlayer)
 		pPlayer->ChangeState(new CPlayerStateAttack());
 		return;
 	}
+	pPlayer->InputKeyMove(&m_Move, 1.5f);
 	static int frame = 0;
 	frame = frame % 10 + 1;
 	if (frame == 10)
@@ -91,7 +85,7 @@ void CPlayerStateMove::Update(CPlayer* pPlayer)
 	}
 
 	// モーションの代入　更新
-	pPlayer->SetMotion(CPlayer::STATE_MOVE);
+	pPlayer->SetMotion(CPlayer::STATE_DASH);
 
 	// 状態変更
 	if (CInputKey::InputPlayerJump())

@@ -6,6 +6,8 @@
 #include "playerStateNormal.h"
 #include "playerStateMove.h"
 #include "playerStateJumpUp.h"
+#include "playerStateJumpDown.h"
+#include "playerStateAttack.h"
 #include "manager.h"
 #include "mode.h"
 #include "modeGame.h"
@@ -49,12 +51,24 @@ void CPlayerStateNormal::Update(CPlayer* pPlayer)
 	pPlayer->SetMotion(CPlayer::STATE_NORMAL);
 
 	// ó‘Ô”»’è
+	if (pPlayer->Position().y - m_FloorPosY > 8.0f)
+	{
+		pPlayer->ChangeState(new CPlayerStateJumpDown(m_MoveY));
+		return;
+	}
 	if (CInputKey::InputPlayerMove())
 	{
 		pPlayer->ChangeState(new CPlayerStateMove);
+		return;
 	}
 	if (CInputKey::InputPlayerJump())
 	{
 		pPlayer->ChangeState(new CPlayerStateJumpUp(pPlayer->GetJumpHeight()));
+		return;
+	}
+	if (CInputKey::InputPlayerAttack())
+	{
+		pPlayer->ChangeState(new CPlayerStateAttack());
+		return;
 	}
 }

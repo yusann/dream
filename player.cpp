@@ -558,7 +558,7 @@ void CPlayer::HitEnemy(int Damage)
 //=======================================================================================
 //   移動判定処理
 //=======================================================================================
-bool CPlayer::InputKeyMove(D3DXVECTOR3 *pMove)
+bool CPlayer::InputKeyMove(D3DXVECTOR3 *pMove, const float speed)
 {
 	// キー押し判定
 	bool bPushKey = false;
@@ -579,12 +579,8 @@ bool CPlayer::InputKeyMove(D3DXVECTOR3 *pMove)
 
 	// 前進キー判定
 	bool Input_MoveDown = false;
-	m_Speed = 0.5f;
+	m_Speed = speed;
 
-	if (CInputKey::InputPlayerDash())
-	{
-		m_Speed = 1.5f;
-	}
 	if (CInputKey::InputPlayerMoveStick())
 	{
 		D3DXVECTOR2 Move = CInputKey::GetAnalogLValue();

@@ -196,6 +196,8 @@
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerStateAttack.cpp" />
+    <ClCompile Include="playerStateDash.cpp" />
     <ClCompile Include="playerStateJumpAttack.cpp" />
     <ClCompile Include="playerStateJumpDown.cpp" />
     <ClCompile Include="playerStateJumpUp.cpp" />
@@ -260,6 +262,8 @@
     <ClInclude Include="particle.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
+    <ClInclude Include="playerStateAttack.h" />
+    <ClInclude Include="playerStateDash.h" />
     <ClInclude Include="playerStateJumpAttack.h" />
     <ClInclude Include="playerStateJumpDown.h" />
     <ClInclude Include="playerStateJumpUp.h" />

@@ -5,8 +5,8 @@
 #include "main.h"
 #include "manager.h"
 
-#define CLASS_NAME        "サンプル"            // ウィンドウクラスの名前
-#define WINDOW_NAME       "インラージクマ"  // ウィンドウの名前（タイトル名）
+#define CLASS_NAME        "就職作品"            // ウィンドウクラスの名前
+#define WINDOW_NAME       "しばアドベンチャー"  // ウィンドウの名前（タイトル名）
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

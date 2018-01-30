@@ -23,6 +23,7 @@ public:
 		STATE_LOADING,
 		STATE_JUMPATTACK,
 		STATE_ATTACK,
+		STATE_DASH,
 		STATE_MAX
 	}STATE;
 	CPlayer();             // デフォルトコンストラクタ
@@ -42,7 +43,7 @@ public:
 	float GetJumpHeight(void) { return m_Jump; }
 	float GetFloorHeight(void) { return m_FloorPosY; }
 	bool OnBlock(void) { return m_onBlock; }
-	bool InputKeyMove(D3DXVECTOR3 *Move);
+	bool InputKeyMove(D3DXVECTOR3 *Move, const float speed = 0.5f);
 	bool EndMotionKey(void) { return m_LastKye; }
 
 	void CollisionEnemy(void);

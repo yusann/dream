@@ -5,6 +5,7 @@
 #include "main.h"
 #include "playerStateJumpDown.h"
 #include "playerStateNormal.h"
+#include "playerStateJumpAttack.h"
 #include "manager.h"
 #include "mode.h"
 #include "modeGame.h"
@@ -53,14 +54,22 @@ void CPlayerStateJumpDown::Update(CPlayer* pPlayer)
 	}
 
 	// めり込み処理
-	if (pPlayer->Position().y < m_FloorHeight)
+	float playerPosY = pPlayer->Position().y;
+	if (playerPosY < m_FloorHeight)
 	{
 		m_Move.y = 0.0f;
 		pPlayer->Position().y = m_FloorHeight;
 		pPlayer->ChangeState(new CPlayerStateNormal);
 		return;
 	}
-
+	if (playerPosY - m_FloorHeight > 8.0f)
+	{
+		// 状態変更
+		if (CInputKey::InputPlayerJump())
+		{
+			pPlayer->ChangeState(new CPlayerStateJumpAttack());
+		}
+	}
 	// モーションの代入　更新
 	pPlayer->SetMotion(CPlayer::STATE_JUMPDOWN);
 }
