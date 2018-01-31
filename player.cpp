@@ -483,8 +483,11 @@ float CPlayer::GetFloorHeight()
 //=======================================================================================
 void CPlayer::ChangeState(CPlayerState* pState)
 {
-	delete m_pState;
-	m_pState = pState;
+	if (m_pState != NULL)
+	{
+		delete m_pState;
+		m_pState = pState;
+	}
 }
 
 #ifdef _DEBUG

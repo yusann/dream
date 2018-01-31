@@ -172,6 +172,9 @@
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="debugShadowMap.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemyStateChase.cpp" />
+    <ClCompile Include="enemyStateMove.cpp" />
+    <ClCompile Include="enemyStateNormal.cpp" />
     <ClCompile Include="equation.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="GBuffer.cpp" />
@@ -234,6 +237,10 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="debugShadowMap.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemyState.h" />
+    <ClInclude Include="enemyStateChase.h" />
+    <ClInclude Include="enemyStateMove.h" />
+    <ClInclude Include="enemyStateNormal.h" />
     <ClInclude Include="equation.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="GBuffer.h" />

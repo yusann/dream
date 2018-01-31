@@ -33,9 +33,6 @@
     <Filter Include="ソース ファイル\object\mash">
       <UniqueIdentifier>{78398d2f-32a7-4509-8fab-8ab763f1f0e8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\object\motionX">
-      <UniqueIdentifier>{ba9fd39b-75f3-4df7-af78-c216cf7a5253}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\imGui">
       <UniqueIdentifier>{b06d866c-02bc-4f2b-8b1f-915933076a26}</UniqueIdentifier>
     </Filter>
@@ -71,6 +68,9 @@
     </Filter>
     <Filter Include="ソース ファイル\scene">
       <UniqueIdentifier>{9e67239a-2848-4d50-8beb-233358ca7a8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\enemy">
+      <UniqueIdentifier>{3eeb0feb-cba7-4ce1-b658-3644c0821d53}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -115,9 +115,6 @@
     </ClCompile>
     <ClCompile Include="imGui\imgui_impl_dx9.cpp">
       <Filter>ソース ファイル\imGui</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>ソース ファイル\object\motionX</Filter>
     </ClCompile>
     <ClCompile Include="modeTitle.cpp">
       <Filter>ソース ファイル\mode</Filter>
@@ -254,6 +251,18 @@
     <ClCompile Include="playerStateDamage.cpp">
       <Filter>ソース ファイル\object\player</Filter>
     </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyStateNormal.cpp">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyStateMove.cpp">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyStateChase.cpp">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -300,9 +309,6 @@
     </ClInclude>
     <ClInclude Include="block.h">
       <Filter>ソース ファイル\object\modelX</Filter>
-    </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>ソース ファイル\object\motionX</Filter>
     </ClInclude>
     <ClInclude Include="renderer.h">
       <Filter>ソース ファイル\renderer</Filter>
@@ -450,6 +456,21 @@
     </ClInclude>
     <ClInclude Include="playerStateDamage.h">
       <Filter>ソース ファイル\object\player</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyState.h">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyStateNormal.h">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyStateMove.h">
+      <Filter>ソース ファイル\object\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyStateChase.h">
+      <Filter>ソース ファイル\object\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

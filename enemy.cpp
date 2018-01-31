@@ -20,11 +20,15 @@
 #include "meshField.h"
 #include "equation.h"
 #include "sound.h"
+
+#include "enemyState.h"
+#include "enemyStateNormal.h"
 #ifdef _DEBUG
 #include "meshSphere.h"
 #endif
 
-CEnemy::CEnemy():CSceneMotionPartsX(CScene::OBJTYPE_ENEMY)
+CEnemy::CEnemy():CSceneMotionPartsX(CScene::OBJTYPE_ENEMY),
+m_FloorPosY(0.0f)
 {
 }
 
@@ -48,7 +52,6 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 //=======================================================================================
 void CEnemy::Init(D3DXVECTOR3 pos)
 {
-	m_Mode = MODE_NORMAL;
 	m_Pos = pos;
 	m_Speed = 0.2f;
 	m_life = 3;
@@ -56,10 +59,6 @@ void CEnemy::Init(D3DXVECTOR3 pos)
 	m_CollisionScl = 5.0f;
 	m_DetectionPos = m_Pos;
 	m_DetectionScl = 30.0f;
-	m_CheckMode = CEquation::Random(180, 360);
-	m_CntFrameNormal = 0;
-	m_CntFrameMove = 0;
-	m_CntFrameAttack = 0;
 
 	m_pMotionPartsX = CMotionPartsX::GetMotionPartsX(CMotionPartsX::TYPE_ENEMY);
 #ifdef _DEBUG
@@ -72,6 +71,10 @@ void CEnemy::Init(D3DXVECTOR3 pos)
 
 	// タイプの代入
 	CScene::SetObjType(CScene::OBJTYPE_ENEMY);
+
+
+	// 状態の生成
+	m_pState = new CEnemyStateNormal(GetFloorHeight());
 }
 
 //=======================================================================================
@@ -91,38 +94,9 @@ void CEnemy::Uninit()
 //=======================================================================================
 void CEnemy::Update()
 {
-	m_Move.y -= 0.2f;
-	if (isPlayer())
-	{
-		m_Mode = MODE_ATTACK;
-	}
-	else if (m_Mode == MODE_ATTACK)
-	{
-		m_Mode = MODE_NORMAL;
-	}
+	m_pState->Update(this);
 
-	switch (m_Mode)
-	{
-	case MODE_NORMAL:     ModeNormal();     break;
-	case MODE_MOVE:       ModeMove();       break;
-	case MODE_ATTACK:     ModeAttack();     break;
-	default:
-		assert("敵モードエラー！");
-		break;
-	}
-
-	// 移動処理
-	m_Pos += m_Move;
-	m_Move.x = 0.0f;
-	m_Move.z = 0.0f;
-	CMeshField *pMeshField = CModeGame::GetMeshField();
-	if (pMeshField == NULL) { return; }
-	float PosY = pMeshField->GetHeight(m_Pos);
-	if (m_Pos.y < PosY)
-	{
-		m_Move.y = 0.0f;
-		m_Pos.y = PosY;
-	}
+	CSceneMotionPartsX::Update();
 
 	// 移動できる範囲
 	if (m_Pos.x > 550.0f) m_Pos.x = 550.0f;
@@ -130,8 +104,6 @@ void CEnemy::Update()
 	if (m_Pos.z > 550.0f) m_Pos.z = 550.0f;
 	if (m_Pos.z < -600.0f) m_Pos.z = -600.0f;
 
-	CSceneMotionPartsX::SetMotion(m_Mode);
-	CSceneMotionPartsX::Update();
 
 	if (m_life <= 0)
 	{
@@ -156,37 +128,6 @@ void CEnemy::Update()
 void CEnemy::Draw()
 {
 	CSceneMotionPartsX::Draw();
-}
-//=======================================================================================
-//   待機モード処理
-//=======================================================================================
-void CEnemy::ModeNormal()
-{
-	m_CntFrameNormal++;
-	if (m_CntFrameNormal >= m_CheckMode)
-	{
-		m_Mode = MODE_MOVE;
-		m_Rot.y = CEquation::Random(-314, 314)* 0.01f;
-		m_CntFrameNormal = 0;
-		m_CheckMode = CEquation::Random(240, 400);
-	}
-}
-
-//=======================================================================================
-//   移動モード処理
-//=======================================================================================
-void CEnemy::ModeMove()
-{
-	m_CntFrameMove++;
-	if (m_CntFrameMove >= m_CheckMode)
-	{
-		m_Mode = MODE_NORMAL;
-		m_CntFrameMove = 0;
-		m_CheckMode = CEquation::Random(120, 250);
-	}
-
-	m_Move.x = (float)cos(-m_Rot.y + D3DXToRadian(-90))*m_Speed;
-	m_Move.z = (float)sin(-m_Rot.y + D3DXToRadian(-90))*m_Speed;
 }
 
 //=======================================================================================
@@ -325,6 +266,25 @@ bool CEnemy::isPlayer(void)
 	}
 	return false;
 }
+float CEnemy::GetFloorHeight()
+{
+	// 地面判定
+	CMeshField *pMeshField = CModeGame::GetMeshField();
+	if (pMeshField == NULL) { return m_FloorPosY; }
+	m_FloorPosY = pMeshField->GetHeight(m_Pos);
+	return m_FloorPosY;
+}
+//=======================================================================================
+//   状態変更処理
+//=======================================================================================
+void CEnemy::ChangeState(CEnemyState* pState)
+{
+	if (m_pState != NULL)
+	{
+		delete m_pState;
+		m_pState = pState;
+	}
+}
 
 #ifdef _DEBUG
 //=======================================================================================
@@ -332,11 +292,6 @@ bool CEnemy::isPlayer(void)
 //=======================================================================================
 void CEnemy::ImGui()
 {
-	std::string ModeName[MODE_MAX];
-	ModeName[0] = "NORMAL";
-	ModeName[1] = "MOVE";
-	ModeName[2] = "ATTACK";
-	ImGui::Text("Mode %s", ModeName[m_Mode].c_str());
 	ImGui::InputFloat("MoveSpeed", &m_Speed, 0.01f);
 	ImGui::InputInt("Life", &m_life);
 }
