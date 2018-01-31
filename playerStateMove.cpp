@@ -38,24 +38,9 @@ m_FloorPosY(0.0f){}
 //=======================================================================================
 void CPlayerStateMove::Update(CPlayer* pPlayer)
 {
-	// キー判定
-	if (!pPlayer->InputKeyMove(&m_Move))
-	{
-		// 押していない時はノーマル状態に遷移
-		pPlayer->ChangeState(new CPlayerStateNormal);
-		return;
-	}
-	if (CInputKey::InputPlayerDash())
-	{
-		pPlayer->ChangeState(new CPlayerStateDash());
-		return;
-	}
-	if (CInputKey::InputPlayerAttack())
-	{
-		pPlayer->SetMotion(CPlayer::STATE_ATTACK);
-		pPlayer->ChangeState(new CPlayerStateAttack());
-		return;
-	}
+	// モーションの代入　更新
+	pPlayer->SetMotion(CPlayer::STATE_MOVE);
+
 	static int frame = 0;
 	frame = frame % 10 + 1;
 	if (frame == 10)
@@ -82,12 +67,25 @@ void CPlayerStateMove::Update(CPlayer* pPlayer)
 		pPlayer->ChangeState(new CPlayerStateJumpDown(m_Move.y));
 	}
 
-	// モーションの代入　更新
-	pPlayer->SetMotion(CPlayer::STATE_MOVE);
-
 	// 状態変更
 	if (CInputKey::InputPlayerJump())
 	{
 		pPlayer->ChangeState(new CPlayerStateJumpUp(pPlayer->GetJumpHeight()));
+	}
+	if (!pPlayer->InputKeyMove(&m_Move))
+	{
+		// 押していない時はノーマル状態に遷移
+		pPlayer->ChangeState(new CPlayerStateNormal);
+		return;
+	}
+	if (CInputKey::InputPlayerDash())
+	{
+		pPlayer->ChangeState(new CPlayerStateDash());
+		return;
+	}
+	if (CInputKey::InputPlayerAttack())
+	{
+		pPlayer->ChangeState(new CPlayerStateAttack(m_Move.y));
+		return;
 	}
 }

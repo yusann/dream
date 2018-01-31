@@ -5,24 +5,19 @@
 #include "main.h"
 #include "playerStateAttack.h"
 #include "playerStateNormal.h"
-#include "playerStateJumpDown.h"
-#include "playerStateJumpUp.h"
 
 #include "scene.h"
 #include "sceneMotionPartsX.h"
 #include "sceneMesh.h"
 #include "player.h"
-#include "meshField.h"
 
-#include "mode.h"
-#include "modeGame.h"
 #include "inputKey.h"
 
 //=======================================================================================
 //   コンストラクタ（初期化）
 //=======================================================================================
-CPlayerStateAttack::CPlayerStateAttack() :
-	m_Move(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+CPlayerStateAttack::CPlayerStateAttack(float MoveY) :
+	m_Move(D3DXVECTOR3(0.0f, MoveY, 0.0f)),
 	m_FloorPosY(0.0f) {}
 
 //=======================================================================================
@@ -30,15 +25,11 @@ CPlayerStateAttack::CPlayerStateAttack() :
 //=======================================================================================
 void CPlayerStateAttack::Update(CPlayer* pPlayer)
 {
-	pPlayer->HitEnemy();
+	// モーションの代入　更新
+	pPlayer->SetMotion(CPlayer::STATE_ATTACK);
 
-	int Key = pPlayer->GetKey();
-	// 状態遷移
-	if (Key >0)
-	{
-		pPlayer->ChangeState(new CPlayerStateNormal);
-		return;
-	}
+	// 敵との当たり判定
+	pPlayer->HitEnemy();
 
 	// 移動処理
 	if (CInputKey::InputPlayerDash())
@@ -62,19 +53,12 @@ void CPlayerStateAttack::Update(CPlayer* pPlayer)
 		m_Move.y = 0.0f;
 		pPlayer->Position().y = m_FloorPosY;
 	}
-	else if (pPlayer->Position().y - m_FloorPosY > 8.0f)
+
+	// 状態遷移
+	int Key = pPlayer->GetKey();
+	if (Key >0)
 	{
-		pPlayer->ChangeState(new CPlayerStateJumpDown(m_Move.y));
+		pPlayer->ChangeState(new CPlayerStateNormal);
 		return;
 	}
-
-	// 状態変更
-	if (CInputKey::InputPlayerJump())
-	{
-		pPlayer->ChangeState(new CPlayerStateJumpUp(pPlayer->GetJumpHeight()));
-		return;
-	}
-
-	// モーションの代入　更新
-	pPlayer->SetMotion(CPlayer::STATE_ATTACK);
 }

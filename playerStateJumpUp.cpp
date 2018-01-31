@@ -6,18 +6,14 @@
 #include "playerStateJumpUp.h"
 #include "playerStateJumpDown.h"
 #include "playerStateJumpAttack.h"
-#include "manager.h"
-#include "mode.h"
-#include "modeGame.h"
+#include "playerStateAttack.h"
+
 #include "scene.h"
 #include "sceneMotionPartsX.h"
 #include "sceneMesh.h"
-
 #include "player.h"
-#include "meshField.h"
 
 #include "inputKey.h"
-
 #include "camera.h"
 
 //=======================================================================================
@@ -34,8 +30,18 @@ m_Move(D3DXVECTOR3(0.0f,0.0f,0.0f))
 //=======================================================================================
 void CPlayerStateJumpUp::Update(CPlayer* pPlayer)
 {
+	// モーションの代入　更新
+	pPlayer->SetMotion(CPlayer::STATE_JUMPUP);
+
 	// キー判定
-	pPlayer->InputKeyMove(&m_Move);
+	if (CInputKey::InputPlayerDash())
+	{
+		pPlayer->InputKeyMove(&m_Move, 1.2f);
+	}
+	else
+	{
+		pPlayer->InputKeyMove(&m_Move);
+	}
 
 	// 移動処理
 	m_Move.y -= PLAYER_GRAVITY;
@@ -43,16 +49,20 @@ void CPlayerStateJumpUp::Update(CPlayer* pPlayer)
 	m_Move.x = 0.0f;
 	m_Move.z = 0.0f;
 
-	// モーションの代入　更新
-	pPlayer->SetMotion(CPlayer::STATE_JUMPUP);
-
 	// 状態変更
 	if (m_Move.y <= 0.0f)
 	{
 		pPlayer->ChangeState(new CPlayerStateJumpDown(m_Move.y));
+		return;
 	}
 	if (CInputKey::InputPlayerJump())
 	{
 		pPlayer->ChangeState(new CPlayerStateJumpAttack());
+		return;
+	}
+	if (CInputKey::InputPlayerAttack())
+	{
+		pPlayer->ChangeState(new CPlayerStateAttack(m_Move.y));
+		return;
 	}
 }

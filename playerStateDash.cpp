@@ -37,18 +37,9 @@ m_FloorPosY(0.0f){}
 //=======================================================================================
 void CPlayerStateDash::Update(CPlayer* pPlayer)
 {
-	// キー判定
-	if (!CInputKey::InputPlayerDash())
-	{
-		pPlayer->ChangeState(new CPlayerStateNormal());
-		return;
-	}
-	if (CInputKey::InputPlayerAttack())
-	{
-		pPlayer->SetMotion(CPlayer::STATE_ATTACK);
-		pPlayer->ChangeState(new CPlayerStateAttack());
-		return;
-	}
+	// モーションの代入　更新
+	pPlayer->SetMotion(CPlayer::STATE_DASH);
+
 	pPlayer->InputKeyMove(&m_Move, 1.5f);
 	static int frame = 0;
 	frame = frame % 10 + 1;
@@ -76,12 +67,20 @@ void CPlayerStateDash::Update(CPlayer* pPlayer)
 		pPlayer->ChangeState(new CPlayerStateJumpDown(m_Move.y));
 	}
 
-	// モーションの代入　更新
-	pPlayer->SetMotion(CPlayer::STATE_DASH);
-
 	// 状態変更
 	if (CInputKey::InputPlayerJump())
 	{
 		pPlayer->ChangeState(new CPlayerStateJumpUp(pPlayer->GetJumpHeight()));
+	}
+	if (!CInputKey::InputPlayerMove()||!CInputKey::InputPlayerDash())
+	{
+		pPlayer->ChangeState(new CPlayerStateNormal());
+		return;
+	}
+	if (CInputKey::InputPlayerAttack())
+	{
+		pPlayer->SetMotion(CPlayer::STATE_ATTACK);
+		pPlayer->ChangeState(new CPlayerStateAttack(m_Move.y));
+		return;
 	}
 }

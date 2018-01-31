@@ -68,7 +68,7 @@ void CPlayerStateNormal::Update(CPlayer* pPlayer)
 	}
 	if (CInputKey::InputPlayerAttack())
 	{
-		pPlayer->ChangeState(new CPlayerStateAttack());
+		pPlayer->ChangeState(new CPlayerStateAttack(m_MoveY));
 		return;
 	}
 }

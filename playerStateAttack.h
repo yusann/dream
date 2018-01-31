@@ -9,7 +9,7 @@
 class CPlayerStateAttack : public CPlayerState
 {
 public:
-	CPlayerStateAttack();
+	CPlayerStateAttack(float MoveY);
 	~CPlayerStateAttack() {};
 
 	void Update(CPlayer* pPlayer) override;

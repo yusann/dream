@@ -6,18 +6,17 @@
 #include "playerStateJumpDown.h"
 #include "playerStateNormal.h"
 #include "playerStateJumpAttack.h"
-#include "manager.h"
+#include "playerStateAttack.h"
+
 #include "mode.h"
 #include "modeGame.h"
+
 #include "scene.h"
 #include "sceneMotionPartsX.h"
 #include "sceneMesh.h"
-
 #include "player.h"
-#include "meshField.h"
 
 #include "inputKey.h"
-
 #include "camera.h"
 
 //=======================================================================================
@@ -34,8 +33,18 @@ m_Move(D3DXVECTOR3(0.0f,0.0f,0.0f))
 //=======================================================================================
 void CPlayerStateJumpDown::Update(CPlayer* pPlayer)
 {
+	// モーションの代入　更新
+	pPlayer->SetMotion(CPlayer::STATE_JUMPDOWN);
+
 	// キー判定
-	pPlayer->InputKeyMove(&m_Move);
+	if (CInputKey::InputPlayerDash())
+	{
+		pPlayer->InputKeyMove(&m_Move, 1.2f);
+	}
+	else
+	{
+		pPlayer->InputKeyMove(&m_Move);
+	}
 
 	// 移動処理
 	m_Move.y -= PLAYER_GRAVITY;
@@ -45,7 +54,8 @@ void CPlayerStateJumpDown::Update(CPlayer* pPlayer)
 
 	m_FloorHeight = pPlayer->GetFloorHeight();
 
-	// めり込み処理
+	// 状態変更
+	// 着地時
 	float playerPosY = pPlayer->Position().y;
 	if (playerPosY < m_FloorHeight)
 	{
@@ -54,6 +64,7 @@ void CPlayerStateJumpDown::Update(CPlayer* pPlayer)
 		pPlayer->ChangeState(new CPlayerStateNormal);
 		return;
 	}
+	// 一定距離の落下時
 	if (playerPosY - m_FloorHeight > 8.0f)
 	{
 		// 状態変更
@@ -62,6 +73,10 @@ void CPlayerStateJumpDown::Update(CPlayer* pPlayer)
 			pPlayer->ChangeState(new CPlayerStateJumpAttack());
 		}
 	}
-	// モーションの代入　更新
-	pPlayer->SetMotion(CPlayer::STATE_JUMPDOWN);
+	// アタックキー押した時
+	if (CInputKey::InputPlayerAttack())
+	{
+		pPlayer->ChangeState(new CPlayerStateAttack(m_Move.y));
+		return;
+	}
 }

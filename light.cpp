@@ -36,11 +36,11 @@ void CLight::Init()
 		MessageBox(NULL, "NULLチェックしてください！", "エラー", MB_OK | MB_ICONASTERISK);         // エラーメッセージ
 		return;
 	}
-	m_Rot = D3DXVECTOR2(1.0f, 0.0f);
+	m_Rot = D3DXVECTOR2(2.0f, -1.0f);
 	m_PosAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_VecUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_Direction = D3DXVECTOR3(1.0f, -1.0f, 1.0f);               // 向き
-	m_Length = 1000.0f;
+	m_Length = 1200.0f;
 	SetPos(&m_PosEye,m_PosAt, m_Length, m_Rot);
 
 	m_Far = 3000.0f;
@@ -78,9 +78,9 @@ void CLight::Update()
 {
 #ifdef _DEBUG
 
-	static float posX = 1.0f;
-	static float posY = 0.0f;
-	static float len = 1000.0f;
+	static float posX = 2.0f;
+	static float posY = -1.0f;
+	static float len = 1200.0f;
 	ImGui::DragFloat("LightFar", &m_Far, 10.0f);
 	ImGui::DragFloat("LightposX", &posX, 0.001f);
 	ImGui::DragFloat("LightposY", &posY, 0.001f);
