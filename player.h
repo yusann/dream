@@ -1,8 +1,11 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
+#define PLAYER_STAMINA_MAX (0.98f)
+
 // ëOï˚êÈåæ
 class CPlayerState;
+class CPlayerUIManager;
 #ifdef _DEBUG
 class CMeshSphere;
 #endif
@@ -40,6 +43,7 @@ public:
 
 	D3DXVECTOR3& Position(void) { return m_Pos; }
 	D3DXVECTOR3& Rotate(void) { return m_Rot; }
+	float& Stamina(void) { return m_Stamina; }
 	float GetJumpHeight(void) { return m_Jump; }
 	bool OnBlock(void) { return m_onBlock; }
 	bool InputKeyMove(D3DXVECTOR3 *Move, const float speed = 0.5f);
@@ -59,15 +63,15 @@ public:
 
 private:
 	CPlayerState* m_pState;
+	CPlayerUIManager* m_pUI;
 
 	D3DXVECTOR3 m_Move;
 	D3DXVECTOR3 m_PosOld;
 	bool m_onBlock;
 	int m_Level;
 	int m_LifeMax;
-	int m_MagicMax;
 	int m_Life;
-	int m_Magic;
+	float m_Stamina;
 	float m_FloorPosY;
 	CCollision::SPHERE m_Collision;
 	bool m_isDamage;

@@ -208,6 +208,7 @@
     <ClCompile Include="playerStateLoading.cpp" />
     <ClCompile Include="playerStateMove.cpp" />
     <ClCompile Include="playerStateNormal.cpp" />
+    <ClCompile Include="playerUIManager.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="scene2D.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="playerStateLoading.h" />
     <ClInclude Include="playerStateMove.h" />
     <ClInclude Include="playerStateNormal.h" />
+    <ClInclude Include="playerUIManager.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scene2D.h" />

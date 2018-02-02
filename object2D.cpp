@@ -72,22 +72,6 @@ void CObject2D::Init(TYPE Type)
 		m_Scl = D3DXVECTOR3(400.0f, 150.0f, 0.0f);
 		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_PUSHSTART);
 		break;
-	case TYPE_UI_LIFE:
-		m_Pos = D3DXVECTOR3(SCREEN_WIDTH*0.06f, SCREEN_HEIGHT*0.95f, 0.0f);
-		m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.18f, SCREEN_HEIGHT*0.015f, 0.0f);
-		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_UI_LIFE);
-		break;
-	case TYPE_UI_MAGIC:
-		m_Pos = D3DXVECTOR3(SCREEN_WIDTH*0.06f, SCREEN_HEIGHT*0.97f, 0.0f);
-		m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.09f, SCREEN_HEIGHT*0.0075f, 0.0f);
-		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_UI_MAGIC);
-		break;
-	case TYPE_UI_LIFEBG:
-		m_Pos = D3DXVECTOR3(SCREEN_WIDTH*0.06f, SCREEN_HEIGHT*0.95f, 0.0f);
-		m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.18f, SCREEN_HEIGHT*0.015f, 0.0f);
-		m_pTexture = CTexture::GetTexture(CTexture::TEXTYPE_UI_GAGEBG);
-		m_Color.a = 0.7f;
-		break;
 	case TYPE_UI_NUM:
 		m_Pos = D3DXVECTOR3(SCREEN_WIDTH*0.03f, SCREEN_HEIGHT*0.97f, 0.0f);
 		m_Scl = D3DXVECTOR3(SCREEN_WIDTH*0.01f, SCREEN_HEIGHT*0.01f, 0.0f);
@@ -139,7 +123,7 @@ void CObject2D::Update()
 		{
 			m_Color.a += 0.04f;
 		}
-		SetVexColor();
+		SetVexColor(m_Color);
 	}
 		break;
 	case TYPE_BG_TITLE_SIBA:
@@ -158,8 +142,6 @@ void CObject2D::Update()
 		SetVexUV();
 		break;
 	}
-	case TYPE_UI_MAGIC:
-		break;
 	default:
 		break;
 	}

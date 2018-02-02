@@ -33,6 +33,8 @@
 #include "playerStateNormal.h"
 #include "playerStateDamage.h"
 
+#include "playerUIManager.h"
+
 #define MOVE (0.5f)
 #define PLAYER_LIFE					(5)
 #define PLAYER_MAGIC				(72)
@@ -70,13 +72,13 @@ void CPlayer::Init(D3DXVECTOR3 pos)
 	m_Jump = PLAYER_JUMP;
 	m_Level = 1;
 	m_LifeMax = PLAYER_LIFE;
-	m_MagicMax = PLAYER_MAGIC;
 	m_Life = m_LifeMax;
-	m_Magic = m_MagicMax;
+	m_Stamina = 1.0f;
 	m_FloorPosY = 0.0f;
 	m_Collision.Pos = m_Pos;
 	m_Collision.Scl = 2.0f;
 	m_isDamage = false;
+	m_pUI = NULL;
 
 	m_pMotionPartsX = CMotionPartsX::GetMotionPartsX(CMotionPartsX::TYPE_PLAYER);
 
@@ -90,11 +92,11 @@ void CPlayer::Init(D3DXVECTOR3 pos)
 	// タイプの代入
 	CScene::SetObjType(CScene::OBJTYPE_PLAYER);
 
-	// UIの生成
-	CObject2D::Create(CObject2D::TYPE_UI_LIFEBG);
-
 	// 状態の生成
 	m_pState = new CPlayerStateNormal;
+
+	// UI情報の代入
+	m_pUI = CPlayerUIManager::Create(m_LifeMax);
 }
 
 //=======================================================================================
@@ -102,6 +104,7 @@ void CPlayer::Init(D3DXVECTOR3 pos)
 //=======================================================================================
 void CPlayer::Uninit()
 {
+	SAFE_UNINIT(m_pUI);
 	CSceneMotionPartsX::Uninit();
 }
 
@@ -137,6 +140,9 @@ void CPlayer::Update()
 		}
 	}
 
+	// スタミナUIの更新
+	m_pUI->SetStamina(m_Stamina);
+	ImGui::Text("stamina %.2f", m_Stamina);
 	// 死亡
 	if (m_Life <= 0) {
 		Uninit();
@@ -169,6 +175,7 @@ void CPlayer::Hit(D3DXVECTOR2 damageVector)
 	ChangeState(new CPlayerStateDamage(damageVector));
 	m_Life --;
 	m_isDamage = true;
+	m_pUI->SetLife(m_Life);
 }
 
 //=======================================================================================

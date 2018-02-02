@@ -72,6 +72,15 @@
     <Filter Include="ソース ファイル\object\enemy">
       <UniqueIdentifier>{3eeb0feb-cba7-4ce1-b658-3644c0821d53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\player\state">
+      <UniqueIdentifier>{8d2fb0b9-2a69-40e9-b8fd-852e63b22465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\enemy\state">
+      <UniqueIdentifier>{fee43445-e65c-4766-9b81-683ffe0d449a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\object\player\UI">
+      <UniqueIdentifier>{c387d8f0-0b7a-4180-8b7c-5112d52add20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -158,9 +167,6 @@
     <ClCompile Include="shaderModel.cpp">
       <Filter>ソース ファイル\shader</Filter>
     </ClCompile>
-    <ClCompile Include="shaderManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClCompile>
     <ClCompile Include="shadowModel.cpp">
       <Filter>ソース ファイル\object\3D\shadow</Filter>
     </ClCompile>
@@ -184,24 +190,6 @@
     </ClCompile>
     <ClCompile Include="collision.cpp">
       <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateNormal.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateMove.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateJumpUp.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateJumpDown.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateJumpAttack.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateLoading.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
     </ClCompile>
     <ClCompile Include="meshCube.cpp">
       <Filter>ソース ファイル\debug\mash</Filter>
@@ -242,26 +230,50 @@
     <ClCompile Include="GBuffer.cpp">
       <Filter>ソース ファイル\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="playerStateAttack.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateDash.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerStateDamage.cpp">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>ソース ファイル\object\enemy</Filter>
     </ClCompile>
-    <ClCompile Include="enemyStateNormal.cpp">
-      <Filter>ソース ファイル\object\enemy</Filter>
+    <ClCompile Include="enemyStateChase.cpp">
+      <Filter>ソース ファイル\object\enemy\state</Filter>
     </ClCompile>
     <ClCompile Include="enemyStateMove.cpp">
-      <Filter>ソース ファイル\object\enemy</Filter>
+      <Filter>ソース ファイル\object\enemy\state</Filter>
     </ClCompile>
-    <ClCompile Include="enemyStateChase.cpp">
-      <Filter>ソース ファイル\object\enemy</Filter>
+    <ClCompile Include="enemyStateNormal.cpp">
+      <Filter>ソース ファイル\object\enemy\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateAttack.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateDamage.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateDash.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateJumpAttack.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateJumpDown.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateJumpUp.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateLoading.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateMove.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStateNormal.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderManager.cpp">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="playerUIManager.cpp">
+      <Filter>ソース ファイル\object\player\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -361,9 +373,6 @@
     <ClInclude Include="shaderModel.h">
       <Filter>ソース ファイル\shader</Filter>
     </ClInclude>
-    <ClInclude Include="shaderManager.h">
-      <Filter>ソース ファイル\manager</Filter>
-    </ClInclude>
     <ClInclude Include="shadowModel.h">
       <Filter>ソース ファイル\object\3D\shadow</Filter>
     </ClInclude>
@@ -387,27 +396,6 @@
     </ClInclude>
     <ClInclude Include="collision.h">
       <Filter>ソース ファイル\collision</Filter>
-    </ClInclude>
-    <ClInclude Include="playerState.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateNormal.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateMove.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateJumpUp.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateJumpDown.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateJumpAttack.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateLoading.h">
-      <Filter>ソース ファイル\object\player</Filter>
     </ClInclude>
     <ClInclude Include="meshCube.h">
       <Filter>ソース ファイル\debug\mash</Filter>
@@ -448,29 +436,56 @@
     <ClInclude Include="GBuffer.h">
       <Filter>ソース ファイル\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="playerStateAttack.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateDash.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerStateDamage.h">
-      <Filter>ソース ファイル\object\player</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>ソース ファイル\object\enemy</Filter>
     </ClInclude>
     <ClInclude Include="enemyState.h">
-      <Filter>ソース ファイル\object\enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="enemyStateNormal.h">
-      <Filter>ソース ファイル\object\enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="enemyStateMove.h">
-      <Filter>ソース ファイル\object\enemy</Filter>
+      <Filter>ソース ファイル\object\enemy\state</Filter>
     </ClInclude>
     <ClInclude Include="enemyStateChase.h">
-      <Filter>ソース ファイル\object\enemy</Filter>
+      <Filter>ソース ファイル\object\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyStateMove.h">
+      <Filter>ソース ファイル\object\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyStateNormal.h">
+      <Filter>ソース ファイル\object\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerState.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateAttack.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateDamage.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateDash.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateJumpAttack.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateJumpDown.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateJumpUp.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateLoading.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateMove.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStateNormal.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderManager.h">
+      <Filter>ソース ファイル\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="playerUIManager.h">
+      <Filter>ソース ファイル\object\player\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

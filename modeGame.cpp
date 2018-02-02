@@ -47,7 +47,6 @@ void CModeGame::Init(void)
 
 	LoadFile("data/objSave01.txt");
 
-	CObject2D::Create(CObject2D::TYPE_UI_LIFE);
 	CManager::GetSound()->Play(CSound::BGM_STAGE000);
 	CCamera *pCamera = CManager::GetCamera();
 	pCamera->SetRot(D3DXVECTOR3(0.4f,3.0f,0.0f));

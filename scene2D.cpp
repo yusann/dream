@@ -14,13 +14,51 @@
 CScene2D::CScene2D(int Priority) :CScene(Priority),
 m_pVB(NULL),
 m_TexPos(D3DXVECTOR2(0.0f,0.0f)),
-m_TexScl(D3DXVECTOR2(1.0f, 1.0f))
+m_TexScl(D3DXVECTOR2(1.0f, 1.0f)),
+m_TexWidth(1),
+m_TexHeight(1)
 {
 	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 CScene2D::~CScene2D()
 {
+}
+
+//==================================================================================================================================================
+// 作成処理
+//==================================================================================================================================================
+CScene2D *CScene2D::Create(const LPDIRECT3DTEXTURE9 pTexture,
+	const D3DXVECTOR2 Pos,
+	const D3DXVECTOR2 Scl,
+	const CScene::OBJTYPE ObjType,
+	const int TexWidth,
+	const int TexHeight)
+{
+	CScene2D *pScene2D;                            // 変数宣言
+	pScene2D = new CScene2D;                       // 動的確保
+	pScene2D->SetInfo(pTexture, Pos, Scl, ObjType, TexWidth, TexHeight);
+	pScene2D->Init();                            // 初期化
+	pScene2D->SetTexID();
+	return pScene2D;                             // 値を返す
+}
+
+//=======================================================================================
+//   情報の代入
+//=======================================================================================
+void CScene2D::SetInfo(const LPDIRECT3DTEXTURE9 pTexture,
+	const D3DXVECTOR2 Pos,
+	const D3DXVECTOR2 Scl,
+	const CScene::OBJTYPE ObjType,
+	const int TexWidth,
+	const int TexHeight)
+{
+	m_pTexture = pTexture;
+	m_Pos = D3DXVECTOR3(Pos.x, Pos.y, 0.0f);
+	m_Scl = D3DXVECTOR3(Scl.x, Scl.y, 0.0f);
+	m_TexWidth = TexWidth;
+	m_TexHeight = TexHeight;
+	CScene::SetObjType(ObjType);
 }
 
 //=======================================================================================
@@ -125,8 +163,9 @@ void CScene2D::MakeVex(void)
 //=======================================================================================
 // ポリゴンの色更新
 //=======================================================================================
-void CScene2D::SetVexColor()
+void CScene2D::SetVexColor(D3DXCOLOR Color)
 {
+	m_Color = Color;
 	// 頂点情報を設定
 	// 頂点情報格納用疑似バッファの宣言
 	CVertexDecl::VERTEX2D* pVtx;
@@ -187,5 +226,61 @@ void CScene2D::SetVexUV()
 	pVtx[3].tex = m_TexPos+ m_TexScl;                    // 右下のUV座標
 
 							// 鍵を開ける
+	m_pVB->Unlock();
+}
+//=======================================================================================
+//   テクスチャIDセット
+//=======================================================================================
+void CScene2D::SetTexID(int nID)
+{
+	// テクスチャのスケール代入
+	m_TexScl.x = 1.0f / m_TexWidth;
+	m_TexScl.y = 1.0f / m_TexHeight;
+
+	// テクスチャ座標の代入
+	m_TexPos.x = nID % m_TexWidth * m_TexScl.x;		//  X座標
+	m_TexPos.y = nID / m_TexWidth * m_TexScl.y;		//  Y座標
+	
+	// 頂点情報格納用疑似バッファの宣言
+	CVertexDecl::VERTEX2D* pVtx;
+	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
+	m_pVB->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点データへUVデータの追加
+	pVtx[0].tex = D3DXVECTOR2(m_TexPos.x + 0.001f             , m_TexPos.y + 0.001f);                    // 左上のUV座標
+	pVtx[1].tex = D3DXVECTOR2(m_TexPos.x - 0.001f + m_TexScl.x, m_TexPos.y + 0.001f);                    // 右上のUV座標
+	pVtx[2].tex = D3DXVECTOR2(m_TexPos.x + 0.001f             , m_TexPos.y - 0.001f + m_TexScl.y);                    // 左下のUV座標
+	pVtx[3].tex = D3DXVECTOR2(m_TexPos.x - 0.001f + m_TexScl.x, m_TexPos.y - 0.001f + m_TexScl.y);                    // 右下のUV座標
+
+	m_pVB->Unlock();
+}
+
+//=======================================================================================
+// ゲージ更新処理
+//=======================================================================================
+void CScene2D::SetVexGage(float Val)
+{
+	float sclX = m_Scl.x * Val;
+	float tex_sclX = m_TexScl.x * Val;
+	// 頂点情報を設定
+	// 頂点情報格納用疑似バッファの宣言
+	CVertexDecl::VERTEX2D* pVtx;
+
+	// 頂点バッファをロックして、仮想アドレスを取得する（0,0を記入すると全部をロック）
+	m_pVB->Lock(0, 0, (void**)&pVtx, 0);
+	
+	// 頂点座標の設定（ 2D座標・右回り ）
+	pVtx[0].pos = D3DXVECTOR4(m_Pos.x          , m_Pos.y, 0.0f,1.0f);                 // 左上の座標
+	pVtx[1].pos = D3DXVECTOR4(m_Pos.x + sclX, m_Pos.y, 0.0f,1.0f);                 // 右上の座標
+	pVtx[2].pos = D3DXVECTOR4(m_Pos.x          , m_Pos.y + m_Scl.y, 0.0f,1.0f);                 // 左下の座標
+	pVtx[3].pos = D3DXVECTOR4(m_Pos.x + sclX, m_Pos.y + m_Scl.y, 0.0f,1.0f);                 // 右下の座標
+
+	// 頂点データへUVデータの追加
+	pVtx[0].tex = m_TexPos;                    // 左上のUV座標
+	pVtx[1].tex = D3DXVECTOR2(m_TexPos.x + tex_sclX, m_TexPos.y);                    // 右上のUV座標
+	pVtx[2].tex = D3DXVECTOR2(m_TexPos.x, m_TexPos.y + m_TexScl.y);                    // 左下のUV座標
+	pVtx[3].tex = D3DXVECTOR2(m_TexPos.x + tex_sclX, m_TexPos.y + m_TexScl.y);                    // 右下のUV座標
+
+	// 鍵を開ける
 	m_pVB->Unlock();
 }

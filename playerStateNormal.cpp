@@ -32,6 +32,9 @@ void CPlayerStateNormal::Update(CPlayer* pPlayer)
 	m_MoveY -= PLAYER_GRAVITY;
 	pPlayer->Position().y += m_MoveY;
 
+	// スタミナの回復
+	pPlayer->Stamina() = min(pPlayer->Stamina()+0.005f, PLAYER_STAMINA_MAX);
+
 	m_FloorPosY = pPlayer->GetFloorHeight();
 
 	// 地面判定

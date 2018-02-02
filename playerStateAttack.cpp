@@ -55,10 +55,10 @@ void CPlayerStateAttack::Update(CPlayer* pPlayer)
 	}
 
 	// ó‘Ô‘JˆÚ
-	int Key = pPlayer->GetKey();
-	if (Key >0)
+	int key = pPlayer->GetKey();
+	if (key >0)
 	{
-		pPlayer->ChangeState(new CPlayerStateNormal);
+		//pPlayer->ChangeState(new CPlayerStateNormal);
 		return;
 	}
 }

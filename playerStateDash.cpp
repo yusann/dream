@@ -40,6 +40,9 @@ void CPlayerStateDash::Update(CPlayer* pPlayer)
 	// モーションの代入　更新
 	pPlayer->SetMotion(CPlayer::STATE_DASH);
 
+	// スタミナの減少
+	pPlayer->Stamina() = max(pPlayer->Stamina() - 0.002f, 0.0f);
+
 	pPlayer->InputKeyMove(&m_Move, 1.5f);
 	static int frame = 0;
 	frame = frame % 10 + 1;

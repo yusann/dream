@@ -28,9 +28,9 @@ char CTexture::m_TexName[TEXTYPE_MAX][128] =
 	"data/TEXTURE/particle001.png",
 	"data/TEXTURE/particle001.png",
 
-	"data/TEXTURE/life000.jpg",
+	"data/TEXTURE/stamina.png",
 	"data/TEXTURE/magic000.jpg",
-	"data/TEXTURE/gageBG000.png",
+	"data/TEXTURE/gage.png",
 	"data/TEXTURE/number000.png",
 	"data/TEXTURE/animeDraw.jpg"
 };
