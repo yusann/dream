@@ -39,10 +39,10 @@ void CPlayerUIManager::Init(int LifeMax)
 	pos = screen_center;
 	scl = D3DXVECTOR2(100.0f, 30.0f);
 	pos -= scl*0.5f;
-	CScene2D::Create(CTexture::GetTexture(CTexture::TEXTYPE_UI_GAGEBG),
-		pos,
-		scl,
-		CScene::OBJTYPE_UI);
+	m_pGage = CScene2D::Create(	CTexture::GetTexture(CTexture::TEXTYPE_UI_GAGEBG),
+								pos,
+								scl,
+								CScene::OBJTYPE_UI);
 
 	m_pStamina = CScene2D::Create(	CTexture::GetTexture(CTexture::TEXTYPE_UI_STAMINA),
 									pos,
@@ -73,7 +73,7 @@ void CPlayerUIManager::SetLife(int Life)
 void CPlayerUIManager::SetStamina(float Stamina)
 {
 	m_pStamina->SetVexGage(Stamina);
-	if (Stamina <= 0.2f)
+	if (Stamina <= 0.3f)
 	{
 		m_pStamina->SetVexColor(D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f));
 	}
@@ -81,4 +81,10 @@ void CPlayerUIManager::SetStamina(float Stamina)
 	{
 		m_pStamina->SetVexColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
+}
+
+void CPlayerUIManager::SetStaminaDraw(bool isDraw)
+{
+	m_pStamina->SetisDraw(isDraw);
+	m_pGage->SetisDraw(isDraw);
 }

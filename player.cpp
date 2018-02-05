@@ -32,6 +32,7 @@
 #include "playerState.h"
 #include "playerStateNormal.h"
 #include "playerStateDamage.h"
+#include "playerStateBreak.h"
 
 #include "playerUIManager.h"
 
@@ -141,7 +142,20 @@ void CPlayer::Update()
 	}
 
 	// スタミナUIの更新
-	m_pUI->SetStamina(m_Stamina);
+	m_Stamina = min(m_Stamina + 0.005f, PLAYER_STAMINA_MAX);
+	if (m_Stamina < PLAYER_STAMINA_MAX)
+	{
+		m_pUI->SetStaminaDraw(true);
+		m_pUI->SetStamina(m_Stamina);
+	}
+	else
+	{
+		m_pUI->SetStaminaDraw(false);
+	}
+	if (m_Stamina <= 0.01f)
+	{
+		ChangeState(new CPlayerStateBreak());
+	}
 #ifdef _DEBUG
 	ImGui::Text("stamina %.2f", m_Stamina);
 #endif // _DEBUG

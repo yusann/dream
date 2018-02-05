@@ -275,6 +275,9 @@
     <ClCompile Include="playerUIManager.cpp">
       <Filter>ソース ファイル\object\player\UI</Filter>
     </ClCompile>
+    <ClCompile Include="playerStateBreak.cpp">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -488,6 +491,9 @@
       <Filter>ソース ファイル\object\player\UI</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="playerStateBreak.h">
+      <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\model.fx">

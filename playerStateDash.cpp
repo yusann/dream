@@ -1,5 +1,5 @@
 //=============================================================================
-// プレイヤー
+// プレイヤー（ダッシュ）
 // Author : YUUSAN KA
 //=============================================================================
 #include "main.h"
@@ -41,7 +41,7 @@ void CPlayerStateDash::Update(CPlayer* pPlayer)
 	pPlayer->SetMotion(CPlayer::STATE_DASH);
 
 	// スタミナの減少
-	pPlayer->Stamina() = max(pPlayer->Stamina() - 0.002f, 0.0f);
+	pPlayer->Stamina() = max(pPlayer->Stamina() - 0.01f, 0.0f);
 
 	pPlayer->InputKeyMove(&m_Move, 1.5f);
 	static int frame = 0;

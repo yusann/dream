@@ -16,7 +16,8 @@ m_pVB(NULL),
 m_TexPos(D3DXVECTOR2(0.0f,0.0f)),
 m_TexScl(D3DXVECTOR2(1.0f, 1.0f)),
 m_TexWidth(1),
-m_TexHeight(1)
+m_TexHeight(1),
+m_isDraw(true)
 {
 	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
@@ -90,6 +91,8 @@ void CScene2D::Update()
 //=======================================================================================
 void CScene2D::Draw()
 {
+	if (!m_isDraw)
+		return;
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	pDevice = CManager::GetRenderer()->GetDevice();

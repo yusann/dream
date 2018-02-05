@@ -35,6 +35,7 @@ public:
 	void SetVexUV();
 	void SetVexGage(float val);
 	void SetTexID(int nID = 0);
+	void SetisDraw(bool isDraw) { m_isDraw = isDraw; }
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9 m_pVB;  // 頂点バッファへのポインタ
@@ -45,6 +46,7 @@ private:
 	void MakeVex(void);     // 頂点の設定
 	int m_TexWidth;
 	int m_TexHeight;
+	bool m_isDraw;
 };
 
 #endif

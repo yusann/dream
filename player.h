@@ -27,6 +27,7 @@ public:
 		STATE_JUMPATTACK,
 		STATE_ATTACK,
 		STATE_DASH,
+		STATE_BREAK,
 		STATE_MAX
 	}STATE;
 	CPlayer();             // デフォルトコンストラクタ
