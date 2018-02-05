@@ -142,7 +142,9 @@ void CPlayer::Update()
 
 	// スタミナUIの更新
 	m_pUI->SetStamina(m_Stamina);
+#ifdef _DEBUG
 	ImGui::Text("stamina %.2f", m_Stamina);
+#endif // _DEBUG
 	// 死亡
 	if (m_Life <= 0) {
 		Uninit();

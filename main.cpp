@@ -4,6 +4,7 @@
 //=============================================================================
 #include "main.h"
 #include "manager.h"
+#include "resource.h"
 
 #define CLASS_NAME        "就職作品"            // ウィンドウクラスの名前
 #define WINDOW_NAME       "しばアドベンチャー"  // ウィンドウの名前（タイトル名）
@@ -26,7 +27,7 @@ int APIENTRY WinMain( HINSTANCE hInstance , HINSTANCE hPrevInstance , LPSTR lpCm
 		0,
 		0,
 		hInstance,
-		NULL,
+		LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1)),
 		LoadCursor(NULL, IDC_ARROW),
 		(HBRUSH)(COLOR_WINDOW + 1),
 		NULL,

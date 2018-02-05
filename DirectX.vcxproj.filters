@@ -487,6 +487,7 @@
     <ClInclude Include="playerUIManager.h">
       <Filter>ソース ファイル\object\player\UI</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\model.fx">
@@ -501,5 +502,15 @@
     <FxCompile Include="shader\GBuffer.fx">
       <Filter>シェーダ</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DirectX.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\TEXTURE\icon.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
   </ItemGroup>
 </Project>
