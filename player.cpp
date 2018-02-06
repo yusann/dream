@@ -145,12 +145,7 @@ void CPlayer::Update()
 	m_Stamina = min(m_Stamina + 0.005f, PLAYER_STAMINA_MAX);
 	if (m_Stamina < PLAYER_STAMINA_MAX)
 	{
-		m_pUI->SetStaminaDraw(true);
 		m_pUI->SetStamina(m_Stamina);
-	}
-	else
-	{
-		m_pUI->SetStaminaDraw(false);
 	}
 	if (m_Stamina <= 0.01f)
 	{

@@ -29,7 +29,7 @@ char CTexture::m_TexName[TEXTYPE_MAX][128] =
 	"data/TEXTURE/particle001.png",
 
 	"data/TEXTURE/stamina.png",
-	"data/TEXTURE/magic000.jpg",
+	"data/TEXTURE/siba_life_icon.png",
 	"data/TEXTURE/gage.png",
 	"data/TEXTURE/number000.png",
 	"data/TEXTURE/animeDraw.jpg"

@@ -41,11 +41,11 @@ protected:
 	LPDIRECT3DVERTEXBUFFER9 m_pVB;  // 頂点バッファへのポインタ
 	D3DXVECTOR2 m_TexPos;
 	D3DXVECTOR2 m_TexScl;
+	int m_TexWidth;
+	int m_TexHeight;
 
 private:
 	void MakeVex(void);     // 頂点の設定
-	int m_TexWidth;
-	int m_TexHeight;
 	bool m_isDraw;
 };
 

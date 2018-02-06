@@ -7,6 +7,8 @@
 
 #include "scene.h"
 #include "scene2D.h"
+#include "playerLife.h"
+#include "playerStamina.h"
 
 #include "texture.h"
 
@@ -26,28 +28,22 @@ CPlayerUIManager *CPlayerUIManager::Create(int LifeMax)
 //==================================================================================================================================================
 void CPlayerUIManager::Init(int LifeMax)
 {
+	// 残機アイコン
 	D3DXVECTOR2 pos = screen_top_right;
-	D3DXVECTOR2 scl = D3DXVECTOR2(100.0f, 100.0f);
-	pos.x -= scl.x;
-	m_pLife = CScene2D::Create(	CTexture::GetTexture(CTexture::TEXTYPE_UI_NUM),
-								pos,
-								scl,
-								CScene::OBJTYPE_UI,
-								5,2);
-	m_pLife->SetTexID(LifeMax);
+	D3DXVECTOR2 scl = D3DXVECTOR2(70.0f, 100.0f);
+	pos.x -= scl.x+20.0f;
+	m_pLife = CPlayerLife::Create(	CTexture::GetTexture(CTexture::TEXTYPE_UI_NUM),
+									pos,
+									scl,
+									LifeMax);
 
+	// スタミナゲージ
 	pos = screen_center;
 	scl = D3DXVECTOR2(100.0f, 30.0f);
 	pos -= scl*0.5f;
-	m_pGage = CScene2D::Create(	CTexture::GetTexture(CTexture::TEXTYPE_UI_GAGEBG),
-								pos,
-								scl,
-								CScene::OBJTYPE_UI);
-
-	m_pStamina = CScene2D::Create(	CTexture::GetTexture(CTexture::TEXTYPE_UI_STAMINA),
-									pos,
-									scl,
-									CScene::OBJTYPE_UI);
+	m_pStamina = CPlayerStamina::Create(	CTexture::GetTexture(CTexture::TEXTYPE_UI_STAMINA),
+											pos,
+											scl);
 }
 
 //==================================================================================================================================================
@@ -64,7 +60,7 @@ void CPlayerUIManager::Uninit()
 //=======================================================================================
 void CPlayerUIManager::SetLife(int Life)
 {
-	m_pLife->SetTexID(Life);
+	m_pLife->ChangeNum(Life);
 }
 
 //=======================================================================================
@@ -72,19 +68,5 @@ void CPlayerUIManager::SetLife(int Life)
 //=======================================================================================
 void CPlayerUIManager::SetStamina(float Stamina)
 {
-	m_pStamina->SetVexGage(Stamina);
-	if (Stamina <= 0.3f)
-	{
-		m_pStamina->SetVexColor(D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f));
-	}
-	else
-	{
-		m_pStamina->SetVexColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-}
-
-void CPlayerUIManager::SetStaminaDraw(bool isDraw)
-{
-	m_pStamina->SetisDraw(isDraw);
-	m_pGage->SetisDraw(isDraw);
+	m_pStamina->SetValue(Stamina);
 }

@@ -278,6 +278,12 @@
     <ClCompile Include="playerStateBreak.cpp">
       <Filter>ソース ファイル\object\player\state</Filter>
     </ClCompile>
+    <ClCompile Include="playerLife.cpp">
+      <Filter>ソース ファイル\object\player\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStamina.cpp">
+      <Filter>ソース ファイル\object\player\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imGui\imconfig.h">
@@ -493,6 +499,12 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="playerStateBreak.h">
       <Filter>ソース ファイル\object\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="playerLife.h">
+      <Filter>ソース ファイル\object\player\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="playerStamina.h">
+      <Filter>ソース ファイル\object\player\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

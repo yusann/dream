@@ -199,6 +199,8 @@
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerLife.cpp" />
+    <ClCompile Include="playerStamina.cpp" />
     <ClCompile Include="playerStateAttack.cpp" />
     <ClCompile Include="playerStateBreak.cpp" />
     <ClCompile Include="playerStateDamage.cpp" />
@@ -271,6 +273,8 @@
     <ClInclude Include="object2D.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerLife.h" />
+    <ClInclude Include="playerStamina.h" />
     <ClInclude Include="playerState.h" />
     <ClInclude Include="playerStateAttack.h" />
     <ClInclude Include="playerStateBreak.h" />
