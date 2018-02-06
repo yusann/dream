@@ -17,6 +17,7 @@ char CModelX::m_TexName[TYPE_MAX][128] =
 	"data/MODEL/player.x",
 	"data/MODEL/enemy000.x",
 	"data/MODEL/block00.x",
+	"data/MODEL/switch.x",
 	"data/MODEL/goal.x"
 };
 
