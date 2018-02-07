@@ -19,19 +19,16 @@
 #include "meshCube.h"
 #endif
 
-CBlock::CBlock() :
-	CSceneModelX(CScene::OBJTYPE_BLOCK)
-{
-#ifdef _DEBUG
-	m_Collision = NULL;
-#endif
-}
-
 CBlock::CBlock(D3DXVECTOR3 pos, D3DXVECTOR3 scl) :
 	CSceneModelX(CScene::OBJTYPE_BLOCK)
 {
 	m_Scl = scl;
 	m_Pos = pos;
+	m_State = STATE_NONE;
+	m_Frame = 0;
+#ifdef _DEBUG
+	m_Collision = NULL;
+#endif
 }
 
 CBlock::~CBlock()
@@ -82,6 +79,18 @@ void CBlock::Update( void )
 #ifdef _DEBUG
 	m_Collision->Update(m_Pos, m_Scl);
 #endif
+	if (m_State == STATE_SWITCH)
+	{
+		float moveY = m_Scl.y / 10;
+		m_Pos.y -= moveY;
+		if (m_Frame >= 10)
+		{
+			m_State = STATE_NONE;
+			m_Frame = 0;
+			return;
+		}
+		m_Frame++;
+	}
 }
 
 //==============================================================================

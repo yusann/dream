@@ -81,6 +81,9 @@
     <Filter Include="ソース ファイル\object\player\UI">
       <UniqueIdentifier>{c387d8f0-0b7a-4180-8b7c-5112d52add20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\gimmick">
+      <UniqueIdentifier>{9a8caff0-a349-4836-8c22-370a77cf9359}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -283,6 +286,12 @@
     </ClCompile>
     <ClCompile Include="playerStamina.cpp">
       <Filter>ソース ファイル\object\player\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="switch.cpp">
+      <Filter>ソース ファイル\object\gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="gimmick.cpp">
+      <Filter>ソース ファイル\object\gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -505,6 +514,12 @@
     </ClInclude>
     <ClInclude Include="playerStamina.h">
       <Filter>ソース ファイル\object\player\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="switch.h">
+      <Filter>ソース ファイル\object\gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="gimmick.h">
+      <Filter>ソース ファイル\object\gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
